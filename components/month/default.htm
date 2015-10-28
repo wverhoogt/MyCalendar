@@ -2,39 +2,51 @@
 {% set dayPointer = MyM.dayPointer %}
 {% set devents = MyM.events[MyM.monthNum] %}
 {% set dprops = MyM.dayprops[MyM.monthNum] %}
+{% set trailDays = 0 %}
 
-<table class="calendar" 
+<table class="mycal" 
        data-request-data="month:{{ MyM.monthNum }}">
-<tr class="calendar-head">
-    <th colspan="7">{{ MyM.monthTitle }}</th>
-</tr>
-<tr class="calendar-day-head">
+    <thead>
+        <tr class="monthHead">
+            <th colspan="7">{{ MyM.monthTitle }}</th>
+        </tr>
+        <tr class="daysHead">
 {% for hding in  MyM.calHeadings %}
-    <th class="calendar-day-head">{{ hding }}</th>
+            <th>{{ hding }}</th>
 {% endfor %}
-</tr>
+        </tr>
+     </thead>
+     <tbody>
 {% for r in range(1,6) %}
-<tr class="calendar-row">
+{% if dayPointer < MyM.days_in_month %}
+        <tr class="days">
 {% for x in range(0, 6) %}
 {% set dayPointer = dayPointer + 1 %}
-{% if dayPointer <1 or dayPointer > MyM.days_in_month %}
-    <td class="calendar-day-np">&nbsp;</td>
+{% if dayPointer <1 %}
+            <td><div class="dis">{{ MyM.prevMonthMonday + x }}</div></td>
+{% elseif dayPointer > MyM.days_in_month %}
+            <td><div class="dis">{% set trailDays = trailDays + 1 %}{{ trailDays }}</div></td>
 {% else %}
 {% set dayProp = dprops[dayPointer] %}
-    <td class="calendar-day">
-{% if dayProp.link %}<a {{ dayProp.link|raw }}>{% endif %}
-        <div class="{% if dayProp.class %}{{ dayProp.class|raw }}{% else %}calendar-day{% endif %}">
-            {{ dayPointer }}
-        </div>
-{% if dayProp.link %}</a>{% endif %}
+            <td>
+{% if dayProp.link %}
+                <a {{ dayProp.link|raw }}>{% endif %}
+                <div class="{% if dayProp.class %}{{ dayProp.class|raw }}{% else %}dayLabel {{ MyM.color }}{% endif %}">{{ dayPointer }}</div>
+{% if dayProp.link %}
+                </a>
+{% endif %}
 {% if devents[dayPointer] %}
-        <ul class="eventList">
+                <ul class="eventList">
 {% for ev in devents[dayPointer] %}
-    {% partial __SELF__~'::event' ev=ev %}
+                    <li{% if ev.class %} class="{{ ev.class|raw }}"{% endif %} title="{% if ev.title %}{{ ev.title|raw }}{% else %}{{ ev.txt|raw }}{% endif %}">{% if ev.link %}<a {{ ev.link|raw }}>{% endif %}{{ ev.txt|raw }}{% if ev.link %}</a>{% endif %}</li>
 {% endfor %}
-        </ul>{% endif %}
+                </ul>
+{% endif %}
+            </td>
 {% endif %}
 {% endfor %}
-</tr>
+        </tr>
+{% endif %}
 {% endfor %}
+    </tbody>
 </table>

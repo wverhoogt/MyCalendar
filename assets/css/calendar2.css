@@ -1,14 +1,13 @@
-table.mycal {
-        /* Calendar width Set Here */
+table.calendar {
         width:500px;
         table-layout:fixed;
         border-spacing: 0px;
     }
-
-tr.days td {
-        /* Calendar Day Height set here. This changes overall height
-         of calendar depending on the number of weeks in month. */
+    tr.calendar-row {
         height:6em;
+    }
+
+    td.calendar-day {
         text-align: left;
         vertical-align: text-top;
         border: 1px grey solid;
@@ -17,42 +16,54 @@ tr.days td {
         padding: 2px;
     }
 
-tr.days td a {
+    td.calendar-day a {
         color:inherit;
         font:inherit;
         font-weight:inherit;
     }
+
+    td.calendar-list-icon{
+        width: 50px;
+        padding:0px;
+    }
+
+    td.calendar-list-event{
+        border-bottom: 1px black solid;
+    }
     
-tr.daysHead th{
+    tr.calendar-day-head th{
         text-align: center;
         height:1em;
         font-weight:bold;
     }
     
-tr.monthHead th{
+    tr.calendar-head th{
         font-size:1.5em;
         text-align: center;
     }
 
-div.dayLabel {
+    div.calendar-day {
         text-align: left;
         color: white;
         text-shadow: 1px 1px 0px #444;
     }
 
-div.dis {
-    /* Disabled Day Label */
+    .txtgrey {
+        color: #999;
+    }
+
+    div.dis {
         color: #444;
         background-color: #929292;
     }
 
-ul.eventList, ul.eventList li {
+    ul.eventList, ul.eventList li {
         list-style-type: none;
         margin: 1px; 
         padding: 0px;
         font-weight:400;}
 
-ul.calendar, ul.calendar li {
+    ul.calendar, ul.calendar li {
         list-style-type: none;
         margin: 1px; 
         padding: 0px;
@@ -60,18 +71,15 @@ ul.calendar, ul.calendar li {
     
 
 
-table.mycal tr td.list-icon{
-        width: 50px;
-        padding:0px;
-    }
-
-table.mycal tr td.list-event{
-        border-bottom: 1px black solid;
-    }
-
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     Simple CSS Calendar Icon - Based on http://365psd.com/day/2-330/ 
-    2013 - Bartos Lazarski / Mediumidee.de
+    2013 - Bartos Lazarski / Mediumidee.de 
+/*##########################*/
+/* feel free to copy */
+/*-------------------------*/
+/* Need a Dribbble invite :) 
+http://dribbble.com/Bartos_Lazarski */
+/*##########################
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */ 
 
 .holder {
