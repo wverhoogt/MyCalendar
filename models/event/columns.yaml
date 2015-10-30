@@ -1,0 +1,24 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    fname:
+            label: Creator First
+            relation: user
+            select: name 
+            searchable: true
+            sortable: true  
+    lname:
+            label: Creator Last
+            relation: user
+            select: surname 
+            searchable: true
+            sortable: true 
+    is_published:
+        label: Published
+        type: switch
+    name:
+        label: Title
+    date:
+        label: Date

@@ -1,0 +1,22 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+#    id:
+#        label: ID
+#        disabled: true
+
+    name:
+        label: Category
+        placeholder: Name of Category
+        span: left
+
+    slug:
+        label: Slug
+        span: right
+        placeholder: Slug for URLS
+        preset: name
+    description:
+        label: Description
+        placeholder: More details

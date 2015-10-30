@@ -1,0 +1,47 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+#    id:
+#        label: ID
+#        disabled: true
+    user_id:
+        label: Creator
+        type: dropdown
+        span: left
+    is_published:
+        label: Published
+        type: switch
+        span: right
+#       options: ['No','Yes']
+    name:
+        label: Title
+        span: left
+        placeholder: Name your Event
+#    year:
+#        label: Year
+#        type: dropdown
+#    month:
+#        label: Month
+#        type: dropdown
+#        dependsOn: year
+#    day:
+#        label: Day
+#        type: dropdown
+#        dependsOn: month
+    date:
+        label: date
+        type: datepicker
+        mode: date
+        span: right
+        placeholder: Pick a Date
+    text:
+        label: Details
+        type: textarea
+        size: large
+        placeholder: Enter as much details as you want about your event. (HTML OK)
+    categories:
+      label: Categories
+      type: relation
+      emptyOption: There are no categories, you should create one first!

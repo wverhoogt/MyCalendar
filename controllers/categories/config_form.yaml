@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: Category
+
+# Model Form Field configuration
+form: $/kurtjensen/mycalendar/models/category/fields.yaml
+
+# Model Class name
+modelClass: KurtJensen\MyCalendar\Models\Category
+
+# Default redirect location
+defaultRedirect: kurtjensen/mycalendar/categories
+
+# Create page
+create:
+    title: Create Category
+    redirect: kurtjensen/mycalendar/categories/update/:id
+    redirectClose: kurtjensen/mycalendar/categories
+
+# Update page
+update:
+    title: Edit Category
+    redirect: kurtjensen/mycalendar/categories
+    redirectClose: kurtjensen/mycalendar/categories
+
+# Preview page
+preview:
+    title: Preview Category
