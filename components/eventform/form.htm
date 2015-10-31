@@ -1,0 +1,75 @@
+<form data-request="onUpdateEvent" data-request-update="'EventForm::event-list': '#eventinfo'">
+        <input type="hidden" name="id" value="{{ __SELF__.myevent.id }}">
+
+    <div class="form-group">
+        <div
+            id="DatePicker-formDate-date"
+            class="field-datepicker"
+            data-control="datepicker"
+            data-min-date="2015-01-01 00:00:00"
+            data-max-date="{{ date()|date("Y") +5 }}-12-31 00:00:00">
+            <div class="input-with-icon">
+                <i class="icon icon-calendar-o"></i>
+                <input
+                    type="text"
+                    id="DatePicker-formDate-input-date"
+                    name="Event[date]"
+                    value="{{ __SELF__.myevent.date }}"
+                    class="form-control"
+                    autocomplete="off"
+                     />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Form-field-myevent-phone">Event Name</label>
+        <input type="text" name="name" id="Form-field-myevent-name" value="{{ __SELF__.myevent.name }}" placeholder="My Event" class="form-control" maxlength="255">
+    </div>
+    <div class="form-group">
+        <label for="Form-field-myevent-text">Event Details</label>
+        <textarea type="text" name="text" id="Form-field-myevent-text" placeholder="Something about your event and its time" class="form-control">{{ __SELF__.myevent.text }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="Form-field-myevent-category_id">Category</label>
+        {{ categorylist|raw  }}
+    </div>
+    <div class="form-group">
+        <input type="checkbox" id="Form-field-myevent-is_published" name="is_published" value="1"
+            {% if __SELF__.myevent.is_published %} checked="checked"{% endif %}>
+        <label for="Form-field-myevent-is_published">Published</label><br />
+    </div>
+    <div class="form-group">
+        <button type="submit" 
+            data-hotkey="ctrl+s, cmd+s" 
+            data-load-indicator="Saving Event..." 
+            class="btn btn-primary"><u>S</u>ave</button>
+
+    <span class="btn-text">
+        or <a href="">Cancel</a>
+    </span>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</form>
+{{ dump(categorylist )}}
+{{ __SELF__.user.name }}

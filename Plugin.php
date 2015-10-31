@@ -21,7 +21,7 @@ class Plugin extends PluginBase
             'name' => 'MyCalendar',
             'description' => 'Super simple calendar for displaying events.',
             'author' => 'KurtJensen',
-            'icon' => 'birthday-cake',
+            'icon' => 'icon-birthday-cake',
         ];
     }
 
@@ -44,6 +44,7 @@ class Plugin extends PluginBase
             //'KurtJensen\MyCalendar\Components\Week' => 'Week',
             'KurtJensen\MyCalendar\Components\EvList' => 'EvList',
             'KurtJensen\MyCalendar\Components\Events' => 'Events',
+            'KurtJensen\MyCalendar\Components\EventForm' => 'EventForm',
         ];
     }
 
@@ -58,13 +59,13 @@ class Plugin extends PluginBase
                 'order' => 500,
 
                 'sideMenu' => [
-                    'downloads' => [
+                    'events' => [
                         'label' => 'Events',
                         'url' => Backend::url('kurtjensen/mycalendar/events'),
                         'icon' => 'icon-birthday-cake',
                         'permissions' => ['kurtjensen.mycalendar.events'],
                     ],
-                    'folders' => [
+                    'categories' => [
                         'label' => 'Categories',
                         'url' => Backend::url('kurtjensen/mycalendar/categories'),
                         'icon' => 'icon-folder',
