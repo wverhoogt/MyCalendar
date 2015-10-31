@@ -3,3 +3,5 @@
     - Built Tables
     - create_events_table.php
     - create_categories_table.php
+1.0.3:
+    - Added frontend form. Fixed Backend context

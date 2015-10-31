@@ -1,35 +1,33 @@
 <!-- Start event-list.htm -->
             <table>
                 <tr>
-                    <th class="">Label</th>
-                    <th class="">Number</th>
-                    <th class="">Provider</th>
-                    <th class="">Updated</th>
+                    <th class="">Event</th>
+                    <th class="">Date</th>
+                    <th class="">Categories</th>
                     <th class="">&nbsp;</th>
                 </tr>
-{% for event in events  %}
+{% for event in __SELF__.myevents  %}
                 <tr>
                     <td class="">{{ event.name }}</td>
                     <td class=""> {{ event.date }} </td>
                     <td class="">{% for cat in event.categories %}{{ cat.name }}, {% endfor %}</td>
                     <td class=""> {% if event.is_published %}{% else %} Not {% endif %} Published </td>
-                    <td class=""> Updated : {% if event.created_at > event.updated_at %}{{ event.created_at }}{% else %}{{ event.updated_at }}{% endif %}</td>
                     <td class="">
                         <button
                             claas="btn btn-default" 
                             title="Edit"
-                            data-request="ProfilePhones::onCellForm"  
+                            data-request="EventForm::onEventForm"  
                             data-request-data="id: {{ event.id }}"
-                            data-request-update="'ProfilePhones::cell-form': '#cellinfo'">
+                            data-request-update="'EventForm::form': '#eventinfo'">
                             <i class="icon-pencil btn-icon danger"></i>
                         </button>
                         <button
                             claas="btn btn-default" 
                             title="Delete"
-                            data-request="ProfilePhones::onDelete" 
+                            data-request="EventForm::onDelete" 
                             data-request-data="id: {{ event.id }}"
-                            data-request-confirm="Do you really want to delete this cell phone?"
-                            data-request-update="'ProfilePhones::cell-list': '#cellinfo'">
+                            data-request-confirm="Do you really want to delete this event?"
+                            data-request-update="'EventForm::list': '#eventinfo'">
                             <i class="icon-trash btn-icon danger"></i>
                         </button>
                     </td>

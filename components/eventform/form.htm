@@ -1,4 +1,4 @@
-<form data-request="onUpdateEvent" data-request-update="'EventForm::event-list': '#eventinfo'">
+<form data-request="onUpdateEvent" data-request-update="'EventForm::list': '#eventinfo'">
         <input type="hidden" name="id" value="{{ __SELF__.myevent.id }}">
 
     <div class="form-group">
@@ -13,7 +13,7 @@
                 <input
                     type="text"
                     id="DatePicker-formDate-input-date"
-                    name="Event[date]"
+                    name="date"
                     value="{{ __SELF__.myevent.date }}"
                     class="form-control"
                     autocomplete="off"
@@ -48,28 +48,4 @@
         or <a href="">Cancel</a>
     </span>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </form>
-{{ dump(categorylist )}}
-{{ __SELF__.user.name }}

@@ -97,7 +97,8 @@ text
 is_published
  */
 		$myevent->name = post('name');
-		list($myevent->year, $myevent->month, $myevent->day) = post('date');
+		//list($myevent->year, $myevent->month, $myevent->day) = explode('-', post('date'));
+		$myevent->date = post('date');
 		$myevent->is_published = post('is_published');
 		$myevent->save();
 
@@ -111,7 +112,8 @@ is_published
 			return null;
 		}
 
-		$myevent = myeventone::where('user_id', '=', $this->userid)->find($eventId);
+		$myevent = MyCalEvent::where('user_id', $this->user->id)
+			->find($eventId);
 
 		$myevent->delete();
 
