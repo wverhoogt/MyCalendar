@@ -1,7 +1,12 @@
 <form data-request="onUpdateEvent" data-request-update="'EventForm::list': '#eventinfo'">
         <input type="hidden" name="id" value="{{ __SELF__.myevent.id }}">
 
-    <div class="form-group">
+
+    <div class="row">
+    <div class="col-md-6">
+        <label for="DatePicker-formDate-input-date">
+        Date
+        </label>
         <div
             id="DatePicker-formDate-date"
             class="field-datepicker"
@@ -21,6 +26,33 @@
             </div>
         </div>
     </div>
+    <div class="col-md-6"
+        data-field-name="time"
+        id="Form-field-Event-time-group">
+        <label for="Form-field-Event-time">
+        Time
+        </label>
+        <div
+            id="DatePicker-formTime-time"
+            data-control="timepicker"
+            class="field-timepicker clockpicker">
+            <div class="input-with-icon right-align">
+                <i class="icon icon-clock-o"></i>
+                <input
+                    type="text"
+                    id="DatePicker-formTime-input-time"
+                    name="time"
+                    value="{{ __SELF__.myevent.time }}"
+                    class="form-control align-right"
+                    autocomplete="off"
+                    data-autoclose="true"
+                    data-placement="bottom"
+                    data-align="right"
+                     />
+            </div>
+        </div>
+    </div>
+    </div>
     <div class="form-group">
         <label for="Form-field-myevent-phone">Event Name</label>
         <input type="text" name="name" id="Form-field-myevent-name" value="{{ __SELF__.myevent.name }}" placeholder="My Event" class="form-control" maxlength="255">
@@ -33,11 +65,13 @@
         <label for="Form-field-myevent-category_id">Category</label>
         {{ categorylist|raw  }}
     </div>
+{% if __SELF__.allowpublish %}
     <div class="form-group">
         <input type="checkbox" id="Form-field-myevent-is_published" name="is_published" value="1"
             {% if __SELF__.myevent.is_published %} checked="checked"{% endif %}>
         <label for="Form-field-myevent-is_published">Published</label><br />
     </div>
+{% endif %}
     <div class="form-group">
         <button type="submit" 
             data-hotkey="ctrl+s, cmd+s" 

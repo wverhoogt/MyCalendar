@@ -1,0 +1,10 @@
+<div class="modal-header">
+<h4 class="modal-title">{{ ev.name }}</h4>{{ ev.date|date('m/d/Y') }} {% if ev.time %} at {{ ev.time }}{% endif %}
+</div>
+<div class="modal-body">
+{{ ev.text|raw }}
+</div>
+<div class="modal-footer">
+<a href="{{ backLink|app }}" class="btn btn-default" data-dismiss="modal">Back</a>
+</div>
+{{ backlink }}

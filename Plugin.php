@@ -44,6 +44,7 @@ class Plugin extends PluginBase
             //'KurtJensen\MyCalendar\Components\Week' => 'Week',
             'KurtJensen\MyCalendar\Components\EvList' => 'EvList',
             'KurtJensen\MyCalendar\Components\Events' => 'Events',
+            'KurtJensen\MyCalendar\Components\Event' => 'Event',
             'KurtJensen\MyCalendar\Components\EventForm' => 'EventForm',
         ];
     }

@@ -1,15 +1,25 @@
 <!-- Start event-list.htm -->
-            <table>
+        <div  class="text-right">
+            <button
+                claas="btn btn-default"
+                title="Add Event"
+                data-request="EventForm::onEventForm" 
+                data-request-update="'EventForm::form': '#eventinfo'">
+                Add Event <i class="icon-plus btn-icon danger"></i>
+            </button>
+        </div>
+            <table class="table">
                 <tr>
                     <th class="">Event</th>
-                    <th class="">Date</th>
+                    <th class="">Date / Time</th>
                     <th class="">Categories</th>
+                    <th class="">&nbsp;</th>
                     <th class="">&nbsp;</th>
                 </tr>
 {% for event in __SELF__.myevents  %}
                 <tr>
                     <td class="">{{ event.name }}</td>
-                    <td class=""> {{ event.date }} </td>
+                    <td class=""> {{ ev.date|date('m/d/Y') }} {% if ev.time %} at {{ ev.time }}{% endif %}</td>
                     <td class="">{% for cat in event.categories %}{{ cat.name }}, {% endfor %}</td>
                     <td class=""> {% if event.is_published %}{% else %} Not {% endif %} Published </td>
                     <td class="">

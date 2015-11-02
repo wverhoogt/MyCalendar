@@ -23,7 +23,7 @@
 {% if dayProp.link %}</a>{% endif %}
         		<ul class="eventList">
 {% for ev in devents[dayPointer] %}
-    {% partial __SELF__~'::event' ev=ev %}
+    {% partial '@event' ev = ev %}
 {% endfor %}
         		</ul>
 			</td>

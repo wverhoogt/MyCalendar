@@ -1,0 +1,9 @@
+
+
+<ul>
+<li{% if ev.class %} class="{{ ev.class|raw }}"{% endif %} title="{% if ev.title %}{{ ev.title }}{% else %}{{ ev.txt|striptags|slice(0,50) }}{% endif %}">
+    {% if ev.link %}<a href="{{ ev.link|raw }}">{% endif %}{{ ev.txt|raw }}{% if ev.link %}</a>{% endif %}
+</li>
+</ul>
+
+<a href="{{ MyCalList }}" class="btn btn-lg btn-default">Return to Events Page</a>

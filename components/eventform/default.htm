@@ -1,13 +1,4 @@
 <!-- Start event-default.htm -->
-        <div  class="text-right">
-            <button
-                claas="btn btn-default"
-                title="Add Event"
-                data-request="EventForm::onEventForm" 
-                data-request-update="'EventForm::form': '#eventinfo'">
-                Add Event <i class="icon-plus btn-icon danger"></i>
-            </button>
-        </div>
         <div id="eventinfo">
         {% partial __SELF__~'::list' %}
         </div>

@@ -14,31 +14,31 @@ Go to the MyCalendar page in the backend and add your events.
 - Drag "Month Component" to the page layout.
 
 ```
-	{% component 'Month' %}
-```	
+  {% component 'Month' %}
+``` 
 
 
 ## Display Month calendar on page and make it wider
 - Drag "Month Component" to the page layout and edit as below.
 
 ```
-    <style>
+  <style>
       table.mycal { width: 900px;}
-	</style>
+  </style>
 
-	{% component 'Month' %}
-```	
+  {% component 'Month' %}
+``` 
 
 
 ## Display Month calendar on page and insert events from DB
-- Double click "Events Component" to add it to page. 
+- Drag "Events Component" to add it to page. 
 - Drag "Month Component" to the page layout and edit as below.
 
 ```
-	{% component 'Month' events = MyEvents %}
+  {% component 'Month' events = MyEvents %}
 ```
 
-The "Events Component" injects the MyEvents array into the page.
+The "Events Component" injects the MyEvents array into the page. It also has a modal pop-up for showing event details.
 
 
 ## Display Event list calendar on page and insert events from DB for current and next month
@@ -46,11 +46,11 @@ The "Events Component" injects the MyEvents array into the page.
 - Drag "List Component" to the page layout and edit as below.
 
 ```
-	<div style="width:100px">
-	{% component 'EvList' events = MyEvents %}
-	{% set m = date()|date("m") +1 %}
-	{% component 'EvList' month = m events = MyEvents %}
-	</div>
+  <div style="width:100px">
+  {% component 'EvList' events = MyEvents %}
+  {% set m = date()|date("m") +1 %}
+  {% component 'EvList' month = m events = MyEvents %}
+  </div>
 ```
 
 The "List Component" only shows up when there are events for the month indicated.
@@ -66,7 +66,67 @@ The "Events Component" injects the MyEvents array into the page.
 
 These properties can be set by clicking on component and changing them there or in the page layout as below:
     
-	{% component 'EvList' month = 2 events = MyEvents %}
+  {% component 'EvList' month = 2 events = MyEvents %}
+
+
+
+## Passing you own "Events" and/or "Day Properties" to the calendar
+If passing you own "Events" and/or "Day Properties" to the calendar using an array in the page, here is the formate used:
+
+```
+    /**
+    * ======================================================
+    * Sample of array format used to pass events to calendar
+    * ======================================================
+    **/
+    $this->page['MyEvents'] = [
+        2015 => [   // Year
+            2 => [    // Month
+                20 => [  // Day
+                    [
+                        'txt' => 'October CMS', 
+                        'link' => 'http://octobercms.com/'
+                    ], 
+                    [
+                        'txt' => '<p>Text to show on calendar</p>', 
+                        // You can add properties to anchor tag if needed.
+                        'link' => '#content-confirmation" data-toggle="modal',
+                        // You can add a CSS class tag to the <li> tag for this event.
+                        'class' => 'text-success',
+                        // You can add an on-hover "title" property to the <li> tag for this event.
+                        'title' => 'Just another test. This text shows on hover of event.' 
+                    ],
+                ],
+                22 => [
+                    [
+                        'txt' => 'My really long and dumb event name',
+                        'title' => 'More about my really long and dumb event named event.'
+                    ],
+                ],
+            ],
+        ]
+    ];
+    /**
+    * ==============================================================
+    * Sample of array format used to pass Day Properties to calendar
+    * ==============================================================
+    **/
+    $this->page['MyDayProps'] = [
+        2015 => [   // Year
+            2 => [    // Month
+                20 => [ // Day
+                    // You can add a link to the day indicator in the calendar.
+                    // ( This example was for a modal AJAX dialog box. )
+                    'link' => '#content-confirmation" data-toggle="modal'
+                ],
+                22 => [
+                    // You can add a CSS class to the day indicator in the calendar.
+                    'class' => 'dis'
+                ],
+            ],
+        ] 
+    ];
+```
 
 
 ## Like this plugin?

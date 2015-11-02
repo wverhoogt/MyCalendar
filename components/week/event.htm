@@ -1,6 +1,0 @@
-            <li{% if ev.class %} class="{{ ev.class|raw }}"{% endif %} 
-            	title="{% if ev.title %}{{ ev.title|raw }}{% else %}{{ ev.txt|raw }}{% endif %}">
-{% if ev.link %}<a {{ ev.link|raw }}>{% endif %}
-                {{ ev.txt|raw }}
-{% if ev.link %}</a>{% endif %}
-            </li>
