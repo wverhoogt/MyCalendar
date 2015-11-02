@@ -48,7 +48,12 @@ class Events extends ComponentBase
     {
         $events = MyEvents::where('is_published', true)->
         where('month', '>=', date('m'))->
-        where('year', '>=', date('Y'))->get();
+        where('year', '>=', date('Y'))->
+        orderBy('year')->
+        orderBy('month')->
+        orderBy('day')->
+        orderBy('time')->
+        get();
 
         $maxLen = $this->property('title_max', 100);
         $linkPage = $this->property('linkpage', '');

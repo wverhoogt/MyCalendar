@@ -22,3 +22,5 @@ columns:
         label: Title
     date:
         label: Date
+    time:
+        label: Time

@@ -67,7 +67,7 @@ is_published
             return '';
         }
         list($h, $m) = explode(':', $this->time);
-        $time = ($h > 12 ? ($h - 12) : $h) . ':' . $m . ($h > 11 ? 'pm' : 'am');
+        $time = ($h > 12 ? ($h - 12) : intval($h)) . ':' . $m . ($h > 11 ? 'pm' : 'am');
         return $time;
     }
 
