@@ -8,3 +8,5 @@
 1.0.4:
     - Add link and time Field to Events
     - add_event_link_time.php
+1.0.5:
+    - Add option to use CKEditor to write event description in form

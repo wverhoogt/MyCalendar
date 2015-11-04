@@ -12,6 +12,7 @@ class EventForm extends ComponentBase
     public $categorylist;
     public $user;
     public $allowpublish;
+    public $ckeditor;
 
     public function componentDetails()
     {
@@ -30,7 +31,15 @@ class EventForm extends ComponentBase
                 'type' => 'dropdown',
                 'default' => '1',
                 'options' => [0 => 'No', 1 => 'Yes'],
-            ]];
+            ],
+            'ckeditor' => [
+                'title' => 'Use CKEditor',
+                'description' => 'Load CKEditor from cdn.ckeditor.com and show rich editor field for event description.',
+                'type' => 'dropdown',
+                'default' => '1',
+                'options' => [0 => 'No', 1 => 'Yes'],
+            ],
+        ];
     }
 
     public function init()
@@ -41,6 +50,7 @@ class EventForm extends ComponentBase
             return null;
         }
         $this->allowpublish = $this->property('allowpublish');
+        $this->ckeditor = $this->property('ckeditor');
     }
 
     public function onRun()
@@ -49,6 +59,11 @@ class EventForm extends ComponentBase
         $this->addCss('/modules/backend/formwidgets/datepicker/assets/css/datepicker.css');
         $this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/pikaday/css/pikaday.css');
         $this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/clockpicker/css/jquery-clockpicker.css');
+
+        if ($this->ckeditor) {
+            $this->addJs('//cdn.ckeditor.com/4.5.4/standard/ckeditor.js');
+        }
+
         $this->myevents = $this->page['myevents'] = $this->loadEvents();
     }
 
@@ -121,7 +136,7 @@ text
 is_published
  */
         $myevent->name = post('name');
-        //list($myevent->year, $myevent->month, $myevent->day) = explode('-', post('date'));
+        $myevent->text = post('text');
         $myevent->date = post('date');
         $myevent->time = post('time');
         if ($this->allowpublish) {

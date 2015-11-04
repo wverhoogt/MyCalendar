@@ -83,3 +83,8 @@
     </span>
     </div>
 </form>
+{% if __SELF__.ckeditor %}
+<script>
+    CKEDITOR.replace( 'text' );
+</script>
+{% endif %}
