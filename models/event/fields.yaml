@@ -10,10 +10,14 @@ fields:
         label: Title
         span: left
         placeholder: Name your Event
-    user_id:
-        label: Creator
-        type: dropdown
+    is_published:
+        label: Published
+        type: switch
         span: right
+#    user_id:
+#        label: Creator
+#        type: dropdown
+#        span: right
     date:
         label: Date
         type: datepicker
@@ -40,7 +44,3 @@ fields:
         type: relation
         emptyOption: There are no categories, you should create one first!
         span: left
-    is_published:
-        label: Published
-        type: switch
-        span: right

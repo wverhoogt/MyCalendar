@@ -10,3 +10,5 @@
     - add_event_link_time.php
 1.0.5:
     - Add option to use CKEditor to write event description in form
+1.0.6:
+    - Fixed ungracefull errors when rainlab.user not installed
