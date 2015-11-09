@@ -46,6 +46,7 @@ class Events extends ComponentBase
 
     public function loadEvents()
     {
+        $MyEvents = [];
         $events = MyEvents::where('is_published', true)->
         where('month', '>=', date('m'))->
         where('year', '>=', date('Y'))->
