@@ -1,5 +1,5 @@
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button type="button" class="close btn btn-default" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">{{ ev.name }}</h4>{{ ev.date|date('m/d/Y') }} {% if ev.time %} at {{ ev.time }}{% endif %}
       </div>
       <div class="modal-body">
@@ -7,7 +7,8 @@
       </div>
       <div class="modal-footer">
         <div class="text-left">
-        {{ ev.cats|join('<br />')|raw }}
+{% for cat in ev.cats %}
+          <span class="label label-info">{{cat}}</span>
+{% endfor %}
         </div>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>

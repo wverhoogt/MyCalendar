@@ -58,7 +58,7 @@ class Events extends ComponentBase {
 
 	public function loadEvents() {
 		$MyEvents = [];
-		if (!$this->usePermissions) {
+		if ($this->usePermissions) {
 			$this->loadPermissions();
 
 			$query =
@@ -110,11 +110,12 @@ class Events extends ComponentBase {
 		$slug = post('evid');
 		$e = MyEvents::with('categorys')->where('is_published', true)->find($slug);
 		if (!$e) {
-			return 'Event not found!';
+			return $this->page['ev'] = ['name' => 'Event not found!', 'cats' => $e->categorys->lists('name')];
 		}
 
 		if ($this->usePermissions) {
 			$this->loadPermissions();
+			$eventPerms = $e->categorys->lists('id');
 
 			$Allow = Category::whereIn('permission_id', $this->permarray)
 				->lists('id');
@@ -122,10 +123,12 @@ class Events extends ComponentBase {
 			$Deny = Category::where('permission_id', Settings::get('deny_perm'))
 				->lists('id');
 
-			if ((count($catsAllowed = array_intersect($e->categorys->lists('id'), $Allow))) OR
+			if (!count(array_intersect($eventPerms, $Allow))) {
+				return $this->page['ev'] = ['name' => 'Event not allowed!', 'cats' => $e->categorys->lists('name')];
+			}
 
-				(count(array_intersect($catsAllowed, $Deny)) > 0)) {
-				return 'Event not found!';
+			if (count(array_intersect($eventPerms, $Deny))) {
+				return $this->page['ev'] = ['name' => 'Event Prohibited!', 'cats' => $e->categorys->lists('name')];
 			}
 
 		}
