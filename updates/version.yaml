@@ -19,3 +19,6 @@
     - categories_add_permissions.php
     - seed_all_tables.php
     - rename_categorys_events_table.php
+1.0.9:
+    - Fixes bug for no logged in user
+    - rename_event_c_e_table.php

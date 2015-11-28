@@ -17,10 +17,12 @@ trait LoadPermissions {
 			return $this->permarray;
 		}
 
-		if (!$user_id) {
-			$User = Auth::getUser();
+		$User = Auth::getUser();
+
+		if ($User) {
 			$user_id = $User->id;
 		}
+
 		$deny_perm = intval(Settings::get('deny_perm'));
 
 		if ($user_id) {
