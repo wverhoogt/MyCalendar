@@ -2,89 +2,137 @@
 
 use Cms\Classes\ComponentBase;
 use Cms\Classes\Page;
+use KurtJensen\MyCalendar\Models\Category as Category;
+use KurtJensen\MyCalendar\Models\CategorysEvents;
 use KurtJensen\MyCalendar\Models\Event as MyEvents;
+use KurtJensen\MyCalendar\Models\Settings;
 
-class Events extends ComponentBase
-{
+class Events extends ComponentBase {
+	use \KurtJensen\MyCalendar\Traits\LoadPermissions;
 
-    public function componentDetails()
-    {
-        return [
-            'name' => 'Events Component',
-            'description' => 'Get Events from DB and insert them into page',
-        ];
-    }
+	public $usePermissions = 0;
 
-    public function defineProperties()
-    {
-        return [
-            'linkpage' => [
-                'title' => 'Link to Page',
-                'description' => 'Name of the event page file for the "More Details" links. This property is used by the event component partial.',
-                'type' => 'dropdown',
-                'default' => '',
-                'group' => 'Links',
-            ],
-            'title_max' => [
-                'title' => 'Maximum Popup Title Length',
-                'description' => 'Maximum length of "title" property that shows the details of an event on hover.',
-                'type' => 'text',
-                'default' => 100,
-            ],
-        ];
-    }
+	public function componentDetails() {
+		return [
+			'name' => 'Events Component',
+			'description' => 'Get Events from DB and insert them into page',
+		];
+	}
 
-    public function getLinkpageOptions()
-    {
-        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName')+['' => 'None - Use Modal Pop-up'];
-    }
+	public function defineProperties() {
+		return [
+			'linkpage' => [
+				'title' => 'Link to Page',
+				'description' => 'Name of the event page file for the "More Details" links. This property is used by the event component partial.',
+				'type' => 'dropdown',
+				'default' => '',
+				'group' => 'Links',
+			],
+			'title_max' => [
+				'title' => 'Maximum Popup Title Length',
+				'description' => 'Maximum length of "title" property that shows the details of an event on hover.',
+				'type' => 'text',
+				'default' => 100,
+			],
+			'usePermissions' => [
+				'title' => 'Use Permission',
+				'description' => 'Use permissions to restrict what categories of events are shown based on roles.',
+				'type' => 'dropdown',
+				'default' => 0,
+				'options' => [0 => 'No', 1 => 'Yes'],
+			],
+		];
+	}
 
-    public function onRun()
-    {
-        $this->page['MyEvents'] = $this->loadEvents();
-    }
+	public function getLinkpageOptions() {
+		return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName') + ['' => 'None - Use Modal Pop-up'];
+	}
 
-    public function loadEvents()
-    {
-        $MyEvents = [];
-        $events = MyEvents::where('is_published', true)->
-        where('month', '>=', date('m'))->
-        where('year', '>=', date('Y'))->
-        orderBy('year')->
-        orderBy('month')->
-        orderBy('day')->
-        orderBy('time')->
-        get();
+	public function init() {
+		$this->usePermissions = $this->property('usePermissions', 0);
+	}
 
-        $maxLen = $this->property('title_max', 100);
-        $linkPage = $this->property('linkpage', '');
+	public function onRun() {
+		$this->page['MyEvents'] = $this->loadEvents();
+	}
 
-        foreach ($events as $e) {
-            $title = (strlen($e->text) > 50) ? substr(strip_tags($e->text), 0, $maxLen) . '...' : $e->text;
+	public function loadEvents() {
+		$MyEvents = [];
+		if (!$this->usePermissions) {
+			$this->loadPermissions();
 
-            $link = $e->link ? $e->link : ($linkPage ? Page::url($linkPage, ['slug' => $e->id]) :
-                '#EventDetail"
+			$query =
+			MyEvents::whereIn('id',
+				CategorysEvents::whereIn('category_id',
+					Category::whereIn('permission_id', $this->permarray)
+						->lists('id')
+				)
+					->lists('event_id')
+			)
+				->whereNotIn('id',
+					CategorysEvents::whereIn('category_id',
+						Category::where('permission_id', Settings::get('deny_perm'))
+							->lists('id')
+					)
+						->lists('event_id')
+				);
+		} else {
+			$query =
+			MyEvents::where('is_published', true);
+
+		}
+		$events = $query->where('month', '>=', date('m'))
+			->where('year', '>=', date('Y'))
+			->orderBy('time')
+			->get();
+
+//                    ->whereNotIn('permission_id', Settings::get('deny_perm'))
+
+		$maxLen = $this->property('title_max', 100);
+		$linkPage = $this->property('linkpage', '');
+
+		foreach ($events as $e) {
+			$title = (strlen($e->text) > 50) ? substr(strip_tags($e->text), 0, $maxLen) . '...' : $e->text;
+
+			$link = $e->link ? $e->link : ($linkPage ? Page::url($linkPage, ['slug' => $e->id]) :
+				'#EventDetail"
             	data-request="onShowEvent"
             	data-request-data="evid:' . $e->id . '"
-		        data-request-success="$(\'html, body\').animate({ scrollTop: 0 });"
             	data-request-update="\'Events::details\':\'#EventDetail\'" data-toggle="modal" data-target="#myModal');
 
-            $MyEvents[$e->year][$e->month][$e->day][] = ['name' => $e->name . ' ' . $e->human_time, 'title' => $title, 'link' => $link];
-        }
-        return $MyEvents;
+			$MyEvents[$e->year][$e->month][$e->day][] = ['name' => $e->name . ' ' . $e->human_time, 'title' => $title, 'link' => $link];
+		}
+		return $MyEvents;
 
-    }
+	}
 
-    public function onShowEvent()
-    {
-        $slug = post('evid');
-        if (!$e = MyEvents::where('is_published', true)->find($slug)) {
-            return 'Event not found!';
-        }
+	public function onShowEvent() {
+		$slug = post('evid');
+		$e = MyEvents::with('categorys')->where('is_published', true)->find($slug);
+		if (!$e) {
+			return 'Event not found!';
+		}
 
-        $maxLen = $this->property('title_max', 100);
+		if ($this->usePermissions) {
+			$this->loadPermissions();
 
-        $link = $e->link ? $e->link : '';
-        $this->page['ev'] = ['name' => $e->name, 'date' => $e->date, 'time' => $e->human_time, 'link' => $link, 'text' => $e->text];
-    }
+			$Allow = Category::whereIn('permission_id', $this->permarray)
+				->lists('id');
+
+			$Deny = Category::where('permission_id', Settings::get('deny_perm'))
+				->lists('id');
+
+			if ((count($catsAllowed = array_intersect($e->categorys->lists('id'), $Allow))) OR
+
+				(count(array_intersect($catsAllowed, $Deny)) > 0)) {
+				return 'Event not found!';
+			}
+
+		}
+
+		$maxLen = $this->property('title_max', 100);
+
+		$link = $e->link ? $e->link : '';
+		$this->page['ev'] = ['name' => $e->name, 'date' => $e->date, 'time' => $e->human_time, 'link' => $link, 'text' => $e->text, 'cats' => $e->categorys->lists('name')];
+	}
 }

@@ -14,3 +14,8 @@
     - Fixed ungracefull errors when rainlab.user not installed
 1.0.7:
     - Fixes error when there are no events in DB
+1.0.8:
+    - Adds permissions to calendar categories
+    - categories_add_permissions.php
+    - seed_all_tables.php
+    - rename_categorys_events_table.php

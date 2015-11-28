@@ -6,5 +6,8 @@
         {{ ev.text|raw }}
       </div>
       <div class="modal-footer">
+        <div class="text-left">
+        {{ ev.cats|join('<br />')|raw }}
+        </div>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>

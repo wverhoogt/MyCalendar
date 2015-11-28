@@ -35,7 +35,11 @@ public $belongsTo = [
 ];
  */
 	public $belongsToMany = [
-		'categories' => ['KurtJensen\MyCalendar\Models\Category', 'table' => 'kurtjensen_mycal_events_categories', 'key' => 'events_id', 'otherKey' => 'category_id'],
+		'categorys' => ['KurtJensen\MyCalendar\Models\Category',
+			'table' => 'kurtjensen_mycal_categorys_events',
+			'key' => 'event_id',
+			'otherKey' => 'category_id',
+		],
 	];
 /*
 id
@@ -99,7 +103,8 @@ is_published
 	public function getUserIdOptions($keyValue = null) {
 		$manager = PluginManager::instance();
 		if ($manager->exists('rainlab.user')) {
-			foreach (UserModel::orderBy('name')->get() as $user) {
+			foreach (UserModel::orderBy('surname')->
+				orderBy('name')->get() as $user) {
 				$Users[$user->id] = $user->surname . ', ' . $user->name;
 			}
 

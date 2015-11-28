@@ -39,7 +39,7 @@ fields:
         label: Link
         span: full
         placeholder: Add URL Link to your event.
-    categories:
+    categorys:
         label: Categories
         type: relation
         emptyOption: There are no categories, you should create one first!

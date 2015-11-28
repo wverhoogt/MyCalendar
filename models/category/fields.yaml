@@ -20,3 +20,7 @@ fields:
     description:
         label: Description
         placeholder: More details
+    permission_id:
+        label: Permision for this Category',
+        comment: Set the permision for this category.',
+        type: dropdown
