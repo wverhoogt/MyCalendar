@@ -24,3 +24,5 @@
     - rename_event_c_e_table.php
 1.0.10:
     - Added "Next" and "Previous" links to month
+1.0.11:
+    - Added "owner" and "id" to Events data array
