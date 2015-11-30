@@ -22,3 +22,5 @@
 1.0.9:
     - Fixes bug for no logged in user
     - rename_event_c_e_table.php
+1.0.10:
+    - Added "Next" and "Previous" links to month

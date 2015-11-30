@@ -16,7 +16,10 @@ Go to the MyCalendar page in the backend and add your events.
 ```
   {% component 'Month' %}
 ``` 
-
+- Edit Page URL to provide "Next" and "Previous" link to allow users to scroll through months. ( /calendarpage/  with no month or year will default to current month and year)
+```
+    /calendarpage/:month?/:year?
+```
 
 ## Display Month calendar on page and make it wider
 - Drag "Month Component" to the page layout and edit as below.

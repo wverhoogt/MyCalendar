@@ -29,7 +29,7 @@ tr.daysHead th{
         font-weight:bold;
     }
     
-tr.monthHead th{
+tr th.monthHead{
         font-size:1.5em;
         text-align: center;
     }

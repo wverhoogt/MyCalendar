@@ -75,7 +75,8 @@ class Events extends ComponentBase {
 							->lists('id')
 					)
 						->lists('event_id')
-				);
+				)
+				->where('is_published', true);
 		} else {
 			$query =
 			MyEvents::where('is_published', true);
