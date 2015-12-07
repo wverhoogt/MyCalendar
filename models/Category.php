@@ -2,7 +2,7 @@
 
 use Form;
 use Model;
-use ShahiemSeymor\Roles\Models\UserPermission as Permission;
+use System\Classes\PluginManager;
 
 /**
  * Category Model
@@ -78,12 +78,15 @@ class Category extends Model {
 		return Form::select($name, self::getNameList($includeBlank), $selectedValue, $options);
 	}
 
-	public function getPermissionIdOptions() {
-		$permissions = Permission::get();
-		foreach ($permissions as $permission) {
-			$options[$permission->id] = $permission->name;
+	public function getDropdownOptions($fieldName = null, $keyValue = null) {
+		$options = [];
+		$manager = PluginManager::instance();
+		if ($manager->exists('shahiemseymor.roles')) {
+			$permissions = ShahiemSeymor\Roles\Models\UserPermission::get();
+			foreach ($permissions as $permission) {
+				$options[$permission->id] = $permission->name;
+			}
 		}
-
 		return $options;
 	}
 }

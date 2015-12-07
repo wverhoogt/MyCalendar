@@ -26,3 +26,5 @@
     - Added "Next" and "Previous" links to month
 1.0.11:
     - Added "owner" and "id" to Events data array
+1.0.12:
+    - Check for 'Roles' plugin before trying to seed tables.
