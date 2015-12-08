@@ -28,3 +28,5 @@
     - Added "owner" and "id" to Events data array
 1.0.12:
     - Check for 'Roles' plugin before trying to seed tables.
+1.0.13:
+    - Fixes incorrect namespace for UserPermission.

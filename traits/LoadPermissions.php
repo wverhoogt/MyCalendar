@@ -3,7 +3,6 @@
 use Auth;
 use DB;
 use KurtJensen\MyCalendar\Models\Settings;
-//use ShahiemSeymor\Roles\Models\UserPermission as Permission;
 use RainLab\User\Models\User as User;
 
 trait LoadPermissions {
