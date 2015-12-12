@@ -4,16 +4,16 @@
 
 fields:
     public_perm:
-        label: Public Category
-        comment: A permission for categories that will NOT be blocked from public viewing.
+        label: kurtjensen.mycalendar::lang.settings.public_perm_label
+        comment: kurtjensen.mycalendar::lang.settings.public_perm_comment
         type: dropdown
         
     deny_perm:
-        label: Denied Category
-        comment: A permission for categories that WILL be blocked from any viewing.
+        label: kurtjensen.mycalendar::lang.settings.deny_perm_label
+        comment: kurtjensen.mycalendar::lang.settings.deny_perm_comment
         type: dropdown
         
     default_perm:
-        label: Default Category
-        comment: A permission that will be set on new categories by default ( unless set by user ).
+        label: kurtjensen.mycalendar::lang.settings.default_perm_label
+        comment: kurtjensen.mycalendar::lang.settings.default_perm_comment
         type: dropdown

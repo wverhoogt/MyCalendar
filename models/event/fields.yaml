@@ -7,11 +7,11 @@ fields:
 #        label: ID
 #        disabled: true
     name:
-        label: Title
+        label: kurtjensen.mycalendar::lang.event.name
         span: left
-        placeholder: Name your Event
+        placeholder: kurtjensen.mycalendar::lang.event.phold_name
     is_published:
-        label: Published
+        label: kurtjensen.mycalendar::lang.event.is_published
         type: switch
         span: right
 #    user_id:
@@ -19,28 +19,28 @@ fields:
 #        type: dropdown
 #        span: right
     date:
-        label: Date
+        label: kurtjensen.mycalendar::lang.event.date
         type: datepicker
         mode: date
         span: left
-        placeholder: Pick a Date
+        placeholder: kurtjensen.mycalendar::lang.event.phold_date
     time:
-        label: Time
+        label: kurtjensen.mycalendar::lang.event.time
         type: datepicker
         mode: time
         span: right
-        placeholder: Pick a Time
+        placeholder: kurtjensen.mycalendar::lang.event.phold_time
     text:
-        label: Details
+        label: kurtjensen.mycalendar::lang.event.text
         type: textarea
         size: large
-        placeholder: Enter as much details as you want about your event. (HTML OK)
+        placeholder: kurtjensen.mycalendar::lang.event.phold_text
     link:
-        label: Link
+        label: kurtjensen.mycalendar::lang.event.link
         span: full
-        placeholder: Add URL Link to your event.
+        placeholder: kurtjensen.mycalendar::lang.event.phold_link
     categorys:
-        label: Categories
+        label: kurtjensen.mycalendar::lang.event.categorys
         type: relation
-        emptyOption: There are no categories, you should create one first!
+        emptyOption: kurtjensen.mycalendar::lang.event.empty_categorys
         span: left

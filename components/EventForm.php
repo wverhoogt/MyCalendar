@@ -4,6 +4,7 @@ use Auth;
 use Cms\Classes\ComponentBase;
 use KurtJensen\MyCalendar\Models\Category as MyCalCategory;
 use KurtJensen\MyCalendar\Models\Event as MyCalEvent;
+use Lang;
 
 class EventForm extends ComponentBase
 {
@@ -17,8 +18,8 @@ class EventForm extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name' => 'EventForm Component',
-            'description' => 'Front end form to allow users to ad their own events',
+            'name' => 'kurtjensen.mycalendar::lang.event_form.name',
+            'description' => 'kurtjensen.mycalendar::lang.event_form.description',
         ];
     }
 
@@ -26,18 +27,24 @@ class EventForm extends ComponentBase
     {
         return [
             'allowpublish' => [
-                'title' => 'Allow Publish',
-                'description' => 'Allow users to publish their event. (No means an admin must do it.)',
+                'title' => 'kurtjensen.mycalendar::lang.event_form.allow_pub_title',
+                'description' => 'kurtjensen.mycalendar::lang.event_form.allow_pub_description',
                 'type' => 'dropdown',
                 'default' => '1',
-                'options' => [0 => 'No', 1 => 'Yes'],
+                'options' => [
+                    0 => 'kurtjensen.mycalendar::lang.event_form.opt_no',
+                    1 => 'kurtjensen.mycalendar::lang.event_form.opt_yes',
+                ],
             ],
             'ckeditor' => [
-                'title' => 'Use CKEditor',
-                'description' => 'Load CKEditor from cdn.ckeditor.com and show rich editor field for event description.',
+                'title' => 'kurtjensen.mycalendar::lang.event_form.ckeditor_title',
+                'description' => 'kurtjensen.mycalendar::lang.event_form.ckeditor_description',
                 'type' => 'dropdown',
                 'default' => '1',
-                'options' => [0 => 'No', 1 => 'Yes'],
+                'options' => [
+                    0 => 'kurtjensen.mycalendar::lang.event_form.opt_no',
+                    1 => 'kurtjensen.mycalendar::lang.event_form.opt_yes',
+                ],
             ],
         ];
     }
@@ -65,6 +72,11 @@ class EventForm extends ComponentBase
         }
 
         $this->myevents = $this->page['myevents'] = $this->loadEvents();
+    }
+
+    public function trans($string)
+    {
+        return Lang::get($string);
     }
 
     protected function loadEvents()
@@ -105,11 +117,11 @@ class EventForm extends ComponentBase
         if (!$myevent = $this->getMyEvent()) {
             return null;
         }
-
+        $cat = isset($myevent->categorys->first()->id) ? $myevent->categorys->first()->id : 0;
         $this->categorylist = $this->page['categorylist'] = MyCalCategory::selector(
-            0,
+            $cat,
             array('class' => 'form-control custom-select',
-                'id' => 'Form-field-myeventone-provider_id')
+                'id' => 'Form-field-myevent-category_id')
         );
 
         $this->myevent = $this->page['myevent'] = $myevent;
@@ -125,20 +137,12 @@ class EventForm extends ComponentBase
         if (!$myevent = $this->getMyEvent()) {
             return null;
         }
-/*
-id
-user_id
-name
-day
-month
-year
-text
-is_published
- */
+
         $myevent->name = post('name');
         $myevent->text = post('text');
         $myevent->date = post('date');
         $myevent->time = post('time');
+        $myevent->categorys = [post('category_id')];
         if ($this->allowpublish) {
             $myevent->is_published = post('is_published');
         }

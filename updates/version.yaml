@@ -30,3 +30,4 @@
     - Check for 'Roles' plugin before trying to seed tables.
 1.0.13:
     - Fixes incorrect namespace for UserPermission.
+1.0.14: Added Localization only (en) included.

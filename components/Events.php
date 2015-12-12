@@ -25,31 +25,30 @@ class Events extends ComponentBase
     {
         return [
             'linkpage' => [
-                'title' => 'Link to Page',
-                'description' => 'Name of the event page file for the "More Details" links. This property is used by the event component partial.',
+                'title' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_title',
+                'description' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_desc',
                 'type' => 'dropdown',
                 'default' => '',
-                'group' => 'Links',
+                'group' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_group',
             ],
             'title_max' => [
-                'title' => 'Maximum Popup Title Length',
-                'description' => 'Maximum length of "title" property that shows the details of an event on hover.',
-                'type' => 'text',
+                'title' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_group',
+                'description' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_group',
                 'default' => 100,
             ],
             'usePermissions' => [
-                'title' => 'Use Permission',
-                'description' => 'Use permissions to restrict what categories of events are shown based on roles.',
+                'title' => 'kurtjensen.mycalendar::lang.events_comp.permissions_title',
+                'description' => 'kurtjensen.mycalendar::lang.events_comp.permissions_description',
                 'type' => 'dropdown',
                 'default' => 0,
-                'options' => [0 => 'No', 1 => 'Yes'],
+                'options' => [0 => 'kurtjensen.mycalendar::lang.events_comp.permissions_opt_no', 1 => 'kurtjensen.mycalendar::lang.events_comp.permissions_opt_yes'],
             ],
         ];
     }
 
     public function getLinkpageOptions()
     {
-        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName')+['' => 'None - Use Modal Pop-up'];
+        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName')+['' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_opt_none'];
     }
 
     public function init()
@@ -123,7 +122,7 @@ class Events extends ComponentBase
         $slug = post('evid');
         $e = MyEvents::with('categorys')->where('is_published', true)->find($slug);
         if (!$e) {
-            return $this->page['ev'] = ['name' => 'Event not found!', 'cats' => $e->categorys->lists('name')];
+            return $this->page['ev'] = ['name' => 'kurtjensen.mycalendar::lang.event.error_not_found', 'cats' => $e->categorys->lists('name')];
         }
 
         if ($this->usePermissions) {
@@ -137,16 +136,14 @@ class Events extends ComponentBase
                 ->lists('id');
 
             if (!count(array_intersect($eventPerms, $Allow))) {
-                return $this->page['ev'] = ['name' => 'Event not allowed!', 'cats' => $e->categorys->lists('name')];
+                return $this->page['ev'] = ['name' => 'kurtjensen.mycalendar::lang.event.error_allow_no', 'cats' => $e->categorys->lists('name')];
             }
 
             if (count(array_intersect($eventPerms, $Deny))) {
-                return $this->page['ev'] = ['name' => 'Event Prohibited!', 'cats' => $e->categorys->lists('name')];
+                return $this->page['ev'] = ['name' => 'kurtjensen.mycalendar::lang.event.error_prohibit', 'cats' => $e->categorys->lists('name')];
             }
 
         }
-
-        $maxLen = $this->property('title_max', 100);
 
         $link = $e->link ? $e->link : '';
         $this->page['ev'] = ['name' => $e->name, 'date' => $e->date, 'time' => $e->human_time, 'link' => $link, 'text' => $e->text, 'cats' => $e->categorys->lists('name')];

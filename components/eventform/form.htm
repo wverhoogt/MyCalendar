@@ -30,7 +30,7 @@
         data-field-name="time"
         id="Form-field-Event-time-group">
         <label for="Form-field-Event-time">
-        Time
+        {{ __SELF__.trans('kurtjensen.mycalendar::lang.event.time') }}
         </label>
         <div
             id="DatePicker-formTime-time"
@@ -54,32 +54,32 @@
     </div>
     </div>
     <div class="form-group">
-        <label for="Form-field-myevent-phone">Event Name</label>
-        <input type="text" name="name" id="Form-field-myevent-name" value="{{ __SELF__.myevent.name }}" placeholder="My Event" class="form-control" maxlength="255">
+        <label for="Form-field-myevent-phone">{{ __SELF__.trans('kurtjensen.mycalendar::lang.event.name') }}</label>
+        <input type="text" name="name" id="Form-field-myevent-name" value="{{ __SELF__.myevent.name }}" placeholder="{{ __SELF__.trans('kurtjensen.mycalendar::lang.event.phold_name') }}" class="form-control" maxlength="255">
     </div>
     <div class="form-group">
-        <label for="Form-field-myevent-text">Event Details</label>
-        <textarea type="text" name="text" id="Form-field-myevent-text" placeholder="Something about your event and its time" class="form-control">{{ __SELF__.myevent.text }}</textarea>
+        <label for="Form-field-myevent-text">{{ __SELF__.trans('kurtjensen.mycalendar::lang.event.text') }}</label>
+        <textarea type="text" name="text" id="Form-field-myevent-text" placeholder="{{ __SELF__.trans('kurtjensen.mycalendar::lang.event.phold_text') }}" class="form-control">{{ __SELF__.myevent.text }}</textarea>
     </div>
     <div class="form-group">
-        <label for="Form-field-myevent-category_id">Category</label>
+        <label for="Form-field-myevent-category_id">{{ __SELF__.trans('kurtjensen.mycalendar::lang.event.category') }}</label>
         {{ categorylist|raw  }}
     </div>
 {% if __SELF__.allowpublish %}
     <div class="form-group">
         <input type="checkbox" id="Form-field-myevent-is_published" name="is_published" value="1"
             {% if __SELF__.myevent.is_published %} checked="checked"{% endif %}>
-        <label for="Form-field-myevent-is_published">Published</label><br />
+        <label for="Form-field-myevent-is_published">{{ __SELF__.trans('kurtjensen.mycalendar::lang.event.is_published') }}</label><br />
     </div>
 {% endif %}
     <div class="form-group">
         <button type="submit" 
             data-hotkey="ctrl+s, cmd+s" 
-            data-load-indicator="Saving Event..." 
-            class="btn btn-primary"><u>S</u>ave</button>
+            data-load-indicator="{{ __SELF__.trans('kurtjensen.mycalendar::lang.event_form.saving') }}" 
+            class="btn btn-primary">{{ __SELF__.trans('kurtjensen.mycalendar::lang.event_form.btn_save') }}</button>
 
     <span class="btn-text">
-        or <a href="">Cancel</a>
+        or <a href="">{{ __SELF__.trans('kurtjensen.mycalendar::lang.event_form.btn_cancel') }}</a>
     </span>
     </div>
 </form>

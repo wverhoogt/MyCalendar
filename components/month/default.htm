@@ -8,13 +8,15 @@
     <thead>
         <tr>
             <th colspan="2" class="text-right">
-                <a href="{{ this.page.baseFileName | app }}/{{ MyM.linkPrevMonth|date('m') }}/{{ MyM.linkPrevMonth|date('Y') }}">Previous</a>
+                <a href="{{ this.page.baseFileName | app }}/{{ MyM.linkPrevMonth|date('m') }}/{{ MyM.linkPrevMonth|date('Y') }}">
+                {{ MyM.trans('kurtjensen.mycalendar::lang.month.previous') }}</a>
             </th>
             <th colspan="3"  class="monthHead">
                 {{ MyM.monthTitle }} {{ MyM.year }}
             </th>
             <th colspan="2" class="text-left">
-                <a href="{{ this.page.baseFileName | app }}/{{ MyM.linkNextMonth|date('m') }}/{{ MyM.linkNextMonth|date('Y') }}">Next</a>
+                <a href="{{ this.page.baseFileName | app }}/{{ MyM.linkNextMonth|date('m') }}/{{ MyM.linkNextMonth|date('Y') }}">
+                {{ MyM.trans('kurtjensen.mycalendar::lang.month.next') }}</a>
             </th>
         </tr>
         <tr class="daysHead">
