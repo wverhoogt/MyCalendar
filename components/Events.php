@@ -16,8 +16,8 @@ class Events extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name' => 'Events Component',
-            'description' => 'Get Events from DB and insert them into page',
+            'name' => 'kurtjensen.mycalendar::lang.events_comp.name',
+            'description' => 'kurtjensen.mycalendar::lang.events_comp.description',
         ];
     }
 
