@@ -32,8 +32,8 @@ class Events extends ComponentBase
                 'group' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_group',
             ],
             'title_max' => [
-                'title' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_group',
-                'description' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_group',
+                'title' => 'kurtjensen.mycalendar::lang.events_comp.title_max_title',
+                'description' => 'kurtjensen.mycalendar::lang.events_comp.title_max_description',
                 'default' => 100,
             ],
             'usePermissions' => [
@@ -41,7 +41,10 @@ class Events extends ComponentBase
                 'description' => 'kurtjensen.mycalendar::lang.events_comp.permissions_description',
                 'type' => 'dropdown',
                 'default' => 0,
-                'options' => [0 => 'kurtjensen.mycalendar::lang.events_comp.permissions_opt_no', 1 => 'kurtjensen.mycalendar::lang.events_comp.permissions_opt_yes'],
+                'options' => [
+                    0 => 'kurtjensen.mycalendar::lang.events_comp.permissions_opt_no',
+                    1 => 'kurtjensen.mycalendar::lang.events_comp.permissions_opt_yes',
+                ],
             ],
         ];
     }

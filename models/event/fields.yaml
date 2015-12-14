@@ -7,7 +7,7 @@ fields:
 #        label: ID
 #        disabled: true
     name:
-        label: kurtjensen.mycalendar::lang.event.name
+        label: kurtjensen.mycalendar::lang.event.title
         span: left
         placeholder: kurtjensen.mycalendar::lang.event.phold_name
     is_published:
