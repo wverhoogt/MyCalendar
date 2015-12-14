@@ -77,7 +77,7 @@ return [
         'opt_yes' => 'Yes',
         'label' => 'Event',
         'id' => 'ID',
-        'name' => 'Title',
+        'title' => 'Title',
         'is_published' => 'Published',
         'user_id' => 'Creator',
         'fname' => 'Creator First',
@@ -91,7 +91,7 @@ return [
     'events_comp' => [// Events Component
         'name' => 'Events Component',
         'description' => 'Get Events from DB and insert them into page',
-        'linkpage_title' => 'Link to Page',
+        'linkpage_title' => 'Link to Event Detail Page',
         'linkpage_desc' => 'Name of the event page file for the "More Details" links. This property is used by the event component partial.',
         'linkpage_group' => 'Links',
         'linkpage_opt_none' => 'None - Use Modal Pop-up',

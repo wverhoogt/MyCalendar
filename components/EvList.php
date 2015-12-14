@@ -78,8 +78,8 @@ class EvList extends ComponentBase
             $this->addCss('/plugins/kurtjensen/mycalendar/assets/css/calendar.css');
         }
 
-        $this->month = $this->property('month', date('m'));
-        $this->year = $this->property('year', date('Y'));
+        $this->month = in_array($this->property('month'), range(1, 12)) ? $this->property('month') : date('m');
+        $this->year = in_array($this->property('year'), range(2014, 2030)) ? $this->property('year') : date('Y');
         $this->calcElements();
         $this->dayprops = $this->property('dayprops');
         $this->color = $this->property('color');

@@ -6,6 +6,7 @@ use KurtJensen\MyCalendar\Models\Category as Category;
 use KurtJensen\MyCalendar\Models\CategorysEvents;
 use KurtJensen\MyCalendar\Models\Event as MyEvents;
 use KurtJensen\MyCalendar\Models\Settings;
+use Lang;
 
 class Events extends ComponentBase
 {
@@ -51,7 +52,8 @@ class Events extends ComponentBase
 
     public function getLinkpageOptions()
     {
-        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName')+['' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_opt_none'];
+        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName')+
+        ['' => Lang::get('kurtjensen.mycalendar::lang.events_comp.linkpage_opt_none')];
     }
 
     public function init()

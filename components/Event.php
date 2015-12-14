@@ -10,8 +10,8 @@ class Event extends ComponentBase
     public function componentDetails()
     {
         return [
-            'name' => 'kurtjensen.mycalendar::lang.events_comp.name',
-            'description' => 'kurtjensen.mycalendar::lang.events_comp.description',
+            'name' => 'kurtjensen.mycalendar::lang.event.name',
+            'description' => 'kurtjensen.mycalendar::lang.event.description',
         ];
     }
 
@@ -20,23 +20,22 @@ class Event extends ComponentBase
         return [
             'slug' => [
                 'title' => 'kurtjensen.mycalendar::lang.event.slug_title',
-                'description' => 'kurtjensen.mycalendar::lang.events_comp.slug_description',
+                'description' => 'kurtjensen.mycalendar::lang.event.slug_description',
                 'default' => '{{ :slug }}',
                 'type' => 'string',
             ],
             'linkpage' => [
-                'title' => 'kurtjensen.mycalendar::lang.event.linkpage_title',
-                'description' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_desc',
+                'title' => 'kurtjensen.mycalendar::lang.event.link_title',
+                'description' => 'kurtjensen.mycalendar::lang.event.link_desc',
                 'type' => 'dropdown',
-                'default' => '',
-                'group' => 'kurtjensen.mycalendar::lang.event.linkpage_group',
+                'group' => 'kurtjensen.mycalendar::lang.event.link_group',
             ],
         ];
     }
 
     public function getLinkpageOptions()
     {
-        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName')+['' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_opt_none'];
+        return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
     }
 
     public function onRun()

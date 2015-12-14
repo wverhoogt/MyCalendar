@@ -77,7 +77,7 @@ return [
         'opt_yes' => 'Sim',
         'label' => 'Evento',
         'id' => 'ID',
-        'name' => 'Título',
+        'title' => 'Título',
         'is_published' => 'Publicado',
         'user_id' => 'Criador',
         'fname' => 'Criador primeiro nome',

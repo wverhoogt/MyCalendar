@@ -2,6 +2,17 @@
 {% set dayPointer = MyM.dayPointer %}
 {% set devents = MyM.events[MyM.year][MyM.monthNum] %}
 {% set dprops = MyM.dayprops[MyM.year][MyM.monthNum] %}
+
+
+
+<pre>
+{{ MyM.year }}
+{{ MyM.monthNum }}
+{{ MyM.dayPointer }}
+{{ MyM.days_in_month }}
+</pre>
+{{ dump(devents) }}
+
 <table class="mycal">
     <tbody>
 {% for dayPointer in range(1,MyM.days_in_month) %}
