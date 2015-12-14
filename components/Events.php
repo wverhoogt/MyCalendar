@@ -13,6 +13,7 @@ class Events extends ComponentBase
     use \KurtJensen\MyCalendar\Traits\LoadPermissions;
 
     public $usePermissions = 0;
+    public $showpast = 0;
 
     public function componentDetails()
     {
@@ -43,8 +44,18 @@ class Events extends ComponentBase
                 'type' => 'dropdown',
                 'default' => 0,
                 'options' => [
-                    0 => 'kurtjensen.mycalendar::lang.events_comp.permissions_opt_no',
-                    1 => 'kurtjensen.mycalendar::lang.events_comp.permissions_opt_yes',
+                    0 => 'kurtjensen.mycalendar::lang.events_comp.opt_no',
+                    1 => 'kurtjensen.mycalendar::lang.events_comp.opt_yes',
+                ],
+            ],
+            'showpast' => [
+                'title' => 'kurtjensen.mycalendar::lang.events_comp.showpast_title',
+                'description' => 'kurtjensen.mycalendar::lang.events_comp.showpast_description',
+                'type' => 'dropdown',
+                'default' => 0,
+                'options' => [
+                    0 => 'kurtjensen.mycalendar::lang.events_comp.opt_no',
+                    1 => 'kurtjensen.mycalendar::lang.events_comp.opt_yes',
                 ],
             ],
         ];
@@ -59,6 +70,7 @@ class Events extends ComponentBase
     public function init()
     {
         $this->usePermissions = $this->property('usePermissions', 0);
+        $this->showpast = $this->property('showpast', 0);
     }
 
     public function onRun()
@@ -93,12 +105,18 @@ class Events extends ComponentBase
             MyEvents::where('is_published', true);
 
         }
-        $events = $query->where('month', '>=', date('m'))
-                        ->where('year', '>=', date('Y'))
-                        ->orderBy('time')
-                        ->get();
 
-//                    ->whereNotIn('permission_id', Settings::get('deny_perm'))
+        if (!$this->showpast) {
+            $query->where(function ($query) {
+                      $query->where('month', '>=', date('m'))
+                      ->where('year', '=', date('Y'));
+                  })
+                  ->orWhere(function ($query) {
+                      $query->where('year', '>', date('Y'));
+                  });
+        }
+        $events = $query->orderBy('time')
+                        ->get();
 
         $maxLen = $this->property('title_max', 100);
         $linkPage = $this->property('linkpage', '');

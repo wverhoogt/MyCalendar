@@ -99,8 +99,10 @@ return [
         'title_max_description' => 'Maximum length of "title" property that shows the details of an event on hover.',
         'permissions_title' => 'Use Permission',
         'permissions_description' => 'Use permissions to restrict what categories of events are shown based on roles.',
-        'permissions_opt_no' => 'No',
-        'permissions_opt_yes' => 'Yes',
+        'showpast_title' => 'Include Past',
+        'showpast_description' => 'Include events before todays month.',
+        'opt_no' => 'No',
+        'opt_yes' => 'Yes',
     ],
     'event' => [// Event Component and Model
         'name' => 'Event Component',

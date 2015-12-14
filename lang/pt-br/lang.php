@@ -99,8 +99,10 @@ return [
         'title_max_description' => 'O comprimento máximo da propriedade "title" que mostra os detalhes de um evento em foco.',
         'permissions_title' => 'Usar permissão',
         'permissions_description' => 'Usar permissões para restringir o que as categorias de eventos são mostrados com base em funções.',
-        'permissions_opt_no' => 'Não',
-        'permissions_opt_yes' => 'Sim',
+        'showpast_title' => 'Incluir passado',
+        'showpast_description' => 'Incluir eventos antes de hoje mês.',
+        'opt_no' => 'Não',
+        'opt_yes' => 'Sim',
     ],
     'event' => [// Event Component and Model
         'name' => 'Componente Evento',
