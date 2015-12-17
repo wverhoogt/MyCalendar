@@ -13,7 +13,8 @@ class Events extends ComponentBase
     use \KurtJensen\MyCalendar\Traits\LoadPermissions;
 
     public $usePermissions = 0;
-    public $showpast = 0;
+    public $dayspast = 0;
+    public $daysfuture = 0;
 
     public function componentDetails()
     {
@@ -48,15 +49,15 @@ class Events extends ComponentBase
                     1 => 'kurtjensen.mycalendar::lang.events_comp.opt_yes',
                 ],
             ],
-            'showpast' => [
-                'title' => 'kurtjensen.mycalendar::lang.events_comp.showpast_title',
-                'description' => 'kurtjensen.mycalendar::lang.events_comp.showpast_description',
-                'type' => 'dropdown',
+            'dayspast' => [
+                'title' => 'kurtjensen.mycalendar::lang.events_comp.past_title',
+                'description' => 'kurtjensen.mycalendar::lang.events_comp.past_description',
                 'default' => 0,
-                'options' => [
-                    0 => 'kurtjensen.mycalendar::lang.events_comp.opt_no',
-                    1 => 'kurtjensen.mycalendar::lang.events_comp.opt_yes',
-                ],
+            ],
+            'daysfuture' => [
+                'title' => 'kurtjensen.mycalendar::lang.events_comp.future_title',
+                'description' => 'kurtjensen.mycalendar::lang.events_comp.future_description',
+                'default' => 60,
             ],
         ];
     }
@@ -70,7 +71,8 @@ class Events extends ComponentBase
     public function init()
     {
         $this->usePermissions = $this->property('usePermissions', 0);
-        $this->showpast = $this->property('showpast', 0);
+        $this->dayspast = $this->property('dayspast', 0);
+        $this->daysfuture = $this->property('daysfuture', 60);
     }
 
     public function onRun()
@@ -80,6 +82,7 @@ class Events extends ComponentBase
 
     public function loadEvents()
     {
+
         $MyEvents = [];
         if ($this->usePermissions) {
             $this->loadPermissions();
@@ -99,24 +102,18 @@ class Events extends ComponentBase
                     )
                         ->lists('event_id')
                 )
-                ->where('is_published', true);
+                ->published();
         } else {
             $query =
-            MyEvents::where('is_published', true);
+            MyEvents::published();
 
         }
 
-        if (!$this->showpast) {
-            $query->where(function ($query) {
-                      $query->where('month', '>=', date('m'))
-                      ->where('year', '=', date('Y'));
-                  })
-                  ->orWhere(function ($query) {
-                      $query->where('year', '>', date('Y'));
-                  });
-        }
-        $events = $query->orderBy('time')
-                        ->get();
+        $events = $query->past($this->dayspast)
+            ->future($this->daysfuture)
+            ->orderBy('date')
+            ->orderBy('time')
+            ->get();
 
         $maxLen = $this->property('title_max', 100);
         $linkPage = $this->property('linkpage', '');

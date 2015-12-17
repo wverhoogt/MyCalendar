@@ -34,3 +34,6 @@
 1.0.15: Added Localization for pt_BR Portuguese (Brazil).
 1.0.16: Fixes overlooked items from Localization update.
 1.0.17: Fixes future date issue and allows choice to include past dates.
+1.0.18: 
+    - Abandone seperate month,day,year in favor of date field.
+    - add_date.php

@@ -1,34 +1,31 @@
 {% set MyM = __SELF__ %}
-{% set dayPointer = MyM.dayPointer %}
-{% set devents = MyM.events[MyM.year][MyM.monthNum] %}
-{% set dprops = MyM.dayprops[MyM.year][MyM.monthNum] %}
+{% set devents = MyM.events %}
 <table class="mycal">
     <tbody>
-{% for dayPointer in range(1,MyM.days_in_month) %}
-{% if devents[dayPointer] %}
-{% set dayProp = dprops[dayPointer] %}
-    	<tr data-request-data="year:{{ MyM.year }},month:{{ MyM.monthNum }},day:{{ dayPointer }}">
-    		<td class="list-icon">
-{% if dayProp.link %}<a {{ dayProp.link|raw }}>{% endif %}
-				<div class="holder">
-		    		<div class="month {{ MyM.color }}">
-		        		<p>{{ MyM.monthTitle }}</p>
-		    		</div>
-		    		<div class="day">
-		        		<p>{{ dayPointer }}</p>
-		    		</div>
-				</div>
-			</td>
-			<td class="list-event">
-{% if dayProp.link %}</a>{% endif %}
-        		<ul class="eventList">
-{% for ev in devents[dayPointer] %}
-    {% partial '@event' ev = ev %}
+{% for y,eYear in devents %}
+{% for m,eMonth in eYear %}
+{% for d,eDay in eMonth %}
+        <tr data-request-data="year:{{ y }},month:{{ m }},day:{{ d }}">
+            <td class="list-icon">
+                <div class="holder">
+                    <div class="month {{ MyM.color }}">
+                        <p>{{ (m~'/1/'~y)|date('M') }}</p> 
+                    </div>
+                    <div class="day">
+                        <p>{{ d }}</p>
+                    </div>
+                </div>
+            </td>
+            <td class="list-event">
+                <ul class="eventList">
+{% for eEvent in eDay %}
+    {% partial '@event' ev = eEvent %}
 {% endfor %}
-        		</ul>
-			</td>
-		</tr>
-{% endif %}
-{% endfor %}
+                </ul>
+            </td>
+        </tr>
+{% endfor %}<!-- eDay -->
+{% endfor %}<!-- eMonth -->
+{% endfor %}<!-- eYear -->
     </tbody>
 </table>

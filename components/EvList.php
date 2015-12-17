@@ -10,7 +10,6 @@ class EvList extends ComponentBase
     public $dayprops;
     public $color;
     public $events;
-    public $calHeadings;
 
     public $monthTitle;
     public $monthNum;
@@ -80,7 +79,9 @@ class EvList extends ComponentBase
 
         $this->month = in_array($this->property('month'), range(1, 12)) ? $this->property('month') : date('m');
         $this->year = in_array($this->property('year'), range(2014, 2030)) ? $this->property('year') : date('Y');
+
         $this->calcElements();
+
         $this->dayprops = $this->property('dayprops');
         $this->color = $this->property('color');
         $this->events = $this->property('events');
@@ -88,17 +89,7 @@ class EvList extends ComponentBase
 
     public function calcElements()
     {
-        $this->calHeadings = [
-            Lang::get('kurtjensen.mycalendar::lang.month.day_sun'),
-            Lang::get('kurtjensen.mycalendar::lang.month.day_mon'),
-            Lang::get('kurtjensen.mycalendar::lang.month.day_tue'),
-            Lang::get('kurtjensen.mycalendar::lang.month.day_wed'),
-            Lang::get('kurtjensen.mycalendar::lang.month.day_thu'),
-            Lang::get('kurtjensen.mycalendar::lang.month.day_fri'),
-            Lang::get('kurtjensen.mycalendar::lang.month.day_sat'),
-        ];
         $time = strtotime($this->month . '/1/' . $this->year);
-        $this->monthTitle = date('M', $time);
         $this->monthNum = date('n', $time);
         $this->running_day = date('w', $time);
         $this->days_in_month = date('t', $time);
