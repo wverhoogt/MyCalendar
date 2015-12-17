@@ -44,15 +44,15 @@ Go to the MyCalendar page in the backend and add your events.
 The "Events Component" injects the MyEvents array into the page. It also has a modal pop-up for showing event details.
 
 
-## Display Event list calendar on page and insert events from DB for current and next month
-- Double click "Events Component" to add it to page. 
+## Display Event list calendar on page and insert events from today to 60 days from now
+- Drag "Events Component" to the page. 
 - Drag "List Component" to the page layout and edit as below.
+- In "Events Component" set property "Future Days" to 60
 
 ```
   <div style="width:100px">
+  {% component 'Events' %}
   {% component 'EvList' events = MyEvents %}
-  {% set m = date()|date("m") +1 %}
-  {% component 'EvList' month = m events = MyEvents %}
   </div>
 ```
 
@@ -69,7 +69,7 @@ The "Events Component" injects the MyEvents array into the page.
 
 These properties can be set by clicking on component and changing them there or in the page layout as below:
     
-  {% component 'EvList' month = 2 events = MyEvents %}
+  {% component 'Month' month = 2 events = MyEvents %}
 
 
 
@@ -130,6 +130,13 @@ If passing you own "Events" and/or "Day Properties" to the calendar using an arr
         ] 
     ];
 ```
+
+
+## Thank You Early Users
+Early users have discovered that several issues with the original design of this plugin.  I want to sincerely apologize 
+for those missteps and flaws that became very apparent when December and January events did not show as expected on your calendars.  This is my third project involving calendars in PHP and each time I learn something new and often forget the many pitfalls of working with dates.  This plugin was no exception.
+
+I very much appreciate your patience and assistance in finding and addressing issues that I should have found before first publishing.  I am committed to getting this right but there is still work to be done before I am completely satisfied with this product.  Please hang in there and continue to point out any issues you may discover.
 
 
 ## Like this plugin?
