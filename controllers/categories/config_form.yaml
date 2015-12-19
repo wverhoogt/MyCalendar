@@ -3,7 +3,7 @@
 # ===================================
 
 # Record name
-name: Category
+name: kurtjensen.mycalendar::lang.categories.form_name
 
 # Model Form Field configuration
 form: $/kurtjensen/mycalendar/models/category/fields.yaml
@@ -16,16 +16,16 @@ defaultRedirect: kurtjensen/mycalendar/categories
 
 # Create page
 create:
-    title: Create Category
+    title: kurtjensen.mycalendar::lang.categories.create_title
     redirect: kurtjensen/mycalendar/categories/update/:id
     redirectClose: kurtjensen/mycalendar/categories
 
 # Update page
 update:
-    title: Edit Category
+    title: kurtjensen.mycalendar::lang.categories.update_title
     redirect: kurtjensen/mycalendar/categories
     redirectClose: kurtjensen/mycalendar/categories
 
 # Preview page
 preview:
-    title: Preview Category
+    title: kurtjensen.mycalendar::lang.categories.preview_title

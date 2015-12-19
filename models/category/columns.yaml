@@ -4,8 +4,8 @@
 
 columns:
     name:
-        label: Category
+        label: kurtjensen.mycalendar::lang.category.name
     slug:
-        label: Slug
+        label: kurtjensen.mycalendar::lang.category.slug
     description:
-        label: Description
+        label: kurtjensen.mycalendar::lang.category.description

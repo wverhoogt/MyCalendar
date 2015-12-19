@@ -8,19 +8,19 @@ fields:
 #        disabled: true
 
     name:
-        label: Category
-        placeholder: Name of Category
+        label: kurtjensen.mycalendar::lang.category.name
+        placeholder: kurtjensen.mycalendar::lang.category.phold_name
         span: left
 
     slug:
-        label: Slug
+        label: kurtjensen.mycalendar::lang.category.slug
         span: right
-        placeholder: Slug for URLS
+        placeholder: kurtjensen.mycalendar::lang.category.phold_slug
         preset: name
     description:
-        label: Description
-        placeholder: More details
+        label: kurtjensen.mycalendar::lang.category.description
+        placeholder: kurtjensen.mycalendar::lang.category.phold_description
     permission_id:
-        label: Permision for this Category',
-        comment: Set the permision for this category.',
+        label: kurtjensen.mycalendar::lang.category.permission
+        comment: kurtjensen.mycalendar::lang.category.comment_permission
         type: dropdown

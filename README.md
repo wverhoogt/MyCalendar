@@ -1,3 +1,8 @@
+## Installation
+( Installation code : __kurtjensen.mycalendar__ ) 
+
+Download the plugin to the plugins directory and logout and log in back into October backend. Go to the MyCalendar page in the backend and add your events.
+
 # MyCalendar plugin
 
 This plugin adds a simple calendar with events database feature to [OctoberCMS](http://octobercms.com).
@@ -38,6 +43,7 @@ Go to the MyCalendar page in the backend and add your events.
 - Drag "Month Component" to the page layout and edit as below.
 
 ```
+  {% component 'Events' %}
   {% component 'Month' events = MyEvents %}
 ```
 
@@ -137,6 +143,10 @@ Early users have discovered that several issues with the original design of this
 for those missteps and flaws that became very apparent when December and January events did not show as expected on your calendars.  This is my third project involving calendars in PHP and each time I learn something new and often forget the many pitfalls of working with dates.  This plugin was no exception.
 
 I very much appreciate your patience and assistance in finding and addressing issues that I should have found before first publishing.  I am committed to getting this right but there is still work to be done before I am completely satisfied with this product.  Please hang in there and continue to point out any issues you may discover.
+
+
+## Did You Add Your Own Language File?
+Please share it with the community by creating a pull request at https://github.com/firemankurt/MyCalendar or by contacting me directly using the contact form at https://octobercms.com/author/KurtJensen 
 
 
 ## Like this plugin?

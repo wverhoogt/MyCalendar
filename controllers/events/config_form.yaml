@@ -3,7 +3,7 @@
 # ===================================
 
 # Record name
-name: Event
+name: kurtjensen.mycalendar::lang.events.form_name
 
 # Model Form Field configuration
 form: $/kurtjensen/mycalendar/models/event/fields.yaml
@@ -16,16 +16,16 @@ defaultRedirect: kurtjensen/mycalendar/events
 
 # Create page
 create:
-    title: Create Event
+    title: kurtjensen.mycalendar::lang.events.create_title
     redirect: kurtjensen/mycalendar/events/update/:id
     redirectClose: kurtjensen/mycalendar/events
 
 # Update page
 update:
-    title: Edit Event
+    title: kurtjensen.mycalendar::lang.events.update_title
     redirect: kurtjensen/mycalendar/events
     redirectClose: kurtjensen/mycalendar/events
 
 # Preview page
 preview:
-    title: Preview Event
+    title: kurtjensen.mycalendar::lang.events.preview_title

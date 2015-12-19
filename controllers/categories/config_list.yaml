@@ -9,7 +9,7 @@ list: $/kurtjensen/mycalendar/models/category/columns.yaml
 modelClass: KurtJensen\MyCalendar\Models\Category
 
 # List Title
-title: Manage Categories
+title: kurtjensen.mycalendar::lang.categories.list_title
 
 # Link URL for each record
 recordUrl: kurtjensen/mycalendar/categories/update/:id

@@ -4,11 +4,11 @@
 
 columns:
     is_published:
-        label: Published
+        label: kurtjensen.mycalendar::lang.event.is_published
         type: switch
     name:
-        label: Title
+        label: kurtjensen.mycalendar::lang.event.title
     date:
-        label: Date
+        label: kurtjensen.mycalendar::lang.event.date
     time:
-        label: Time
+        label: kurtjensen.mycalendar::lang.event.time

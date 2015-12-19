@@ -37,3 +37,5 @@
 1.0.18: 
     - Abandone seperate month,day,year in favor of date field.
     - add_date.php
+1.0.19: 
+    - Finished Localization of backend.
