@@ -139,6 +139,7 @@ return $this->year . '-' . $this->month . '-' . $this->day;
 
     public function getUserIdOptions($keyValue = null)
     {
+        $Users = [];
         $manager = PluginManager::instance();
         if ($manager->exists('rainlab.user')) {
             foreach (UserModel::orderBy('surname')->
