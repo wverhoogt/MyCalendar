@@ -166,6 +166,7 @@ return [
         'opt_yes' => 'Yes',
         'btn_add' => 'Add Event',
         'btn_edit' => 'Edit',
+        'btn_copy' => 'Copy',
         'btn_delete' => 'Delete',
         'btn_save' => 'Save',
         'btn_cancel' => 'Cancel',

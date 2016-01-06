@@ -1,5 +1,5 @@
 <form data-request="onUpdateEvent" data-request-update="'EventForm::list': '#eventinfo'">
-        <input type="hidden" name="id" value="{{ __SELF__.myevent.id }}">
+        <input type="hidden" name="id" value="{% if not is_copy %}{{ __SELF__.myevent.id  }}{% endif %}">
 
 
     <div class="row">

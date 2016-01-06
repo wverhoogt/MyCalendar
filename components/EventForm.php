@@ -14,6 +14,7 @@ class EventForm extends ComponentBase
     public $user;
     public $allowpublish;
     public $ckeditor;
+    public $is_copy;
 
     public function componentDetails()
     {
@@ -117,6 +118,8 @@ class EventForm extends ComponentBase
         if (!$myevent = $this->getMyEvent()) {
             return null;
         }
+        $this->is_copy = $this->page['is_copy'] = post('copy');
+
         $cat = isset($myevent->categorys->first()->id) ? $myevent->categorys->first()->id : 0;
         $this->categorylist = $this->page['categorylist'] = MyCalCategory::selector(
             $cat,

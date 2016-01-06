@@ -39,3 +39,4 @@
     - add_date.php
 1.0.19: 
     - Finished Localization of backend.
+1.1.0: Fixed No date == Error by requiring a date in model. Adds a copy feature to frontend form.

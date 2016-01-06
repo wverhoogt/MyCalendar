@@ -33,6 +33,14 @@
                         </button>
                         <button
                             claas="btn btn-default" 
+                            title="{{ __SELF__.trans('kurtjensen.mycalendar::lang.event_form.btn_copy') }}"
+                            data-request="EventForm::onEventForm"  
+                            data-request-data="id: {{ event.id }}, copy: 1"
+                            data-request-update="'EventForm::form': '#eventinfo'">
+                            <i class="icon-copy btn-icon danger"></i>
+                        </button>
+                        <button
+                            claas="btn btn-default" 
                             title="{{ __SELF__.trans('kurtjensen.mycalendar::lang.event_form.btn_delete') }}"
                             data-request="EventForm::onDelete" 
                             data-request-data="id: {{ event.id }}"

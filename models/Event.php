@@ -10,11 +10,19 @@ use System\Classes\PluginManager;
  */
 class Event extends Model
 {
+    use \October\Rain\Database\Traits\Validation;
 
     /**
      * @var string The database table used by the model.
      */
     public $table = 'kurtjensen_mycal_events';
+
+    /**
+     * Validation rules
+     */
+    public $rules = [
+        'date' => 'required',
+    ];
 
     /**
      * @var array Guarded fields
