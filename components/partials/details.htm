@@ -9,6 +9,7 @@
         <div class="text-left">
 {% for cat in ev.cats %}
           <span class="label label-info">{{cat}}</span>
-{% endfor %}
+{% endfor %}<br />
+{% if ev.owner_name %}<small>Owner: {{ ev.owner_name }}</small>{% endif %}
         </div>
       </div>

@@ -88,8 +88,10 @@ class Plugin extends PluginBase
     {
         return [
             'KurtJensen\MyCalendar\Components\Month' => 'Month',
+            'KurtJensen\MyCalendar\Components\MonthEvents' => 'MonthEvents',
             //'KurtJensen\MyCalendar\Components\Week' => 'Week',
             'KurtJensen\MyCalendar\Components\EvList' => 'EvList',
+            'KurtJensen\MyCalendar\Components\ListEvents' => 'ListEvents',
             'KurtJensen\MyCalendar\Components\Events' => 'Events',
             'KurtJensen\MyCalendar\Components\Event' => 'Event',
             'KurtJensen\MyCalendar\Components\EventForm' => 'EventForm',

@@ -41,7 +41,7 @@ return [
         'default_perm_comment' => 'A permission that will be set on new categories by default ( unless set by user ).',
     ],
     'month' => [// Month Component
-        'name' => 'Month Component',
+        'name' => 'Month View',
         'description' => 'Shows a month calendar with events',
         'month_title' => 'Month',
         'month_description' => 'The month you want to show.',
@@ -72,11 +72,11 @@ return [
         'next' => 'Next',
     ],
     'week' => [// Week Component
-        'name' => 'Week Component',
+        'name' => 'Week View',
         'description' => 'Shows a week calendar with events',
     ],
     'evlist' => [// EvList Component
-        'name' => 'List Component',
+        'name' => 'List View',
         'description' => 'Shows a list of events',
         'month_title' => 'Month',
         'month_description' => 'The month you want to show.',
@@ -104,7 +104,7 @@ return [
         'categorys' => 'Categories',
     ],
     'events_comp' => [// Events Component
-        'name' => 'Events Component',
+        'name' => 'Events Data',
         'description' => 'Get Events from DB and insert them into page',
         'linkpage_title' => 'Link to Event Detail Page',
         'linkpage_desc' => 'Name of the event page file for the "More Details" links. This property is used by the event component partial.',
@@ -122,7 +122,7 @@ return [
         'opt_yes' => 'Yes',
     ],
     'event' => [// Event Component and Model
-        'name' => 'Event Component',
+        'name' => 'Event View',
         'description' => 'Shows one event on page with details',
         'label' => 'Event',
         'id' => 'ID',
@@ -156,7 +156,7 @@ return [
         'link_group' => 'Links',
     ],
     'event_form' => [// EventForm Component
-        'name' => 'EventForm Component',
+        'name' => 'Event Form',
         'description' => 'Front end form to allow users to ad their own events',
         'allow_pub_title' => 'Allow Publish',
         'allow_pub_description' => 'Allow users to publish their event. (No means an admin must do it.)',
@@ -172,6 +172,14 @@ return [
         'btn_cancel' => 'Cancel',
         'saving' => 'Saving Event...',
         'delete_conf' => 'Do you really want to delete this event?',
+    ],
+    'month_events' => [// MonthEvents Component
+        'name' => 'Month View w/ Event Data',
+        'description' => 'Show Full Month View with DB events',
+    ],
+    'list_events' => [// ListEvents Component
+        'name' => 'Event List w/ Event Data',
+        'description' => 'Show Event List View with DB events',
     ],
     'category' => [// Category Model
         'name' => 'Category',

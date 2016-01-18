@@ -15,6 +15,7 @@ class Events extends ComponentBase
     public $usePermissions = 0;
     public $dayspast = 0;
     public $daysfuture = 0;
+    public $compLink = 'Events';
 
     public function componentDetails()
     {
@@ -125,13 +126,14 @@ class Events extends ComponentBase
                 '#EventDetail"
             	data-request="onShowEvent"
             	data-request-data="evid:' . $e->id . '"
-            	data-request-update="\'Events::details\':\'#EventDetail\'" data-toggle="modal" data-target="#myModal');
+            	data-request-update="\'' . $this->compLink . '::details\':\'#EventDetail\'" data-toggle="modal" data-target="#myModal');
 
             $MyEvents[$e->year][$e->month][$e->day][] = ['name' => $e->name . ' ' . $e->human_time,
                 'title' => $title,
                 'link' => $link,
                 'id' => $e->id,
-                'owner' => $e->user_id];
+                'owner' => $e->user_id,
+                'owner_name' => $e->owner_name];
         }
         return $MyEvents;
 
@@ -144,7 +146,6 @@ class Events extends ComponentBase
         if (!$e) {
             return $this->page['ev'] = ['name' => 'kurtjensen.mycalendar::lang.event.error_not_found', 'cats' => $e->categorys->lists('name')];
         }
-
         if ($this->usePermissions) {
             $this->loadPermissions();
             $eventPerms = $e->categorys->lists('id');
@@ -166,6 +167,14 @@ class Events extends ComponentBase
         }
 
         $link = $e->link ? $e->link : '';
-        $this->page['ev'] = ['name' => $e->name, 'date' => $e->date, 'time' => $e->human_time, 'link' => $link, 'text' => $e->text, 'cats' => $e->categorys->lists('name')];
+        return $this->page['ev'] = [
+            'name' => $e->name,
+            'date' => $e->date,
+            'time' => $e->human_time,
+            'link' => $link,
+            'text' => $e->text,
+            'cats' => $e->categorys->lists('name'),
+            'owner_name' => $e->owner_name,
+        ];
     }
 }

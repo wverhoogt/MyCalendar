@@ -69,6 +69,7 @@ is_published
         'month' => '',
         'year' => '',
         'human_time' => '',
+        'owner_name' => '',
     ];
 /*
 public function getDateAttribute() {
@@ -105,12 +106,24 @@ return $this->year . '-' . $this->month . '-' . $this->day;
         return $time;
     }
 
+    public function getOwnerNameAttribute()
+    {
+        $ownerName = '';
+        $manager = PluginManager::instance();
+        if ($manager->exists('rainlab.user')) {
+            $user = UserModel::find($this->user_id);
+            if ($user) {
+                $ownerName = $user->name . ' ' . $user->surname;
+            }
+        }
+        return $ownerName;
+    }
+
     public function beforeSave()
     {
-//        list($this->year, $this->month, $this->day) = explode('-', $this->attributes['date']);
-
-        unset( //$this->attributes['date'],
-            $this->attributes['human_time']);
+        unset(
+            $this->attributes['human_time'],
+            $this->attributes['owner_name']);
     }
 
     public function getDayOptions($month)
