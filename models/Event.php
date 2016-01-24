@@ -202,17 +202,19 @@ class Event extends Model
 
         $manager = PluginManager::instance();
         if ($manager->exists('shahiemseymor.roles')) {
-
-            $permarray = array_merge(
-                DB::table('shahiemseymor_permission_role')
-                    ->wherein('role_id',
-                        DB::table('shahiemseymor_assigned_roles')
-                            ->where('user_id', '=', $user_id)
-                            ->lists('role_id')
-                    )
-                    ->lists('permission_id'),
-                $public_perm);
-
+            if ($user_id) {
+                $permarray = array_merge(
+                    DB::table('shahiemseymor_permission_role')
+                        ->wherein('role_id',
+                            DB::table('shahiemseymor_assigned_roles')
+                                ->where('user_id', '=', $user_id)
+                                ->lists('role_id')
+                        )
+                        ->lists('permission_id'),
+                    $public_perm);
+            } else {
+                $permarray = $public_perm;
+            }
             $permarray = array_unique($permarray);
 
             $query->whereHas('categorys', function ($q) use ($permarray) {

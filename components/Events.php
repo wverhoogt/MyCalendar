@@ -15,7 +15,7 @@ class Events extends ComponentBase
     public $dayspast = 0;
     public $daysfuture = 0;
     public $compLink = 'Events';
-    public $user = null;
+    public $user_id = null;
 
     public function componentDetails()
     {
@@ -81,20 +81,27 @@ class Events extends ComponentBase
         $this->page['MyEvents'] = $this->loadEvents();
     }
 
+    public function userId()
+    {
+        if (is_null($this->user_id)) {
+            $user = Auth::getUser();
+        }
+        if ($user) {
+            $this->user_id = $user->id;
+        }
+        $this->user_id = 0;
+    }
+
     public function loadEvents()
     {
         $MyEvents = [];
         if ($this->usePermissions) {
 
-            if (!$this->user) {
-                $this->user = Auth::getUser();
-            }
-
             $query =
             MyEvents::withOwner()
                 ->published()
                 ->permisions(
-                    $this->user->id,
+                    $this->userId(),
                     [Settings::get('public_perm')],
                     Settings::get('deny_perm')
                 );
@@ -138,13 +145,10 @@ class Events extends ComponentBase
     {
         $slug = post('evid');
         if ($this->usePermissions) {
-            if (!$this->user) {
-                $this->user = Auth::getUser();
-            }
 
             $query = MyEvents::withOwner()
                 ->permisions(
-                    $this->user->id,
+                    $this->userId(),
                     [Settings::get('public_perm')],
                     Settings::get('deny_perm')
                 );

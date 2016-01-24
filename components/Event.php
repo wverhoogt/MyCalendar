@@ -69,17 +69,25 @@ class Event extends ComponentBase
         $this->page->description = $date . ' ' . $time;
     }
 
+    public function userId()
+    {
+        if (is_null($this->user_id)) {
+            $user = Auth::getUser();
+        }
+        if ($user) {
+            $this->user_id = $user->id;
+        }
+        $this->user_id = 0;
+    }
+
     public function loadEvent()
     {
         $slug = $this->property('slug');
         if ($this->usePermissions) {
-            if (!$this->user) {
-                $this->user = Auth::getUser();
-            }
 
             $query = MyEvents::withOwner()
                 ->permisions(
-                    $this->user->id,
+                    $this->userId(),
                     [Settings::get('public_perm')],
                     Settings::get('deny_perm')
                 );
