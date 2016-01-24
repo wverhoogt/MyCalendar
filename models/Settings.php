@@ -16,6 +16,8 @@ class Settings extends Model
 
     public $settingsFields = 'fields.yaml';
 
+    public $permOptions = [];
+
     /**
      * Validation rules
      */
@@ -25,40 +27,27 @@ class Settings extends Model
         'default_perm' => 'required',
     ];
 
-    /**
-     * @var array Relations
-     */
-    public $belongsTo = [
-        'permission' => ['ShahiemSeymor\Roles\Models\UserPermission',
-            'otherKey' => 'id'],
-    ];
-
-    public function __construct()
+    public function initSettingsData()
     {
-        parent::__construct();
-        $options = $this->getDropdownOptions();
-
-        $this->public_perm = $this->public_perm ? $this->public_perm :
-        array_search('calendar_public', $options);
-
-        $this->deny_perm = $this->deny_perm ? $this->deny_perm :
-        array_search('calendar_deny_all', $options);
-
-        $this->default_perm = $this->default_perm ? $this->default_perm :
-        array_search('calendar_deny_all', $options);
+        $this->date_format = 'F jS, Y';
+        $this->time_format = 'g:i a';
+        $options = array_flip($this->getDropdownOptions());
+        $this->public_perm = $options['calendar_public'];
+        $this->deny_perm = $options['calendar_deny_all'];
+        $this->default_perm = $options['calendar_deny_all'];
     }
 
     public function getDropdownOptions($fieldName = null, $keyValue = null)
     {
-        $options = [];
+        if (count($this->permOptions)) {
+            return $this->permOptions;
+        }
+
         $manager = PluginManager::instance();
         if ($manager->exists('shahiemseymor.roles')) {
-            $permissions = \ShahiemSeymor\Roles\Models\UserPermission::get();
-            foreach ($permissions as $permission) {
-                $options[$permission->id] = $permission->name;
-            }
+            $this->permOptions = \ShahiemSeymor\Roles\Models\UserPermission::lists('name', 'id');
         }
-        return $options;
+        return $this->permOptions;
     }
 
 }

@@ -1,6 +1,6 @@
       <div class="modal-header">
         <button type="button" class="close btn btn-default" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">{{ ev.name }}</h4>{{ ev.date|date('m/d/Y') }} {% if ev.time %} at {{ ev.time }}{% endif %}
+        <h4 class="modal-title">{{ ev.name }}</h4>{% if ev.date %}{{ ev.date|date('m/d/Y') }}{% endif %} {% if ev.time %} at {{ ev.time }}{% endif %}
       </div>
       <div class="modal-body">
         {{ ev.text|raw }}

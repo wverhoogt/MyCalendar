@@ -1,11 +1,17 @@
 <?php namespace KurtJensen\MyCalendar\Components;
 
+use Auth;
 use Cms\Classes\ComponentBase;
 use Cms\Classes\Page;
 use KurtJensen\MyCalendar\Models\Event as MyEvents;
+use KurtJensen\MyCalendar\Models\Settings;
+use Lang;
 
 class Event extends ComponentBase
 {
+    public $usePermissions = 0;
+    public $user = null;
+    public $calEvent = null;
 
     public function componentDetails()
     {
@@ -30,7 +36,22 @@ class Event extends ComponentBase
                 'type' => 'dropdown',
                 'group' => 'kurtjensen.mycalendar::lang.event.link_group',
             ],
+            'usePermissions' => [
+                'title' => 'kurtjensen.mycalendar::lang.events_comp.permissions_title',
+                'description' => 'kurtjensen.mycalendar::lang.events_comp.permissions_description',
+                'type' => 'dropdown',
+                'default' => 0,
+                'options' => [
+                    0 => 'kurtjensen.mycalendar::lang.events_comp.opt_no',
+                    1 => 'kurtjensen.mycalendar::lang.events_comp.opt_yes',
+                ],
+            ],
         ];
+    }
+
+    public function init()
+    {
+        $this->usePermissions = $this->property('usePermissions', 0);
     }
 
     public function getLinkpageOptions()
@@ -40,20 +61,48 @@ class Event extends ComponentBase
 
     public function onRun()
     {
-        $this->page['ev'] = $this->loadEvents();
+        $this->loadEvent();
         $this->page['backLink'] = $this->property('linkpage', '');
+        $this->page->title = $this->calEvent->name;
+        $date = isset($this->calEvent->date) ? $this->calEvent->date->format(Settings::get('date_format', 'F jS, Y')) : '';
+        $time = isset($this->calEvent->time) ? $this->calEvent->carbon_time->format(Settings::get('time_format', 'g:i a')) : '';
+        $this->page->description = $date . ' ' . $time;
     }
 
-    public function loadEvents()
+    public function loadEvent()
     {
         $slug = $this->property('slug');
-        if (!$e = MyEvents::where('is_published', true)->find($slug)) {
-            return 'Event not found!';
+        if ($this->usePermissions) {
+            if (!$this->user) {
+                $this->user = Auth::getUser();
+            }
+
+            $query = MyEvents::withOwner()
+                ->permisions(
+                    $this->user->id,
+                    [Settings::get('public_perm')],
+                    Settings::get('deny_perm')
+                );
+        } else {
+            $query = MyEvents::withOwner();
         }
 
-        $maxLen = $this->property('title_max', 100);
+        $this->calEvent = $query->with('categorys')
+             ->where('is_published', true)
+             ->find($slug);
 
-        $link = $e->link ? $e->link : '';
-        return ['name' => $e->name, 'date' => $e->date, 'time' => $e->human_time, 'link' => $link, 'text' => $e->text];
+        if (!$this->calEvent) {
+            return $this->page['ev'] = ['name' => Lang::get('kurtjensen.mycalendar::lang.event.error_not_found'), 'cats' => []];
+        }
+
+        return $this->page['ev'] = [
+            'name' => $this->calEvent->name,
+            'date' => $this->calEvent->date,
+            'time' => $this->calEvent->human_time,
+            'link' => $this->calEvent->link ? $this->calEvent->link : '',
+            'text' => $this->calEvent->text,
+            'cats' => $this->calEvent->categorys->lists('name'),
+            'owner_name' => $this->calEvent->owner_name,
+        ];
     }
 }

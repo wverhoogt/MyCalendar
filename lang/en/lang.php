@@ -7,6 +7,7 @@ return [
         'tab' => 'MyCalendar',
         'access_events' => 'events',
         'access_categories' => 'categories',
+        'access_settings' => 'settings',
     ],
     'events' => [// Events Controller
         'menu_label' => 'Events',
@@ -31,14 +32,18 @@ return [
     ],
     'settings' => [
         'description' => 'Configure calendar category protection.',
-        'menu_label' => 'User settings',
-        'menu_description' => 'Manage user based settings.',
+        'menu_label' => 'MyCalendar settings',
+        'menu_description' => 'Manage calendar settings.',
         'public_perm_label' => 'Public Category',
         'public_perm_comment' => 'A permission for categories that will NOT be blocked from public viewing.',
         'deny_perm_label' => 'Denied Category',
         'deny_perm_comment' => 'A permission for categories that WILL be blocked from any viewing.',
         'default_perm_label' => 'Default Category',
         'default_perm_comment' => 'A permission that will be set on new categories by default ( unless set by user ).',
+        'date_format_label' => 'Date Format',
+        'date_format_comment' => 'Format to use for display of date.  Uses standard PHP date format string',
+        'time_format_label' => 'Time Format',
+        'time_format_comment' => 'Format to use for display of time.  Uses standard PHP date format string',
     ],
     'month' => [// Month Component
         'name' => 'Month View',

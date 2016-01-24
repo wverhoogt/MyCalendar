@@ -1,21 +1,21 @@
 <?php namespace KurtJensen\MyCalendar\Components;
 
+use Auth;
 use Cms\Classes\ComponentBase;
 use Cms\Classes\Page;
-use KurtJensen\MyCalendar\Models\Category as Category;
-use KurtJensen\MyCalendar\Models\CategorysEvents;
 use KurtJensen\MyCalendar\Models\Event as MyEvents;
 use KurtJensen\MyCalendar\Models\Settings;
 use Lang;
 
 class Events extends ComponentBase
 {
-    use \KurtJensen\MyCalendar\Traits\LoadPermissions;
+    //use \KurtJensen\MyCalendar\Traits\LoadPermissions;
 
     public $usePermissions = 0;
     public $dayspast = 0;
     public $daysfuture = 0;
     public $compLink = 'Events';
+    public $user = null;
 
     public function componentDetails()
     {
@@ -83,30 +83,24 @@ class Events extends ComponentBase
 
     public function loadEvents()
     {
-
         $MyEvents = [];
         if ($this->usePermissions) {
-            $this->loadPermissions();
+
+            if (!$this->user) {
+                $this->user = Auth::getUser();
+            }
 
             $query =
-            MyEvents::whereIn('id',
-                CategorysEvents::whereIn('category_id',
-                    Category::whereIn('permission_id', $this->permarray)
-                        ->lists('id')
-                )
-                    ->lists('event_id')
-            )
-                ->whereNotIn('id',
-                    CategorysEvents::whereIn('category_id',
-                        Category::where('permission_id', Settings::get('deny_perm'))
-                            ->lists('id')
-                    )
-                        ->lists('event_id')
-                )
-                ->published();
+            MyEvents::withOwner()
+                ->published()
+                ->permisions(
+                    $this->user->id,
+                    [Settings::get('public_perm')],
+                    Settings::get('deny_perm')
+                );
         } else {
             $query =
-            MyEvents::published();
+            MyEvents::withOwner()->published();
 
         }
 
@@ -133,7 +127,8 @@ class Events extends ComponentBase
                 'link' => $link,
                 'id' => $e->id,
                 'owner' => $e->user_id,
-                'owner_name' => $e->owner_name];
+                'owner_name' => $e->owner_name,
+            ];
         }
         return $MyEvents;
 
@@ -142,36 +137,34 @@ class Events extends ComponentBase
     public function onShowEvent()
     {
         $slug = post('evid');
-        $e = MyEvents::with('categorys')->where('is_published', true)->find($slug);
-        if (!$e) {
-            return $this->page['ev'] = ['name' => 'kurtjensen.mycalendar::lang.event.error_not_found', 'cats' => $e->categorys->lists('name')];
-        }
         if ($this->usePermissions) {
-            $this->loadPermissions();
-            $eventPerms = $e->categorys->lists('id');
-
-            $Allow = Category::whereIn('permission_id', $this->permarray)
-                ->lists('id');
-
-            $Deny = Category::where('permission_id', Settings::get('deny_perm'))
-                ->lists('id');
-
-            if (!count(array_intersect($eventPerms, $Allow))) {
-                return $this->page['ev'] = ['name' => 'kurtjensen.mycalendar::lang.event.error_allow_no', 'cats' => $e->categorys->lists('name')];
+            if (!$this->user) {
+                $this->user = Auth::getUser();
             }
 
-            if (count(array_intersect($eventPerms, $Deny))) {
-                return $this->page['ev'] = ['name' => 'kurtjensen.mycalendar::lang.event.error_prohibit', 'cats' => $e->categorys->lists('name')];
-            }
-
+            $query = MyEvents::withOwner()
+                ->permisions(
+                    $this->user->id,
+                    [Settings::get('public_perm')],
+                    Settings::get('deny_perm')
+                );
+        } else {
+            $query = MyEvents::withOwner();
         }
 
-        $link = $e->link ? $e->link : '';
+        $e = $query->with('categorys')
+                   ->where('is_published', true)
+                   ->find($slug);
+
+        if (!$e) {
+            return $this->page['ev'] = ['name' => Lang::get('kurtjensen.mycalendar::lang.event.error_not_found'), 'cats' => []];
+        }
+
         return $this->page['ev'] = [
             'name' => $e->name,
             'date' => $e->date,
             'time' => $e->human_time,
-            'link' => $link,
+            'link' => $e->link ? $e->link : '',
             'text' => $e->text,
             'cats' => $e->categorys->lists('name'),
             'owner_name' => $e->owner_name,

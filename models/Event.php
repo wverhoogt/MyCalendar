@@ -1,6 +1,7 @@
 <?php namespace KurtJensen\MyCalendar\Models;
 
 use Carbon\Carbon;
+use DB;
 use Model;
 use RainLab\User\Models\User as UserModel;
 use System\Classes\PluginManager;
@@ -11,6 +12,11 @@ use System\Classes\PluginManager;
 class Event extends Model
 {
     use \October\Rain\Database\Traits\Validation;
+
+    /**
+     * @var array Permissions cache.
+     */
+    public $permarray = [];
 
     /**
      * @var string The database table used by the model.
@@ -39,13 +45,6 @@ class Event extends Model
     /**
      * @var array Relations
      */
-/*
-public $belongsTo = [
-'user' => ['RainLab\User\Models\User',
-'key' => 'user_id',
-'otherKey' => 'id'],
-];
- */
     public $belongsToMany = [
         'categorys' => ['KurtJensen\MyCalendar\Models\Category',
             'table' => 'kurtjensen_mycal_categorys_events',
@@ -53,33 +52,15 @@ public $belongsTo = [
             'otherKey' => 'category_id',
         ],
     ];
-/*
-id
-user_id
-name
-day
-month
-year
-text
-is_published
- */
+
     public $attributes = [
-//        'date' => '',
         'day' => '',
         'month' => '',
         'year' => '',
         'human_time' => '',
+        'carbon_time' => '',
         'owner_name' => '',
     ];
-/*
-public function getDateAttribute() {
-if (!$this->year) {
-return date('Y-m-d');
-}
-
-return $this->year . '-' . $this->month . '-' . $this->day;
-}
- */
 
     public function getDayAttribute()
     {
@@ -106,24 +87,35 @@ return $this->year . '-' . $this->month . '-' . $this->day;
         return $time;
     }
 
+    public function getCarbonTimeAttribute()
+    {
+        if (!$this->time) {
+            return '';
+        }
+        list($h, $m) = explode(':', $this->time);
+        $time = $this->date->copy();
+        $time->hour = $h;
+        $time->minute = $m;
+        return $time;
+    }
+
     public function getOwnerNameAttribute()
     {
-        $ownerName = '';
         $manager = PluginManager::instance();
         if ($manager->exists('rainlab.user')) {
-            $user = UserModel::find($this->user_id);
-            if ($user) {
-                $ownerName = $user->name . ' ' . $user->surname;
+            if ($this->user) {
+                return $this->user->name . ' ' . $this->user->surname;
             }
         }
-        return $ownerName;
+        return '';
     }
 
     public function beforeSave()
     {
         unset(
             $this->attributes['human_time'],
-            $this->attributes['owner_name']);
+            $this->attributes['owner_name'],
+            $this->attributes['carbon_time']);
     }
 
     public function getDayOptions($month)
@@ -194,5 +186,84 @@ return $this->year . '-' . $this->month . '-' . $this->day;
         $date = new Carbon();
         $date->addDays($days);
         return $query->where('date', '<=', $date);
+    }
+
+    public function scopeWithOwner($query)
+    {
+        $manager = PluginManager::instance();
+        if ($manager->exists('rainlab.user')) {
+            return $query->with('user');
+        }
+        return $query;
+    }
+
+    public function scopePermisions($query, $user_id, $public_perm = [], $deny_perm = 0)
+    {
+
+        $manager = PluginManager::instance();
+        if ($manager->exists('shahiemseymor.roles')) {
+
+            $permarray = array_merge(
+                DB::table('shahiemseymor_permission_role')
+                    ->wherein('role_id',
+                        DB::table('shahiemseymor_assigned_roles')
+                            ->where('user_id', '=', $user_id)
+                            ->lists('role_id')
+                    )
+                    ->lists('permission_id'),
+                $public_perm);
+
+            $permarray = array_unique($permarray);
+
+            $query->whereHas('categorys', function ($q) use ($permarray) {
+                      $q->whereIn('permission_id', $permarray);
+                  })
+                  ->whereDoesntHave('categorys', function ($q) use ($deny_perm) {
+                      $q->where('permission_id', $deny_perm);
+                  });
+            return $query;
+        }
+        return $query;
+    }
+
+    /**
+     * Restricts to dates after $days days from today.
+     * @param  object $query
+     * @param  array $public_perm the public permision as an array
+     * @return object $query
+     */
+    public function hasPermission($user_id, $public_perm)
+    {
+        if (!count($this->permarray)) {
+            $manager = PluginManager::instance();
+            if ($manager->exists('shahiemseymor.roles')) {
+
+                $this->permarray = array_merge(
+                    DB::table('shahiemseymor_permission_role')
+                        ->wherein('role_id',
+                            DB::table('shahiemseymor_assigned_roles')
+                                ->where('user_id', '=', $user_id)
+                                ->lists('role_id')
+                        )
+                        ->lists('permission_id'),
+                    [Settings::get('public_perm')]);
+
+                $this->permarray = array_unique($this->permarray);
+            } else {
+                $this->permarray = $public_perm;
+            }
+        }
+
+        $eventPerms = $this->categorys->lists('permission_id');
+
+        if (!count(array_intersect($eventPerms, $this->permarray))) {
+            return false;
+        }
+
+        if (count(array_intersect($eventPerms, [Settings::get('deny_perm')]))) {
+            return false;
+        }
+
+        return true;
     }
 }

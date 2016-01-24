@@ -17,3 +17,13 @@ fields:
         label: kurtjensen.mycalendar::lang.settings.default_perm_label
         comment: kurtjensen.mycalendar::lang.settings.default_perm_comment
         type: dropdown
+        
+    date_format:
+        label: kurtjensen.mycalendar::lang.settings.date_format_label
+        comment: kurtjensen.mycalendar::lang.settings.date_format_comment
+        default: F jS, Y
+        
+    time_format:
+        label: kurtjensen.mycalendar::lang.settings.time_format_label
+        comment: kurtjensen.mycalendar::lang.settings.time_format_comment
+        default: g:i a

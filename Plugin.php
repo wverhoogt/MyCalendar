@@ -122,6 +122,14 @@ class Plugin extends PluginBase
                         'permissions' => ['kurtjensen.mycalendar.categories'],
                         'order' => 500,
                     ],
+                    'settings' => [
+                        'label' => 'kurtjensen.mycalendar::lang.settings.menu_label',
+                        'url' => Backend::url('system/settings/update/kurtjensen/mycalendar/settings'),
+                        'icon' => 'icon-gear',
+                        'code' => 'settings',
+                        'permissions' => ['kurtjensen.mycalendar.settings'],
+                        'order' => 800,
+                    ],
                 ],
             ],
         ];
@@ -143,6 +151,7 @@ class Plugin extends PluginBase
         return [
             'kurtjensen.mycalendar.events' => ['label' => 'kurtjensen.mycalendar::lang.plugin.access_events', 'tab' => 'kurtjensen.mycalendar::lang.plugin.tab'],
             'kurtjensen.mycalendar.categories' => ['label' => 'kurtjensen.mycalendar::lang.plugin.access_categories', 'tab' => 'kurtjensen.mycalendar::lang.plugin.tab'],
+            'kurtjensen.mycalendar.settings' => ['label' => 'kurtjensen.mycalendar::lang.plugin.access_settings', 'tab' => 'kurtjensen.mycalendar::lang.plugin.tab'],
         ];
     }
 
