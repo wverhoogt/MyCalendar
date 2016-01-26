@@ -32,9 +32,9 @@ class Settings extends Model
         $this->date_format = 'F jS, Y';
         $this->time_format = 'g:i a';
         $options = array_flip($this->getDropdownOptions());
-        $this->public_perm = $options['calendar_public'];
-        $this->deny_perm = $options['calendar_deny_all'];
-        $this->default_perm = $options['calendar_deny_all'];
+        $this->public_perm = $this->public_perm ? $this->public_perm : array_get($options, 'calendar_public', 0);
+        $this->deny_perm = $this->deny_perm ? $this->deny_perm : array_get($options, 'calendar_deny_all', 0);
+        $this->default_perm = $this->default_perm ? $this->default_perm : array_get($options, 'calendar_deny_all', 0);
     }
 
     public function getDropdownOptions($fieldName = null, $keyValue = null)

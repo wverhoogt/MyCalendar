@@ -42,3 +42,4 @@
 1.1.0: Fixed No date == Error by requiring a date in model. Adds a copy feature to frontend form.
 1.1.1: Added "Event List w/ Event Data" and "Month View w/ Event Data" components.
 1.1.2: Refactored to reduce query count, remove trait and reformat single event component.
+1.1.3: Fixed Seting issue when Roles not installed.
