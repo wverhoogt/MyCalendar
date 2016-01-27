@@ -206,9 +206,17 @@ class Event extends Model
                 $permarray = array_merge(
                     DB::table('shahiemseymor_permission_role')
                         ->wherein('role_id',
-                            DB::table('shahiemseymor_assigned_roles')
+
+                            DB::table('users_groups')
                                 ->where('user_id', '=', $user_id)
-                                ->lists('role_id')
+                                ->lists('user_group_id')
+
+/*
+
+DB::table('shahiemseymor_assigned_roles')
+->where('user_id', '=', $user_id)
+->lists('role_id')
+ */
                         )
                         ->lists('permission_id'),
                     $public_perm);
@@ -226,46 +234,5 @@ class Event extends Model
             return $query;
         }
         return $query;
-    }
-
-    /**
-     * Restricts to dates after $days days from today.
-     * @param  object $query
-     * @param  array $public_perm the public permision as an array
-     * @return object $query
-     */
-    public function hasPermission($user_id, $public_perm)
-    {
-        if (!count($this->permarray)) {
-            $manager = PluginManager::instance();
-            if ($manager->exists('shahiemseymor.roles')) {
-
-                $this->permarray = array_merge(
-                    DB::table('shahiemseymor_permission_role')
-                        ->wherein('role_id',
-                            DB::table('shahiemseymor_assigned_roles')
-                                ->where('user_id', '=', $user_id)
-                                ->lists('role_id')
-                        )
-                        ->lists('permission_id'),
-                    [Settings::get('public_perm')]);
-
-                $this->permarray = array_unique($this->permarray);
-            } else {
-                $this->permarray = $public_perm;
-            }
-        }
-
-        $eventPerms = $this->categorys->lists('permission_id');
-
-        if (!count(array_intersect($eventPerms, $this->permarray))) {
-            return false;
-        }
-
-        if (count(array_intersect($eventPerms, [Settings::get('deny_perm')]))) {
-            return false;
-        }
-
-        return true;
     }
 }
