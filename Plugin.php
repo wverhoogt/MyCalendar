@@ -2,8 +2,8 @@
 
 use Backend;
 use KurtJensen\MyCalendar\Controllers\Events as EventController;
+use KurtJensen\MyCalendar\Models\Category as CategoryModel;
 use KurtJensen\MyCalendar\Models\Event as EventModel;
-//use October\Rain\Auth\Models\User as BackUser;
 use RainLab\User\Models\User;
 use System\Classes\PluginBase;
 use System\Classes\PluginManager;
@@ -26,6 +26,7 @@ class Plugin extends PluginBase
             'description' => 'kurtjensen.mycalendar::lang.plugin.description',
             'author' => 'KurtJensen',
             'icon' => 'icon-birthday-cake',
+            'message_url' => 'http://firemankurt.com/notices/',
         ];
     }
 
@@ -80,6 +81,15 @@ class Plugin extends PluginBase
                     ],
                 ]);
             });
+        }
+
+        if ($manager->exists('kurtjensen.passage')) {
+            CategoryModel::extend(function ($model) {
+                $model->belongsTo['permission'] = ['KurtJensen\Passage\Models\Key',
+                    'table' => 'kurtjensen_passage_keys',
+                    'key' => 'permission_id'];
+            });
+
         }
 
     }

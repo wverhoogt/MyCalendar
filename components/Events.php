@@ -86,36 +86,36 @@ class Events extends ComponentBase
         if (is_null($this->user_id)) {
             $user = Auth::getUser();
         }
+
         if ($user) {
             $this->user_id = $user->id;
+        } else {
+            $this->user_id = 0;
         }
-        $this->user_id = 0;
+        return $this->user_id;
     }
 
     public function loadEvents()
     {
         $MyEvents = [];
-        if ($this->usePermissions) {
 
-            $query =
-            MyEvents::withOwner()
-                ->published()
-                ->permisions(
-                    $this->userId(),
-                    [Settings::get('public_perm')],
-                    Settings::get('deny_perm')
-                );
-        } else {
-            $query =
-            MyEvents::withOwner()->published();
-
-        }
-
-        $events = $query->past($this->dayspast)
+        $query = MyEvents::withOwner()
+            ->published()
+            ->past($this->dayspast)
             ->future($this->daysfuture)
             ->orderBy('date')
-            ->orderBy('time')
-            ->get();
+            ->orderBy('time');
+
+        if ($this->usePermissions) {
+
+            $query->permisions(
+                $this->userId(),
+                [Settings::get('public_perm')],
+                Settings::get('deny_perm')
+            );
+        }
+
+        $events = $query->get();
 
         $maxLen = $this->property('title_max', 100);
         $linkPage = $this->property('linkpage', '');
@@ -129,12 +129,14 @@ class Events extends ComponentBase
             	data-request-data="evid:' . $e->id . '"
             	data-request-update="\'' . $this->compLink . '::details\':\'#EventDetail\'" data-toggle="modal" data-target="#myModal');
 
-            $MyEvents[$e->year][$e->month][$e->day][] = ['name' => $e->name . ' ' . $e->human_time,
+            $MyEvents[$e->year][$e->month][$e->day][] = [
+                'name' => $e->name . ' ' . $e->human_time,
                 'title' => $title,
                 'link' => $link,
                 'id' => $e->id,
                 'owner' => $e->user_id,
                 'owner_name' => $e->owner_name,
+                'data' => $e,
             ];
         }
         return $MyEvents;
@@ -166,12 +168,14 @@ class Events extends ComponentBase
 
         return $this->page['ev'] = [
             'name' => $e->name,
-            'date' => $e->date,
+            'date' => $e->date->format(Settings::get('date_format', 'F jS, Y')),
             'time' => $e->human_time,
             'link' => $e->link ? $e->link : '',
             'text' => $e->text,
             'cats' => $e->categorys->lists('name'),
+            'owner' => $e->user_id,
             'owner_name' => $e->owner_name,
+            'data' => $e,
         ];
     }
 }

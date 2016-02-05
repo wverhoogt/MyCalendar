@@ -44,10 +44,9 @@ class Settings extends Model
         }
 
         $manager = PluginManager::instance();
-        if ($manager->exists('shahiemseymor.roles')) {
-            $this->permOptions = \ShahiemSeymor\Roles\Models\UserPermission::lists('name', 'id');
+        if ($manager->exists('kurtjensen.passage')) {
+            $this->permOptions = \KurtJensen\Passage\Models\Key::lists('name', 'id');
         }
         return $this->permOptions;
     }
-
 }

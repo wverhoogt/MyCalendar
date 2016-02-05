@@ -11,6 +11,8 @@ class Category extends Model
 {
     use \October\Rain\Database\Traits\Validation;
 
+    public $permOptions = [];
+
     public $table = 'kurtjensen_mycal_categories';
 
     /*
@@ -26,13 +28,6 @@ class Category extends Model
     ];
 
     protected $guarded = [];
-
-    public $belongsTo = [
-        'permission' => ['ShahiemSeymor\Roles\Models\UserPermission',
-            'table' => 'shahiemseymor_permissions',
-            'key' => 'permission_id',
-        ],
-    ];
 
     public $belongsToMany = [
         'events' => ['KurtJensen\MyCalendar\Models\Event',
@@ -86,14 +81,14 @@ class Category extends Model
 
     public function getDropdownOptions($fieldName = null, $keyValue = null)
     {
-        $options = [];
-        $manager = PluginManager::instance();
-        if ($manager->exists('shahiemseymor.roles')) {
-            $permissions = \ShahiemSeymor\Roles\Models\UserPermission::get();
-            foreach ($permissions as $permission) {
-                $options[$permission->id] = $permission->name;
-            }
+        if (count($this->permOptions)) {
+            return $this->permOptions;
         }
-        return $options;
+
+        $manager = PluginManager::instance();
+        if ($manager->exists('kurtjensen.passage')) {
+            $this->permOptions = \KurtJensen\Passage\Models\Key::lists('name', 'id');
+        }
+        return $this->permOptions;
     }
 }

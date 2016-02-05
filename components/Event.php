@@ -62,11 +62,12 @@ class Event extends ComponentBase
     public function onRun()
     {
         $this->loadEvent();
-        $this->page['backLink'] = $this->property('linkpage', '');
+        $date = $this->calEvent->date->format(Settings::get('date_format', 'F jS, Y'));
+        $time = $this->calEvent->human_time;
+
         $this->page->title = $this->calEvent->name;
-        $date = isset($this->calEvent->date) ? $this->calEvent->date->format(Settings::get('date_format', 'F jS, Y')) : '';
-        $time = isset($this->calEvent->time) ? $this->calEvent->carbon_time->format(Settings::get('time_format', 'g:i a')) : '';
         $this->page->description = $date . ' ' . $time;
+        $this->page['backLink'] = $this->property('linkpage', '');
     }
 
     public function userId()
@@ -105,12 +106,13 @@ class Event extends ComponentBase
 
         return $this->page['ev'] = [
             'name' => $this->calEvent->name,
-            'date' => $this->calEvent->date,
+            'date' => $this->calEvent->date->format(Settings::get('date_format', 'F jS, Y')),
             'time' => $this->calEvent->human_time,
             'link' => $this->calEvent->link ? $this->calEvent->link : '',
             'text' => $this->calEvent->text,
             'cats' => $this->calEvent->categorys->lists('name'),
             'owner_name' => $this->calEvent->owner_name,
+            'data' => $this->calEvent,
         ];
     }
 }

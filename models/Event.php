@@ -1,7 +1,7 @@
 <?php namespace KurtJensen\MyCalendar\Models;
 
 use Carbon\Carbon;
-use DB;
+use KurtJensen\MyCalendar\Models\Settings;
 use Model;
 use RainLab\User\Models\User as UserModel;
 use System\Classes\PluginManager;
@@ -27,7 +27,8 @@ class Event extends Model
      * Validation rules
      */
     public $rules = [
-        'date' => 'required',
+        'date' => 'date|required',
+        'name' => 'required',
     ];
 
     /**
@@ -79,11 +80,7 @@ class Event extends Model
 
     public function getHumanTimeAttribute()
     {
-        if (!$this->time) {
-            return '';
-        }
-        list($h, $m) = explode(':', $this->time);
-        $time = ($h > 12 ? ($h - 12) : intval($h)) . ':' . $m . ($h > 11 ? 'pm' : 'am');
+        $time = isset($this->time) ? $this->carbon_time->format(Settings::get('time_format', 'g:i a')) : '';
         return $time;
     }
 
@@ -199,30 +196,17 @@ class Event extends Model
 
     public function scopePermisions($query, $user_id, $public_perm = [], $deny_perm = 0)
     {
-
         $manager = PluginManager::instance();
-        if ($manager->exists('shahiemseymor.roles')) {
+
+        if ($manager->exists('kurtjensen.passage')) {
+
+            $akeys = array_keys(\KurtJensen\Passage\Plugin::globalPassageKeys());
             if ($user_id) {
-                $permarray = array_merge(
-                    DB::table('shahiemseymor_permission_role')
-                        ->wherein('role_id',
-
-                            DB::table('users_groups')
-                                ->where('user_id', '=', $user_id)
-                                ->lists('user_group_id')
-
-/*
-
-DB::table('shahiemseymor_assigned_roles')
-->where('user_id', '=', $user_id)
-->lists('role_id')
- */
-                        )
-                        ->lists('permission_id'),
-                    $public_perm);
+                $permarray = array_merge($akeys, $public_perm);
             } else {
                 $permarray = $public_perm;
             }
+
             $permarray = array_unique($permarray);
 
             $query->whereHas('categorys', function ($q) use ($permarray) {

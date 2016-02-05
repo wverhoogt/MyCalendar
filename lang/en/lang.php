@@ -118,7 +118,7 @@ return [
         'title_max_title' => 'Maximum Popup Title Length',
         'title_max_description' => 'Maximum length of "title" property that shows the details of an event on hover.',
         'permissions_title' => 'Use Permission',
-        'permissions_description' => 'Use permissions to restrict what categories of events are shown based on roles.',
+        'permissions_description' => 'Use permissions to restrict what categories of events are shown based on user groups.',
         'past_title' => 'Past Days',
         'past_description' => 'How far into the past do you want to load events from?',
         'future_title' => 'Future Days',

@@ -9,17 +9,19 @@ class SeedAllTables extends Seeder
     public function run()
     {
         $manager = PluginManager::instance();
-        if ($manager->exists('shahiemseymor.roles')) {
+        if ($manager->exists('kurtjensen.passage')) {
 
-            if (!\ShahiemSeymor\Roles\Models\UserPermission::where('name', '=', 'calendar_public')->first()) {
-                \ShahiemSeymor\Roles\Models\UserPermission::create([
+            if (!\KurtJensen\Passage\Models\Key::where('name', '=', 'calendar_public')->first()) {
+                \KurtJensen\Passage\Models\Key::create([
                     'name' => 'calendar_public',
+                    'description' => 'Public Calendar Events ( no user account required to view )',
                 ]);
             }
 
-            if (!\ShahiemSeymor\Roles\Models\UserPermission::where('name', '=', 'calendar_deny_all')->first()) {
-                \ShahiemSeymor\Roles\Models\UserPermission::create([
+            if (!\KurtJensen\Passage\Models\Key::where('name', '=', 'calendar_deny_all')->first()) {
+                \KurtJensen\Passage\Models\Key::create([
                     'name' => 'calendar_deny_all',
+                    'description' => 'Denied Calendar Events ( no one can see these events )',
                 ]);
             }
         }
