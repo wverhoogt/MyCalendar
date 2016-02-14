@@ -26,8 +26,12 @@ class Plugin extends PluginBase
             'description' => 'kurtjensen.mycalendar::lang.plugin.description',
             'author' => 'KurtJensen',
             'icon' => 'icon-birthday-cake',
-            'message_url' => 'http://firemankurt.com/notices/',
         ];
+    }
+
+    public function messageURL()
+    {
+        return 'http://firemankurt.com/notices/';
     }
 
     public function boot()
