@@ -178,6 +178,7 @@ class Plugin extends PluginBase
                 'description' => 'kurtjensen.mycalendar::lang.settings.description',
                 'class' => 'KurtJensen\MyCalendar\Models\Settings',
                 'order' => 199,
+                'permissions' => ['kurtjensen.mycalendar.settings'],
             ],
         ];
 
