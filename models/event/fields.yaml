@@ -30,6 +30,14 @@ fields:
         mode: time
         span: right
         placeholder: kurtjensen.mycalendar::lang.event.phold_time
+    length:
+        label: kurtjensen.mycalendar::lang.event.length
+        type: datepicker
+        mode: time
+        span: right
+        placeholder: kurtjensen.mycalendar::lang.event.phold_length
+    pattern:
+        label: kurtjensen.mycalendar::lang.event.pattern
     text:
         label: kurtjensen.mycalendar::lang.event.text
         type: textarea

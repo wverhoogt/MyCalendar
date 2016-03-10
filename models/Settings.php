@@ -35,6 +35,9 @@ class Settings extends Model
         $this->public_perm = $this->public_perm ? $this->public_perm : array_get($options, 'calendar_public', 0);
         $this->deny_perm = $this->deny_perm ? $this->deny_perm : array_get($options, 'calendar_deny_all', 0);
         $this->default_perm = $this->default_perm ? $this->default_perm : array_get($options, 'calendar_deny_all', 0);
+        $this->day_start = $this->day_start ? $this->day_start : '24:00:00';
+        $this->day_end = $this->day_end ? $this->day_end : '23:59:00';
+        $this->default_length = $this->default_length ? $this->default_length : '01:00:00';
     }
 
     public function getDropdownOptions($fieldName = null, $keyValue = null)
@@ -48,5 +51,26 @@ class Settings extends Model
             $this->permOptions = \KurtJensen\Passage\Models\Key::lists('name', 'id');
         }
         return $this->permOptions;
+    }
+
+    public function getDayStartAttribute($value)
+    {
+        $time = $this->get('day_start', '24:00:00');
+
+        return substr($time, 0, 5);
+    }
+
+    public function getDayEndAttribute($value)
+    {
+        $time = $this->get('day_end', '23:59:00');
+
+        return substr($time, 0, 5);
+    }
+
+    public function getDefaultLengthAttribute($value)
+    {
+        $time = $this->get('default_length', '01:00:00');
+
+        return substr($time, 0, 5);
     }
 }

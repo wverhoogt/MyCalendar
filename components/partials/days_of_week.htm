@@ -1,0 +1,15 @@
+<!-- days_of_week partial start -->
+            <label for="form-month-days-{{ name }}">{{ label }}</label>
+            <select class="form-control custom-select  {{ class }}" id="form-month-days-{{ name }}" name="{{ name }}">
+                        <option{% if value == 'SU'  %} selected{% endif %} value="SU">Sunday</option>
+                        <option{% if value == 'MO'  %} selected{% endif %} value="MO">Monday</option>
+                        <option{% if value == 'TU'  %} selected{% endif %} value="TU">Tuesday</option>
+                        <option{% if value == 'WE'  %} selected{% endif %} value="WE">Wednesday</option>
+                        <option{% if value == 'TH'  %} selected{% endif %} value="TH">Thursday</option>
+                        <option{% if value == 'FR'  %} selected{% endif %} value="FR">Friday</option>
+                        <option{% if value == 'SA'  %} selected{% endif %} value="SA">Saturday</option>
+                        <option{% if value == 'SU,MO,TU,WE,TH,FR,SA'  %} selected{% endif %} value="SU,MO,TU,WE,TH,FR,SA">Day</option>
+                        <option{% if value == 'MO,TU,WE,TH,FR'  %} selected{% endif %} value="MO,TU,WE,TH,FR">Weekday</option>
+                        <option{% if value == 'SU,SA'  %} selected{% endif %} value="SU,SA">Weekend day</option>
+            </select>
+<!-- days_of_week partial end -->

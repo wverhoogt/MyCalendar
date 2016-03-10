@@ -1,0 +1,12 @@
+<!-- weekdaypicker partial start -->
+            <label for="bymonthday">{{ label }}</label>
+            <fieldset class="btn-group" data-toggle="buttons">
+                <label class="btn btn-default"><input type="checkbox" class="{{ class }}"{% if 'SU' in value %} selected{% endif %} name="{{ name }}[SU]" value="SU">Sun</label>
+                <label class="btn btn-default"><input type="checkbox" class="{{ class }}"{% if 'MO' in value %} selected{% endif %} name="{{ name }}[MO]" value="MO">Mon</label>
+                <label class="btn btn-default"><input type="checkbox" class="{{ class }}"{% if 'TU' in value %} selected{% endif %} name="{{ name }}[TU]" value="TU">Tue</label>
+                <label class="btn btn-default"><input type="checkbox" class="{{ class }}"{% if 'WE' in value %} selected{% endif %} name="{{ name }}[WE]" value="WE"> Wed</label>
+                <label class="btn btn-default"><input type="checkbox" class="{{ class }}"{% if 'TH' in value %} selected{% endif %} name="{{ name }}[TH]" value="TH"> Thu</label>
+                <label class="btn btn-default"><input type="checkbox" class="{{ class }}"{% if 'FR' in value %} selected{% endif %} name="{{ name }}[FR]" value="FR"> Fri</label>
+                <label class="btn btn-default"><input type="checkbox" class="{{ class }}"{% if 'SA' in value %} selected{% endif %} name="{{ name }}[SA]" value="SA"> Sat</label>
+            </fieldset>
+<!-- weekdaypicker partial end -->

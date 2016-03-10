@@ -1,0 +1,3 @@
+{% for date in dates %}
+{{ date.getStart()|date('Y-m-d H:i') }} to {{ date.getEnd()|date('Y-m-d H:i') }}<br>
+{% endfor %}

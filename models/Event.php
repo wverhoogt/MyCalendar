@@ -5,6 +5,8 @@ use KurtJensen\MyCalendar\Models\Settings;
 use Model;
 use RainLab\User\Models\User as UserModel;
 use System\Classes\PluginManager;
+use \Recurr\Rule;
+use \Recurr\Transformer\ArrayTransformer;
 
 /**
  * event Model
@@ -39,7 +41,18 @@ class Event extends Model
     /**
      * @var array Fillable fields
      */
-    protected $fillable = ['*'];
+    protected $fillable = [
+        'name',
+        'is_published',
+        'user_id',
+        'date',
+        'time',
+        'text',
+        'link',
+        'length',
+        'pattern',
+        'categorys',
+    ];
 
     protected $dates = ['date'];
 
@@ -51,6 +64,12 @@ class Event extends Model
             'table' => 'kurtjensen_mycal_categorys_events',
             'key' => 'event_id',
             'otherKey' => 'category_id',
+        ],
+    ];
+    public $hasMany = [
+        'occurrences' => ['KurtJensen\MyCalendar\Models\Occurrence',
+            'table' => 'kurtjensen_mycalendar_occurrences',
+            'key' => 'event_id',
         ],
     ];
 
@@ -218,5 +237,36 @@ class Event extends Model
             return $query;
         }
         return $query;
+    }
+
+    public function afterCreate()
+    {
+        $start_at = $this->carbon_time;
+
+        list($lengthHour, $lengthMinute) = explode(':', $this->length);
+
+        $end_at = $start_at->copy();
+        $end_at->addMinutes($lengthMinute)->addHours($lengthHour);
+
+        $rules = new \Recurr\Rule($this->pattern, $start_at, $end_at);
+        $transformer = new \Recurr\Transformer\ArrayTransformer;
+        $dates = $transformer->transform($rules);
+        $this->fillOccurrences($dates);
+    }
+
+    public function fillOccurrences($dates)
+    {
+        foreach ($dates as $occurrence) {
+            $occurrences[] = new Occurrence([
+                'relation' => 'events',
+                'relation_id' => $this->id,
+                'start_at' => $occurrence->getStart()->format('Y-m-d H:i:s'),
+                'end_at' => $occurrence->getEnd()->format('Y-m-d H:i:s'),
+                'is_modified' => 0,
+                'is_allday' => 0,
+                'is_cancelled' => 0,
+            ]);
+        }
+        $this->occurrences()->saveMany($occurrences);
     }
 }
