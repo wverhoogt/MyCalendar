@@ -82,6 +82,11 @@ class Event extends Model
         'owner_name' => '',
     ];
 
+    public function getDateAttribute()
+    {
+        return ($this->exists) ? $this->date : new Carbon();
+    }
+
     public function getDayAttribute()
     {
         return $this->date->day;

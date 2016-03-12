@@ -69,11 +69,6 @@ class EventForm extends ComponentBase
             return null;
         }
         $this->allowpublish = $this->property('allowpublish');
-        $this->ckeditor = $this->property('ckeditor');
-        if ($this->ckeditor) {
-            $this->addJs('//cdn.ckeditor.com/4.5.4/standard/ckeditor.js');
-        }
-        $this->addJs('/plugins/kurtjensen/mycalendar/assets/js/scheduler.js');
     }
 
     public function onRun()
@@ -84,12 +79,12 @@ class EventForm extends ComponentBase
         $this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/clockpicker/css/jquery-clockpicker.css');
         $this->addCss('/plugins/kurtjensen/mycalendar/assets/css/cal-form.css');
         $this->addJs('/modules/backend/formwidgets/datepicker/assets/js/build-min.js');
-/*
-if ($this->ckeditor) {
-$this->addJs('//cdn.ckeditor.com/4.5.4/standard/ckeditor.js');
-}
-$this->addJs('/plugins/kurtjensen/mycalendar/assets/js/scheduler.js');
- */$this->myevents = $this->page['myevents'] = $this->loadEvents();
+
+        if ($this->ckeditor) {
+            $this->addJs('//cdn.ckeditor.com/4.5.4/standard/ckeditor.js');
+        }
+        $this->addJs('/plugins/kurtjensen/mycalendar/assets/js/scheduler.js');
+        $this->myevents = $this->page['myevents'] = $this->loadEvents();
     }
 
     public function trans($string)
@@ -104,10 +99,7 @@ $this->addJs('/plugins/kurtjensen/mycalendar/assets/js/scheduler.js');
         }
 
         $myevents = MyCalEvent::where('user_id', '=', $this->user->id)->
-        orderBy('year')->
-        orderBy('month')->
-        orderBy('day')->
-        orderBy('time')->
+        orderBy('date')->
         get();
         return $myevents;
     }
@@ -135,6 +127,11 @@ $this->addJs('/plugins/kurtjensen/mycalendar/assets/js/scheduler.js');
         if (!$myevent = $this->getMyEvent()) {
             return null;
         }
+
+        if ($this->ckeditor) {
+            $this->addJs('//cdn.ckeditor.com/4.5.4/standard/ckeditor.js');
+        }
+        $this->addJs('/plugins/kurtjensen/mycalendar/assets/js/scheduler.js');
 
         $this->is_copy = $this->page['is_copy'] = post('copy');
 

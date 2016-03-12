@@ -20,7 +20,7 @@
 {% for event in __SELF__.myevents  %}
                 <tr>
                     <td class="">{{ event.name }}</td>
-                    <td class=""> {{ event.date|date('m/d/Y') }} {% if event.time %} at {{ event.time }}{% endif %}</td>
+                    <td class=""> {{ event.datey|date('m/d/Y') }} {% if event.time %} at {{ event.time }}{% endif %}</td>
                     <td class="">{% for cat in event.categories %}{{ cat.name }}, {% endfor %}</td>
                     <td class="">{{ event.pattern }}</td>
                     <td class=""> {% if event.is_published %}{% else %} Not {% endif %} Published </td>
