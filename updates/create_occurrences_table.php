@@ -19,7 +19,7 @@ class CreateOccurrencesTable extends Migration
             $table->boolean('is_modified')->nullable()->default(false);
             $table->boolean('is_allday')->nullable()->default(false);
             $table->boolean('is_cancelled')->nullable()->default(false);
-
+            $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });
     }

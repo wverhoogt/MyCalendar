@@ -241,6 +241,11 @@ class Event extends Model
 
     public function afterCreate()
     {
+        $this->fillOccurrences($this->generateOccurranceDates());
+    }
+
+    public function generateOccurranceDates()
+    {
         $start_at = $this->carbon_time;
 
         list($lengthHour, $lengthMinute) = explode(':', $this->length);
@@ -251,22 +256,79 @@ class Event extends Model
         $rules = new \Recurr\Rule($this->pattern, $start_at, $end_at);
         $transformer = new \Recurr\Transformer\ArrayTransformer;
         $dates = $transformer->transform($rules);
-        $this->fillOccurrences($dates);
+        return $dates;
     }
 
     public function fillOccurrences($dates)
     {
-        foreach ($dates as $occurrence) {
+        foreach ($dates as $recurrence) {
             $occurrences[] = new Occurrence([
+                'event_id' => $this->id,
                 'relation' => 'events',
                 'relation_id' => $this->id,
-                'start_at' => $occurrence->getStart()->format('Y-m-d H:i:s'),
-                'end_at' => $occurrence->getEnd()->format('Y-m-d H:i:s'),
+                'start_at' => $recurrence->getStart()->format('Y-m-d H:i:s'),
+                'end_at' => $recurrence->getEnd()->format('Y-m-d H:i:s'),
                 'is_modified' => 0,
                 'is_allday' => 0,
                 'is_cancelled' => 0,
             ]);
         }
         $this->occurrences()->saveMany($occurrences);
+    }
+
+    public function afterUpdate()
+    {
+        // Check if any change will cause a change in recurrence.
+        if (
+            $this->date !== $this->getOriginal('date') &&
+            $this->time !== $this->getOriginal('time') &&
+            $this->length !== $this->getOriginal('length') &&
+            $this->pattern !== $this->getOriginal('pattern')
+        ) {
+            return;
+        }
+
+        $this->updateOccurrences($this->generateOccurranceDates());
+    }
+
+    public function updateOccurrence($occurrence, $recurrence)
+    {
+        if (!$recurrence) {
+            return $occurrence->delete();
+        }
+        $occurrence->deleted_at = null;
+        $occurrence->event_id = $this->id;
+        $occurrence->relation = 'events';
+        $occurrence->relation_id = $this->id;
+        $occurrence->start_at = $recurrence->getStart()->format('Y-m-d H:i:s');
+        $occurrence->end_at = $recurrence->getEnd()->format('Y-m-d H:i:s');
+        $occurrence->is_modified = 1;
+        $occurrence->is_allday = 0;
+        $occurrence->is_cancelled = 0;
+        $occurrence->save();
+    }
+
+    public function updateOccurrences($dates)
+    {
+        $occurrences = Occurrence::where('event_id', $this->id)->orderBy('start_at')->withTrashed()->get();
+        $countNew = count($dates);
+        $countOld = $occurrences->count();
+        $i = 0;
+        if ($countOld >= $countNew) {
+            // More Old than New
+            foreach ($occurrences as $occurrence) {
+                $recurrence = $dates[$i++];
+                $this->updateOccurrence($occurrence, $recurrence);
+            }
+
+        } else {
+            // More New than Old
+            foreach ($dates as $recurrence) {
+                $occurrence = $occurrences[$i++];
+                if ($occurrence) {
+                    $this->updateOccurrence($occurrence, $recurrence);
+                }
+            }
+        }
     }
 }

@@ -17,42 +17,41 @@ function enableshow(sclass) {
 	$(sclass).attr('disabled', false);
 }
 
-
-function repeatChange() {
-	disableHide('.r_all');
-	var repeat = $('#form-repeat').val();
-	enableshow('.r_'+repeat);
-	endsChange(true)
-}
-
-
 function endsChange(hide) {
 	disableHide('.e_all');
     if (hide == true){
-    	$('#form-Ends').val('never');
+    	$('#Ends').val('never');
     }
 
-	var end_at = $('#form-Ends').val();
+	var end_at = $('#Ends').val().toLowerCase();
 	enableshow('.e_'+end_at);
 
 }
 
 
-function monthOnChange() {
+$( "#FREQ" ).on( "change", function() {
+	disableHide('.r_all');
+	var repeat = $('#FREQ').val().toLowerCase();
+	enableshow('.r_'+repeat);
+	endsChange(true);
+});
+
+$( "#month_on" ).on( "change", function() {
 	disableHide('.mo_all');
     
-	var on = $('#form-month-on').val();
+	var on = $('#form-month-on').val().toLowerCase();
 	enableshow('.mo_'+on);
-}
+});
 
-
-function yearOnChange() {
-	disableHide('.yr_all');
-    
-	var on = $('#form-year-on').val();
+$( "#year_on" ).on( "change", function() {	
+	disableHide('.yr_all');    
+	var on = $('#year_on').val().toLowerCase();
 	enableshow('.yr_'+on);
+});
 
-}
+$( "#Ends" ).on( "change", function() {
+	endsChange(false);
+});
 
 if($('#ck-input').val()) CKEDITOR.replace( 'text' );
 

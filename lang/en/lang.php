@@ -236,12 +236,16 @@ return [
     ],
     'rrule' => [// Rrule Form
         'repeat' => 'Repeat',
-        'on' => 'On',
+        'INTERVAL' => 'Every',
+        'WBYDAY' => 'On',
+        'YBYMONTH' => ' Of ',
         'on_the' => 'On The',
         'bymonthday' => 'bymonthday',
         'bysetpos' => 'bysetpos',
         'byday' => 'byday',
         'bymonth' => 'bymonth',
+
+        'timezone' => 'Timezone',
 
         'timezones' => [
 
@@ -262,11 +266,8 @@ return [
             '+10:00' => '(GMT+10:00) Brisbane, Canberra, Melbourne, Sydney',
             '+11:00' => '(GMT+11:00) Magadan, Solomon Is., New Caledonia',
             '+12:00' => '(GMT+12:00) Auckland, Wellington, Fiji, Kamchatka, Marshall Is.',
-            '+12:00' => '(GMT+13:00) Nukualofa',
-            '+12:00' => '(GMT-01:00) Azores, Cape Verde Is.',
             '-02:00' => '(GMT-02:00) Mid-Atlantic',
-            '-03:00' => '(GMT-03:00) Brasilia, Buenos Aires, Georgetown, Greenland *',
-            '-03:00' => '(GMT-03:30) Newfoundland',
+            '-03:00' => '(GMT-03:00) Brasilia, Buenos Aires, Georgetown, Greenland, Newfoundland',
             '-04:00' => '(GMT-04:00) Atlantic Time (Canada), Santiago',
             '-04:30' => '(GMT-04:30) Caracas',
             '-05:00' => '(GMT-05:00) Bogota, Lima, Quito, Rio Branco, Eastern Time (US &amp; Canada)',
@@ -317,7 +318,7 @@ return [
             '-1' => 'Last',
             '-2' => 'Second to Last',
         ],
-        'months' => [
+        'month' => [
             '1' => 'January',
             '2' => 'February',
             '3' => 'March',

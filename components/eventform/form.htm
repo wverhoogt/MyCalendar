@@ -1,5 +1,3 @@
-{% set formVals = __SELF__.formValues %}
-{{ formVals.FREQ }}
 <!--<form data-request="onUpdateEvent" data-request-update="'EventForm::list': '#eventinfo'">-->
 <form data-request="onProcess" id="EventForm">
 
@@ -16,189 +14,41 @@
     <div id="ajaxResponse">
     </div>
 
-        <input type="hidden" name="id" value="{% if not is_copy %}{{ formValues.id  }}{% endif %}">
+        <input type="hidden" name="id" value="{% if not is_copy %}{{ formVals.id  }}{% endif %}">
 
 
     <div class="row">
 <!-- Date -->
         <div class="col-md-3 form-group">
-{% partial '@datepicker' name='date' value=formValues.date label=__SELF__.trans('event.date') %}
+{% partial '@datepicker' name='date' value=formVals.date label=__SELF__.trans('event.date') %}
         </div>
 <!-- Time -->
         <div class="col-md-2 form-group"
             data-field-name="time"
             id="Form-field-Event-time-group">
-{% partial '@clockpicker' name='time' value=formValues.time label=__SELF__.trans('event.time') %}
+{% partial '@clockpicker' name='time' value=formVals.time label=__SELF__.trans('event.time') %}
         </div>
 <!-- Length -->
         <div class="col-md-3 form-group"
             data-field-name="length"
             id="Form-field-Event-length-group">
-{% if formValues.length %}
-{% set value = formValues.length %}
+{% if formVals.length %}
+{% set value = formVals.length %}
 {% else %}{% set value = '1:00' %}
 {% endif %}
 {% partial '@clockpicker' name='length' value=value label=__SELF__.trans('event.length') %}
         </div>
     </div>
 
-
-<!-- Timezone -->
-    <div class="row">
-        <div class="col-md-6 form-group">
-{% partial '@timezone' name='timezone' value='formValues.length' label='timezone' %}
-        </div>
-    </div>
-
-
-    <div class="row form-inline ">
-<!-- Repeat -->
-        <div class="col-md-3 form-group">
-            <label for="form-repeat">{{ __SELF__.trans('event_form.repeat') }}</label>
-            <select class="form-control custom-select" id="form-repeat" name="FREQ" onchange="repeatChange()">
-                <option{% if formValues.FREQ=='NONE'  %} selected{% endif %} value="none">None (run once)</option>
-                <option{% if formValues.FREQ=='HOURLY'  %} selected{% endif %} value="hourly">Hourly</option>
-                <option{% if formValues.FREQ=='DAILY'  %} selected{% endif %} value="daily">Daily</option>
-                <option{% if formValues.FREQ=='WEEKDAYS'  %} selected{% endif %} value="weekdays">Weekdays</option>
-                <option{% if formValues.FREQ=='WEEKENDS'  %} selected{% endif %} value="weekends">Weekends</option>
-                <option{% if formValues.FREQ=='WEEKLY'  %} selected{% endif %} value="weekly">Weekly</option>
-                <option{% if formValues.FREQ=='MONTHLY'  %} selected{% endif %} value="monthly">Monthly</option>
-                <option{% if formValues.FREQ=='YEARLY'  %} selected{% endif %} value="yearly">Yearly</option>
-            </select>
-        </div>
-
-        <div class="col-md-6 hidden r_all r_hourly r_daily r_weekly r_monthly r_yearly">
-{% partial '@number_spin' max=365 name='INTERVAL' class='r_all r_hourly r_daily r_weekly r_monthly r_yearly'
-    value=formValues.INTERVAL 
-    label=__SELF__.trans('event_form.every') %}
-            <span class="inline-form-text{% if formValues.FREQ!='HOURLY'  %} hidden{% endif %} r_all r_hourly"><strong>hours(s)</strong></span>
-            <span class="inline-form-text{% if formValues.FREQ!='DAILY'  %} hidden{% endif %} r_all r_daily"><strong>days(s)</strong></span>
-            <span class="inline-form-text{% if formValues.FREQ!='WEEKLY'  %} hidden{% endif %} r_all r_weekly"><strong>week(s)</strong></span>
-            <span class="inline-form-text{% if formValues.FREQ!='MONTHLY'  %} hidden{% endif %}  r_all r_monthly"><strong>month(s)</strong></span>
-            <span class="inline-form-text{% if formValues.FREQ!='YEARLY'  %} hidden{% endif %} r_all r_yearly"><strong>year(s)</strong></span>
-        </div>
-    </div>
-
-<!-- BYDAY -->
-    <div class="row hidden r_all r_weekly"><br>
-        <div class="col-md-8 form-group">
-{% partial '@weekdaypicker' name='BYDAY' class='r_all r_weekly' 
-    value=formValues.BYDAY
-    label='' %}
-        </div>
-    </div>
-
-
-
-
-
-<!-- Month On -->
-    <div class="row {% if formValues.FREQ!='MONTHLY'  %} hidden{% endif %} r_all r_monthly  form-inline "><br>
-        <div class="col-md-8 form-group">
-        <fieldset class="btn-group" data-toggle="buttons">
-            <label for="form-month-on"></label>
-            <select class="form-control custom-select r_all r_monthly" id="form-month-on" name="month_on" onchange="monthOnChange()">
-                <option{% if formValues.month_on=='on_day'  %} selected{% endif %} value="on_day">On Date Above</option>
-                <option{% if formValues.month_on=='on_the'  %} selected{% endif %} value="on_the">On The</option>
-            </select>
-{% if formValues.month_on=='on_the'  %}
-{% set class = 'mo_all mo_on_the' %}
-{% else %}
-{% set class = 'mo_all mo_on_the hidden' %}
-{% endif %}
-<!-- year-month-day-pos -->
-{% partial '@dayposition' name='BYSETPOS' class=class
-value=formValues.BYSETPOS 
-label='' %}
-
-<!-- Timezone -->
-{% partial '@days_of_week' name='BYDAY' class=class
-value=formValues.BYDAY 
-label='' %}
-        </fieldset>
-        </div>
-    </div>
-
-
-
-<!-- Year On -->
-    <div class="row hidden r_all r_yearly  form-inline "><br>
-        <div class="col-md-8 form-group">
-        <fieldset class="btn-group" data-toggle="buttons">
-            <label for="form-year-on"></label>
-            <select class="form-control custom-select r_all r_yearly" id="form-year-on" name="year_on" onchange="yearOnChange()">
-                <option{% if formValues.year_on=='on_day'  %} selected{% endif %} value="on_day">On Date Above</option>
-                <option{% if formValues.year_on=='on_the'  %} selected{% endif %} value="on_the">On The</option>
-            </select>
-
-{% if formValues.year_on=='on_the'  %}
-{% set class = 'yr_all yr_on_the' %}
-{% else %}
-{% set class = 'yr_all yr_on_the hidden' %}
-{% endif %}
-
-<!-- YBYSETPOS -->
-{% partial '@dayposition' class=class
-name='YBYSETPOS' 
-value=formValues.YBYSETPOS 
-label=' ' %}
-
-<!-- BYDAY -->
-{% partial '@days_of_week' class=class
-name='BYDAY' 
-value=formValues.BYDAY 
-label=' ' %}
-
-<!-- YBYMONTH -->
-{% partial '@month_picker' class=class
-name='YBYMONTH' 
-value=formValues.YBYMONTH 
-label='' %}
-        </fieldset>
-        </div>
-    </div>
-
-    <br>
-<!-- Ends -->
-    <div class="row {% if formValues.FREQ=='NONE' or not formValues.FREQ %} hidden{% endif %} r_all r_hourly r_daily r_weekdays r_weekends r_weekly r_monthly r_yearly form-inline ">
-        <div class="col-md-3 form-group">
-            <label for="form-Ends">Ends</label>
-            <select class="form-control custom-select  r_all r_hourly r_daily r_weekdays r_weekends r_weekly r_monthly r_yearly" id="form-Ends" name="Ends" onchange="endsChange()">
-                <option{% if formValues.Ends=='NEVER'  %} selected{% endif %} value="never">Never</option>
-                <option{% if formValues.Ends=='AFTER'  %} selected{% endif %} value="after">After</option>
-                <option{% if formValues.Ends=='DATE'  %} selected{% endif %} value="date">On date</option>
-            </select>
-        </div>
-
-
-        <div class="col-md-2 {% if formValues.Ends!='AFTER'  %}hidden {% endif %}e_all e_after form-group ">
-{% partial '@number_spin' max=100 class='e_all e_after'
-name='COUNT' 
-value=formValues.COUNT 
-label='' %}
-            <span class="inline-form-text"><strong>occurrence(s)</strong></span>
-        </div>
-
-
-        <div class="col-md-4 {% if formValues.Ends!='DATE'  %}hidden {% endif %}e_all e_date form-group">
-{% partial '@datepicker' class='e_all e_date'
-name='ENDON'
-value=formValues.ENDON 
-label='End Date' %}
-        </div>
-
-
-    </div>
-
-
+{{ rcurForm|raw }}
 
     <div class="form-group"><br>
         <label for="Form-field-myevent-name">{{ __SELF__.trans('event.title') }}</label>
-        <input type="text" name="name" id="Form-field-myevent-name" value="{{ formValues.name }}" placeholder="{{ __SELF__.trans('event.phold_name') }}" class="form-control" maxlength="255">
+        <input type="text" name="name" id="Form-field-myevent-name" value="{{ formVals.name }}" placeholder="{{ __SELF__.trans('event.phold_name') }}" class="form-control" maxlength="255">
     </div>
     <div class="form-group">
         <label for="Form-field-myevent-text">{{ __SELF__.trans('event.text') }}</label>
-        <textarea name="text" id="Form-field-myevent-text" placeholder="{{ __SELF__.trans('phold_text') }}" class="form-control ckeditor">{{ formValues.text }}</textarea>
+        <textarea name="text" id="Form-field-myevent-text" placeholder="{{ __SELF__.trans('phold_text') }}" class="form-control ckeditor">{{ formVals.text }}</textarea>
     </div>
     <div class="form-group">
         <label for="Form-field-myevent-category_id">{{ __SELF__.trans('event.category') }}</label>
@@ -207,7 +57,7 @@ label='End Date' %}
 {% if __SELF__.allowpublish %}
     <div class="form-group">
         <input type="checkbox" id="Form-field-myevent-is_published" name="is_published" value="1"
-            {% if formValues.is_published %} checked="checked"{% endif %}>
+            {% if formVals.is_published %} checked="checked"{% endif %}>
         <label for="Form-field-myevent-is_published">{{ __SELF__.trans('event.is_published') }}</label><br />
     </div>
 {% endif %}
@@ -223,4 +73,4 @@ label='End Date' %}
     </div>
 </form>
 
-<input type="hidden" id="ck-input" value="{{__SELF__.ckeditor}}"></input>
+<input type="hidden" id="ck-input" value="{{ __SELF__.ckeditor }}"></input>

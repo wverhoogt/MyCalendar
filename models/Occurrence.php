@@ -7,6 +7,7 @@ use Model;
  */
 class Occurrence extends Model
 {
+    use \October\Rain\Database\Traits\SoftDeleting;
 
     /**
      * @var string The database table used by the model.
@@ -30,6 +31,12 @@ class Occurrence extends Model
         //'is_modified',
         'is_allday',
         //'is_cancelled',
+    ];
+
+    protected $dates = [
+        'start_at',
+        'end_at',
+        'deleted_at',
     ];
 
     /**
