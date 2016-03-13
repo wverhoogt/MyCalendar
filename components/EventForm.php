@@ -69,22 +69,22 @@ class EventForm extends ComponentBase
             return null;
         }
         $this->allowpublish = $this->property('allowpublish');
+        $this->ckeditor = $this->property('ckeditor');
     }
 
     public function onRun()
     {
         $this->addCss('/modules/backend/formwidgets/datepicker/assets/css/datepicker.css');
-        $this->addCss('/modules/backend/formwidgets/datepicker/assets/css/datepicker.css');
         $this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/pikaday/css/pikaday.css');
         $this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/clockpicker/css/jquery-clockpicker.css');
         $this->addCss('/plugins/kurtjensen/mycalendar/assets/css/cal-form.css');
         $this->addJs('/modules/backend/formwidgets/datepicker/assets/js/build-min.js');
-
         if ($this->ckeditor) {
             $this->addJs('//cdn.ckeditor.com/4.5.4/standard/ckeditor.js');
         }
-        $this->addJs('/plugins/kurtjensen/mycalendar/assets/js/scheduler.js');
-        $this->myevents = $this->page['myevents'] = $this->loadEvents();
+
+        $this->page['myevents'] = $this->loadEvents();
+        $this->onEventForm();
     }
 
     public function trans($string)
@@ -98,10 +98,10 @@ class EventForm extends ComponentBase
             return null;
         }
 
-        $myevents = MyCalEvent::where('user_id', '=', $this->user->id)->
+        $this->myevents = MyCalEvent::where('user_id', '=', $this->user->id)->
         orderBy('date')->
         get();
-        return $myevents;
+        return $this->myevents;
     }
 
     protected function getMyEvent()
@@ -113,36 +113,32 @@ class EventForm extends ComponentBase
         $eventId = post('id');
 
         if (!$eventId) {
-            $myevent = new MyCalEvent();
-            $myevent->user_id = $this->user->id;
+            $this->myevent = new MyCalEvent();
+            $this->myevent->user_id = $this->user->id;
         } else {
-            $myevent = MyCalEvent::where('user_id', '=', $this->user->id)->find($eventId);
+            $this->myevent = MyCalEvent::where('user_id', '=', $this->user->id)->find($eventId);
         }
 
-        return $myevent;
+        return $this->myevent;
     }
 
     protected function onEventForm()
     {
-        if (!$myevent = $this->getMyEvent()) {
+        $this->addJs('/plugins/kurtjensen/mycalendar/assets/js/scheduler.js');
+        if (!$this->getMyEvent()) {
             return null;
         }
 
-        if ($this->ckeditor) {
-            $this->addJs('//cdn.ckeditor.com/4.5.4/standard/ckeditor.js');
-        }
-        $this->addJs('/plugins/kurtjensen/mycalendar/assets/js/scheduler.js');
-
         $this->is_copy = $this->page['is_copy'] = post('copy');
 
-        $cat = isset($myevent->categorys->first()->id) ? $myevent->categorys->first()->id : 0;
+        $cat = isset($this->myevent->categorys->first()->id) ? $this->myevent->categorys->first()->id : 0;
         $this->categorylist = $this->page['categorylist'] = MyCalCategory::selector(
             $cat,
             array('class' => 'form-control custom-select',
                 'id' => 'Form-field-myevent-category_id')
         );
 
-        $this->myevent = $this->page['myevent'] = $myevent;
+        $this->myevent = $this->page['myevent'] = $this->myevent;
 
         $this->RRForm = new RRForm();
         $this->formValues = $this->page['formVals'] = array_merge($this->RRForm->parseRrule($this->myevent->pattern), $this->myevent->toArray());
@@ -157,32 +153,12 @@ class EventForm extends ComponentBase
 
         $dates = $this->processPost();
         if (!$dates) {
-            die('fuck');
             return ['#ajaxResponse' => $this->renderPartial('@ajaxResponse', $this->ajaxResponse)];
         }
         $this->myevent->save();
 
         $this->onRun();
         return;
-
-        if (!$myevent = $this->getMyEvent()) {
-            return null;
-        }
-        $this->RRForm = new RRForm();
-        if ($this->RRForm->unParseRrule(post()));
-
-        $myevent->name = post('name');
-        $myevent->text = post('text');
-        $myevent->date = post('date');
-        $myevent->time = post('time');
-        $myevent->pattern = unParseRrule(post());
-        $myevent->categorys = [post('category_id')];
-        if ($this->allowpublish) {
-            $myevent->is_published = post('is_published');
-        }
-        $myevent->save();
-
-        $this->onRun();
     }
 
     protected function onDelete()
@@ -193,10 +169,10 @@ class EventForm extends ComponentBase
             return null;
         }
 
-        $myevent = MyCalEvent::where('user_id', $this->user->id)
+        $this->myevent = MyCalEvent::where('user_id', $this->user->id)
             ->find($eventId);
 
-        $myevent->delete();
+        $this->myevent->delete();
 
         $this->onRun();
     }
@@ -215,41 +191,20 @@ class EventForm extends ComponentBase
     {
         $dates = $this->processPost();
         if (!$dates) {
-            return ['#ajaxResponse' => $this->renderPartial('@ajaxResponse', $this->ajaxResponse)];
+            return ['#EventDetail' => $this->renderPartial('@ajaxResponse', $this->ajaxResponse)];
         }
-
-        $myevent = ['Event Data<hr>',
-            'NAME' => $this->myevent->name,
-            'IS_PUBLISHED = ' . $this->myevent->is_published,
-            'USER_ID = ' . post('user_id'),
-            'DATE = ' . $this->myevent->date,
-            'TIME = ' . $this->myevent->time,
-            'TEXT = ' . $this->myevent->text,
-            'LINK = ' . $this->myevent->link,
-            'LENGTH = ' . $this->myevent->length,
-            'PATTERN = ' . $this->myevent->pattern,
-            'CATEGORYS = ' . $this->myevent->categorys,
-        ];
 
         $occurrences = [];
         foreach ($dates as $occurrence) {
-            $occurrences[] = $occurrence->getStart()->format('Y-m-d H:i:s') . ' --- ' . $occurrence->getEnd()->format('Y-m-d H:i:s');
+            $occurrences[] = $occurrence->getStart()->format('M d Y H:i') . ' - ' . $occurrence->getEnd()->format('H:i');
         }
 
-        $this->ajaxResponse = array_merge($this->ajaxResponse, [
-            'context' => 'default',
-            'title' => 'Event Preview:',
-            'content' => implode('<br>', $myevent) . '<ul><li>' . implode('</li><li>', $occurrences) . '</li></ul>',
-            'footer' => '',
-        ]);
-
-        return ['#ajaxResponse' => $this->renderPartial('@details', ['ev' => $this->myevent])];
+        return ['#EventDetail' => $this->renderPartial('@details', ['ev' => $this->myevent, 'occs' => $occurrences, 'context' => 'success']), '#ajaxResponse' => ''];
 
     }
 
     public function processPost()
     {
-
         $this->RRForm = new RRForm();
         if (!$this->RRForm->valiDate(post())) {
             // Sets a warning message
@@ -265,24 +220,22 @@ class EventForm extends ComponentBase
 
         $pattern = $this->RRForm->unParseRrule(post());
 
-        $myevent = $this->getMyEvent();
+        $this->getMyEvent();
 
-        $myevent->name = post('name');
-        $myevent->text = post('text');
-        $myevent->date = post('date');
-        $myevent->time = post('time');
-        $myevent->length = post('length');
-        $myevent->pattern = $pattern;
-        $myevent->categorys = [post('category_id')];
+        $this->myevent->name = post('name');
+        $this->myevent->text = post('text');
+        $this->myevent->date = post('date');
+        $this->myevent->time = post('time');
+        $this->myevent->length = post('length');
+        $this->myevent->pattern = $pattern;
+        $this->myevent->categorys = [post('category_id')];
         if ($this->allowpublish) {
-            $myevent->is_published = post('is_published');
+            $this->myevent->is_published = post('is_published');
         }
-        // Copy into class variable
-        $this->myevent = $myevent;
 
-        $start_at = $myevent->carbon_time; //new Carbon(post('date') . ' ' . post('time'));
+        $start_at = $this->myevent->carbon_time;
 
-        list($lengthHour, $lengthMinute) = explode(':', $myevent->length);
+        list($lengthHour, $lengthMinute) = explode(':', $this->myevent->length);
 
         $end_at = $start_at->copy();
         $end_at->addMinutes($lengthMinute)->addHours($lengthHour);

@@ -1,6 +1,8 @@
 function preSubmit() {
+	if($('#ck-input').val()){
 	 for(var instanceName in CKEDITOR.instances)
-    CKEDITOR.instances[instanceName].updateElement();
+    	CKEDITOR.instances[instanceName].updateElement();
+	}
 	return true;
 }
 
@@ -20,14 +22,13 @@ function enableshow(sclass) {
 function endsChange(hide) {
 	disableHide('.e_all');
     if (hide == true){
-    	$('#Ends').val('never');
+    	$('#Ends').val('NEVER');
     }
 
 	var end_at = $('#Ends').val().toLowerCase();
 	enableshow('.e_'+end_at);
 
 }
-
 
 $( "#FREQ" ).on( "change", function() {
 	disableHide('.r_all');
@@ -54,6 +55,7 @@ $( "#Ends" ).on( "change", function() {
 });
 
 if($('#ck-input').val()) CKEDITOR.replace( 'text' );
+
 
 $('#EventForm').submit(function()
 {

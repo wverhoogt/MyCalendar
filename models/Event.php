@@ -81,10 +81,18 @@ class Event extends Model
         'carbon_time' => '',
         'owner_name' => '',
     ];
-
-    public function getDateAttribute()
+/*
+public function __construct(array $attributes = array())
+{
+$settings = Settings::instance();
+$this->setRawAttributes(['date' => new Carbon()], true);
+$this->setRawAttributes(['pattern' => 'FREQ=DAILY;INTERVAL=1;COUNT=1;'], true);
+parent::__construct($attributes);
+}
+ */
+    public function getDateAttribute($value)
     {
-        return ($this->exists) ? $this->date : new Carbon();
+        return $value ? $value : new Carbon();
     }
 
     public function getDayAttribute()
@@ -129,6 +137,11 @@ class Event extends Model
             }
         }
         return '';
+    }
+
+    public function getPatternAttribute($value)
+    {
+        return $value ? $value : 'FREQ=DAILY;INTERVAL=1;COUNT=1;';
     }
 
     public function beforeSave()
@@ -329,10 +342,12 @@ class Event extends Model
         } else {
             // More New than Old
             foreach ($dates as $recurrence) {
-                $occurrence = $occurrences[$i++];
-                if ($occurrence) {
-                    $this->updateOccurrence($occurrence, $recurrence);
+                if ($countOld > $i) {
+                    $occurrence = $occurrences[$i++];
+                } else {
+                    $occurrence = new Occurrence();
                 }
+                $this->updateOccurrence($occurrence, $recurrence);
             }
         }
     }

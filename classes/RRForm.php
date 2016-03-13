@@ -182,10 +182,10 @@ class RRForm
     <br>
 
 <!-- Ends -->
-    <div class="row' . (array_get($f, 'FREQ') == 'NONE' ? ' hidden' : '') . ' r_all r_hourly r_daily r_weekdays r_weekends r_weekly r_monthly r_yearly form-inline">
+    <div class="row' . (array_get($f, 'FREQ', 'NONE') == 'NONE' ? ' hidden' : '') . ' r_all r_hourly r_daily r_weekdays r_weekends r_weekly r_monthly r_yearly form-inline">
         <div class="col-md-2 form-group">
             ' . Form::label('Ends', 'Ends') . '
-            ' . Form::select('Ends', ['NEVER' => 'Never', 'AFTER' => 'After', 'DATE' => 'On date'], array_get($f, 'Ends'), ['class' => 'form-control custom-select  r_all r_hourly r_daily r_weekdays r_weekends r_weekly r_monthly r_yearly']) . '
+            ' . Form::select('Ends', ['NEVER' => $this->t('Never'), 'AFTER' => $this->t('After'), 'DATE' => $this->t('On_date')], array_get($f, 'Ends'), ['class' => 'form-control custom-select  r_all r_hourly r_daily r_weekdays r_weekends r_weekly r_monthly r_yearly']) . '
         </div>
 
 
@@ -309,6 +309,13 @@ class RRForm
         }
 
         $rparts = explode(';', trim($rrule, ';'));
+        $FREQ =
+        $INTERVAL =
+        $BYDAY =
+        $BYSETPOS =
+        $BYMONTH =
+        $UNTIL =
+        $COUNT = null;
 
         foreach ($rparts as $part) {
             list($prop, $val) = explode('=', $part);
@@ -411,22 +418,22 @@ class RRForm
                 $v['ENDON'] = 'required|date_format:"Y-m-d"';
             }
         }
-        /*
+
         $validations = array_merge([
-        'name' => 'required',
-        'is_published' => 'boolean',
-        'date' => 'required',
-        'time' => 'required',
-        'text' => 'required',
-        // 'link' => 'required',
-        'length' => 'required',
-        // 'pattern' => 'required',
-        // 'categorys' => 'required',
+            'name' => 'required|min:1',
+            'is_published' => 'boolean',
+            'date' => 'required',
+            'time' => 'required',
+            'text' => 'required',
+            // 'link' => 'required',
+            'length' => 'required',
+            // 'pattern' => 'required',
+            // 'categorys' => 'required',
         ], $v);
-         */
+
         $this->formValues = $formValues;
 
-        $validator = Validator::make($formValues, $v);
+        $validator = Validator::make($formValues, $validations);
 
         if ($validator->fails()) {
             $this->messages = $validator->messages();

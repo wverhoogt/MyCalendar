@@ -192,7 +192,8 @@ return [
         'btn_copy' => 'Copy',
         'btn_delete' => 'Delete',
         'btn_save' => 'Save',
-        'btn_cancel' => 'Cancel',
+        'btn_preview' => 'Preview',
+        'btn_cancel' => 'Cancel / Go Back to List',
         'saving' => 'Saving Event...',
         'delete_conf' => 'Do you really want to delete this event?',
         'every' => 'Every',
@@ -333,5 +334,8 @@ return [
             '12' => 'December',
         ],
         'ENDON' => 'End Date',
+        'Never' => 'Never',
+        'After' => 'After',
+        'On_date' => 'On Date',
     ],
 ];

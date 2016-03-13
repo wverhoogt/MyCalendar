@@ -2,12 +2,17 @@
 <form data-request="onProcess" id="EventForm">
 
     <div class="form-group">
-        <button type="submit" 
+        <a  class="btn btn-primary"
+            href="#EventDetail"
             data-request="onPreviewRrule"
-            data-target="#ajaxResponse"
-            onclick="preSubmit();" 
-            class="btn btn-primary">Preview RRULE
-        </button>
+            data-toggle="modal" 
+            data-target="#myModal"
+            onclick="preSubmit();">{{ __SELF__.trans('event_form.btn_preview') }}
+        </a>
+        <a href=""
+            class="btn btn-default" >
+            {{ __SELF__.trans('event_form.btn_cancel') }}
+        </a>
     </div>
 
 
@@ -20,13 +25,17 @@
     <div class="row">
 <!-- Date -->
         <div class="col-md-3 form-group">
-{% partial '@datepicker' name='date' value=formVals.datey label=__SELF__.trans('event.date') %}
+{% partial '@datepicker' name='date' value=formVals.date label=__SELF__.trans('event.date') %}
         </div>
 <!-- Time -->
         <div class="col-md-2 form-group"
             data-field-name="time"
             id="Form-field-Event-time-group">
-{% partial '@clockpicker' name='time' value=formVals.time label=__SELF__.trans('event.time') %}
+{% if formVals.time %}
+{% set value = formVals.time %}
+{% else %}{% set value = "now"|date('H:m') %}
+{% endif %}
+{% partial '@clockpicker' name='time' value=value label=__SELF__.trans('event.time') %}
         </div>
 <!-- Length -->
         <div class="col-md-3 form-group"
@@ -48,7 +57,7 @@
     </div>
     <div class="form-group">
         <label for="Form-field-myevent-text">{{ __SELF__.trans('event.text') }}</label>
-        <textarea name="text" id="Form-field-myevent-text" placeholder="{{ __SELF__.trans('phold_text') }}" class="form-control ckeditor">{{ formVals.text }}</textarea>
+        <textarea name="text" id="Form-field-myevent-text" placeholder="{{ __SELF__.trans('event.phold_text') }}" class="form-control ckeditor">{{ formVals.text }}</textarea>
     </div>
     <div class="form-group">
         <label for="Form-field-myevent-category_id">{{ __SELF__.trans('event.category') }}</label>
@@ -68,7 +77,11 @@
             class="btn btn-primary">{{ __SELF__.trans('event_form.btn_save') }}</button>
 
     <span class="btn-text">
-        or <a href="">{{ __SELF__.trans('event_form.btn_cancel') }}</a>
+        or 
+        <a href=""
+            class="btn btn-default" >
+            {{ __SELF__.trans('event_form.btn_cancel') }}
+        </a>
     </span>
     </div>
 </form>

@@ -20,21 +20,21 @@
 {% for event in __SELF__.myevents  %}
                 <tr>
                     <td class="">{{ event.name }}</td>
-                    <td class=""> {{ event.datey|date('m/d/Y') }} {% if event.time %} at {{ event.time }}{% endif %}</td>
+                    <td class=""> {{ event.date|date('m/d/Y') }} {% if event.time %} at {{ event.time }}{% endif %}</td>
                     <td class="">{% for cat in event.categories %}{{ cat.name }}, {% endfor %}</td>
                     <td class="">{{ event.pattern }}</td>
                     <td class=""> {% if event.is_published %}{% else %} Not {% endif %} Published </td>
                     <td class="">
-                        <button
-                            claas="btn btn-default" 
+                        <a href="#"
+                            class="btn btn-default" 
                             title="{{ __SELF__.trans('event_form.btn_edit') }}"
                             data-request="EventForm::onEventForm"  
                             data-request-data="id: {{ event.id }}"
                             data-request-update="'EventForm::form': '#eventinfo'">
                             <i class="icon-pencil btn-icon danger"></i>
-                        </button>
+                        </a>
                         <button
-                            claas="btn btn-default" 
+                            class="btn btn-default" 
                             title="{{ __SELF__.trans('event_form.btn_copy') }}"
                             data-request="EventForm::onEventForm"  
                             data-request-data="id: {{ event.id }}, copy: 1"
@@ -42,7 +42,7 @@
                             <i class="icon-copy btn-icon danger"></i>
                         </button>
                         <button
-                            claas="btn btn-default" 
+                            class="btn btn-default" 
                             title="{{ __SELF__.trans('event_form.btn_delete') }}"
                             data-request="EventForm::onDelete" 
                             data-request-data="id: {{ event.id }}"
