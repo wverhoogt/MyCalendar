@@ -137,6 +137,13 @@ class Plugin extends PluginBase
                         'permissions' => ['kurtjensen.mycalendar.categories'],
                         'order' => 500,
                     ],
+                    'occurrences' => [
+                        'label' => 'kurtjensen.mycalendar::lang.occurrences.menu_label',
+                        'url' => Backend::url('kurtjensen/mycalendar/occurrences'),
+                        'icon' => 'icon-flask',
+                        'permissions' => ['kurtjensen.mycalendar.occurrences'],
+                        'order' => 500,
+                    ],
                     'settings' => [
                         'label' => 'kurtjensen.mycalendar::lang.settings.menu_label',
                         'url' => Backend::url('system/settings/update/kurtjensen/mycalendar/settings'),
@@ -166,6 +173,7 @@ class Plugin extends PluginBase
         return [
             'kurtjensen.mycalendar.events' => ['label' => 'kurtjensen.mycalendar::lang.plugin.access_events', 'tab' => 'kurtjensen.mycalendar::lang.plugin.tab'],
             'kurtjensen.mycalendar.categories' => ['label' => 'kurtjensen.mycalendar::lang.plugin.access_categories', 'tab' => 'kurtjensen.mycalendar::lang.plugin.tab'],
+            'kurtjensen.mycalendar.occurrences' => ['label' => 'kurtjensen.mycalendar::lang.plugin.access_occurrences', 'tab' => 'kurtjensen.mycalendar::lang.plugin.tab'],
             'kurtjensen.mycalendar.settings' => ['label' => 'kurtjensen.mycalendar::lang.plugin.access_settings', 'tab' => 'kurtjensen.mycalendar::lang.plugin.tab'],
         ];
     }

@@ -53,8 +53,13 @@ class Event extends Model
         'pattern',
         'categorys',
     ];
+    protected $primaryKey = 'id';
+
+    public $exists = false;
 
     protected $dates = ['date'];
+
+    public $timestamps = true;
 
     /**
      * @var array Relations
@@ -81,22 +86,22 @@ class Event extends Model
         'carbon_time' => '',
         'owner_name' => '',
     ];
-/*
-public function __construct(array $attributes = array())
-{
-$settings = Settings::instance();
-$this->setRawAttributes(['date' => new Carbon()], true);
-$this->setRawAttributes(['pattern' => 'FREQ=DAILY;INTERVAL=1;COUNT=1;'], true);
-parent::__construct($attributes);
-}
- */
+    public function __construct(array $attributes = array())
+    {
+        $settings = Settings::instance();
+        $this->setRawAttributes(['date' => new Carbon()], true);
+//$this->setRawAttributes(['pattern' => 'FREQ=DAILY;INTERVAL=1;COUNT=1;'], true);
+        parent::__construct($attributes);
+    }
+    /*
     public function getDateAttribute($value)
     {
-        return $value ? $value : new Carbon();
+    return $value ? $value : new Carbon();
     }
-
-    public function getDayAttribute()
+     */
+    public function getDayAttribute($value)
     {
+        //die(get_class($this->date));
         return $this->date->day;
     }
 

@@ -50,7 +50,7 @@ fields:
         type: datepicker
         span: left
         mode: time
-        default: 24:00
+        default: 00:00
         comment: kurtjensen.mycalendar::lang.settings.day_start_comment
     day_end:
         label: kurtjensen.mycalendar::lang.settings.day_end_label
@@ -64,5 +64,5 @@ fields:
         type: datepicker
         span: left
         mode: time
-        default: 23:59
+        default: 01:00
         comment: kurtjensen.mycalendar::lang.settings.default_length_comment

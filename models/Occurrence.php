@@ -32,6 +32,11 @@ class Occurrence extends Model
         'is_allday',
         //'is_cancelled',
     ];
+    protected $primaryKey = 'id';
+
+    public $exists = false;
+
+    public $timestamps = true;
 
     protected $dates = [
         'start_at',
@@ -43,7 +48,7 @@ class Occurrence extends Model
      * @var array Relations
      */
     public $belongsTo = [
-        'events' => ['KurtJensen\MyCalendar\Models\Event',
+        'event' => ['KurtJensen\MyCalendar\Models\Event',
             'table' => 'kurtjensen_mycal_events',
         ],
     ];
