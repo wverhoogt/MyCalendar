@@ -55,21 +55,20 @@ class Settings extends Model
 
     public function getDayStartAttribute($value)
     {
-        $time = $this->get('day_start', '24:00:00');
-
+        $time = $value ? $value : '00:00:00';
         return substr($time, 0, 5);
     }
 
     public function getDayEndAttribute($value)
     {
-        $time = $this->get('day_end', '23:59:00');
+        $time = $value ? $value : '23:59:00';
 
         return substr($time, 0, 5);
     }
 
     public function getDefaultLengthAttribute($value)
     {
-        $time = $this->get('default_length', '01:00:00');
+        $time = $value ? $value : '01:00:00';
 
         return substr($time, 0, 5);
     }

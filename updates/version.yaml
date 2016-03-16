@@ -51,3 +51,4 @@
     - !!! This is an important update that contains breaking changes. Adding occurance table for recuring events.
     - create_occurrences_table.php
     - add_event_length.php
+1.1.9: Fixed Settings model mutators causing errors
