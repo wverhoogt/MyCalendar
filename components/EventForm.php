@@ -84,7 +84,7 @@ class EventForm extends ComponentBase
         }
 
         $this->page['myevents'] = $this->loadEvents();
-        $this->onEventForm();
+        //$this->onEventForm();
     }
 
     public function trans($string)
@@ -158,7 +158,6 @@ class EventForm extends ComponentBase
         $this->myevent->save();
 
         $this->onRun();
-        return;
     }
 
     protected function onDelete()
@@ -184,7 +183,7 @@ class EventForm extends ComponentBase
             return ['#ajaxResponse' => $this->renderPartial('@ajaxResponse', $this->ajaxResponse)];
         }
         $this->myevent->save();
-
+        $this->onRun();
     }
 
     public function onPreviewRrule()

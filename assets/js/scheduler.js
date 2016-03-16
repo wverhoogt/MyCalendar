@@ -40,7 +40,7 @@ $( "#FREQ" ).on( "change", function() {
 $( "#month_on" ).on( "change", function() {
 	disableHide('.mo_all');
     
-	var on = $('#form-month-on').val().toLowerCase();
+	var on = $('#month_on').val().toLowerCase();
 	enableshow('.mo_'+on);
 });
 
