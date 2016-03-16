@@ -293,7 +293,7 @@ class Event extends Model
                 'end_at' => $recurrence->getEnd()->format('Y-m-d H:i:s'),
                 'is_modified' => 0,
                 'is_allday' => 0,
-                'is_cancelled' => 0,
+                'is_canceled' => 0,
             ]);
         }
         $this->occurrences()->saveMany($occurrences);
@@ -327,7 +327,7 @@ class Event extends Model
         $occurrence->end_at = $recurrence->getEnd()->format('Y-m-d H:i:s');
         $occurrence->is_modified = 1;
         $occurrence->is_allday = 0;
-        $occurrence->is_cancelled = 0;
+        $occurrence->is_canceled = 0;
         $occurrence->save();
     }
 

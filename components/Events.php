@@ -178,8 +178,11 @@ class Events extends ComponentBase
             	data-request-data="evid:' . $occ->id . '"
             	data-request-update="\'' . $this->compLink . '::details\':\'#EventDetail\'" data-toggle="modal" data-target="#myModal');
 
+            $time = $occ->is_allday ? '(' . Lang::get('kurtjensen.mycalendar::lang.occurrence.is_allday') . ')'
+            : $occ->start_at->format($timeFormat);
+
             $MyEvents[$occ->start_at->year][$occ->start_at->month][$occ->start_at->day][] = [
-                'name' => $e->name . ' ' . $occ->start_at->format($timeFormat),
+                'name' => $e->name . ' ' . $time,
                 'title' => $title,
                 'link' => $link,
                 'id' => $occ->id,

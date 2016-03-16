@@ -30,7 +30,7 @@ class Occurrence extends Model
         'end_at',
         //'is_modified',
         'is_allday',
-        //'is_cancelled',
+        //'is_canceled',
     ];
     protected $primaryKey = 'id';
 

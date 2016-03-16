@@ -24,6 +24,6 @@ fields:
     is_allday:
         label: kurtjensen.mycalendar::lang.occurrence.is_allday
         type: checkbox
-    is_cancelled:
-        label: kurtjensen.mycalendar::lang.occurrence.is_cancelled
+    is_canceled:
+        label: kurtjensen.mycalendar::lang.occurrence.is_canceled
         type: checkbox

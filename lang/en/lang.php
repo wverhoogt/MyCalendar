@@ -248,7 +248,7 @@ return [
         'end_at' => 'Ends',
         'is_modified' => 'Modified',
         'is_allday' => 'All Day',
-        'is_cancelled' => 'Cancelled',
+        'is_canceled' => 'Canceled',
     ],
     'rrule' => [// Rrule Form
         'repeat' => 'Repeat',

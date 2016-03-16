@@ -20,5 +20,5 @@ columns:
         label: kurtjensen.mycalendar::lang.occurrence.is_modified
     is_allday:
         label: kurtjensen.mycalendar::lang.occurrence.is_allday
-    is_cancelled:
-        label: kurtjensen.mycalendar::lang.occurrence.is_cancelled
+    is_canceled:
+        label: kurtjensen.mycalendar::lang.occurrence.is_canceled

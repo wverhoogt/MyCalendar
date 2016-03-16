@@ -3,6 +3,15 @@
 - [Upgrading to 1.0.10 from 1.0.9](#upgrade-1.0.10)
 - [Upgrading to 1.0.18](#upgrade-1.0.18)
 - [Upgrading to 1.1.5 from 1.1.4](#upgrade-1.1.5)
+- [Upgrading to 1.1.8 from 1.1.7](#upgrade-1.1.8)
+
+<a name="upgrade-1.1.8"></a>
+## Upgrading To 1.1.8
+
+**This is an important update that contains breaking changes.**
+
+The Super Simple Calendar is Growing Up. 
+Several customers have requested the ability to have recurring dates on MyCalendar. This feature has now been added and I want to make sure existing customers understand how this update will effect them and their current installation. Details about the changes and upgrade instructions can be found at: http://firemankurt.com/mycalendar
 
 <a name="upgrade-1.1.5"></a>
 ## Upgrading To 1.1.5
