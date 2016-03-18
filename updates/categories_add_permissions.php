@@ -9,7 +9,7 @@ class CategoriesAddPermissions extends Migration
     public function up()
     {
         Schema::table('kurtjensen_mycal_categories', function ($table) {
-            $table->integer('permission_id')->unsigned();
+            $table->integer('permission_id')->nullable()->unsigned();
         });
     }
 

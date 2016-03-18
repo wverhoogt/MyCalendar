@@ -53,3 +53,4 @@
     - add_event_length.php
 1.1.9: Fixed Settings model mutators causing errors
 1.1.10: Fixed JS errors and frontend form save redirection
+1.1.11: Fixed "NOT NULL column with value of NULL" error for SQLite users

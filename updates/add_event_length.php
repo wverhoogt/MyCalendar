@@ -9,8 +9,8 @@ class AddEventLength extends Migration
     public function up()
     {
         Schema::table('kurtjensen_mycal_events', function ($table) {
-            $table->time('length')->after('date');
-            $table->string('pattern')->after('text');
+            $table->time('length')->nullable()->after('date');
+            $table->string('pattern')->nullable()->after('text');
         });
     }
 
