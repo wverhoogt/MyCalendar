@@ -260,6 +260,9 @@ return [
         'bysetpos' => 'bysetpos',
         'byday' => 'byday',
         'bymonth' => 'bymonth',
+        'INTERVALS' => 'Enter day intervals seperated by commas',
+        'INTERVALS_example' => 'Example: "1,2,1,4" would represent event on first day, skip 2 days, another 1 event day, skip 4 days and then repeat.</p>
+        <p>If your event started on the first day of February using example series above, then event dates would be February 1,4,9,12,17,20,25,28 March 2,5,etc...',
 
         'timezone' => 'Timezone',
 
@@ -304,6 +307,14 @@ return [
             'WEEKLY' => 'Weekly',
             'MONTHLY' => 'Monthly',
             'YEARLY' => 'Yearly',
+            'SERIES' => 'Shift Series',
+        ],
+        'freq_units' => [
+            'HOURLY' => 'hour(s)',
+            'DAILY' => 'day(s)',
+            'WEEKLY' => 'week(s)',
+            'MONTHLY' => 'month(s)',
+            'YEARLY' => 'year(s)',
         ],
         'SU' => 'Sun',
         'MO' => 'Mon',

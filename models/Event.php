@@ -13,6 +13,7 @@ use \Recurr\Transformer\ArrayTransformer;
  */
 class Event extends Model
 {
+    use \KurtJensen\MyCalendar\Traits\Series;
     use \October\Rain\Database\Traits\Validation;
 
     /**
@@ -276,9 +277,19 @@ class Event extends Model
         $end_at = $start_at->copy();
         $end_at->addMinutes($lengthMinute)->addHours($lengthHour);
 
-        $rules = new \Recurr\Rule($this->pattern, $start_at, $end_at);
-        $transformer = new \Recurr\Transformer\ArrayTransformer;
-        $dates = $transformer->transform($rules);
+        $pieces = explode(';', $this->pattern);
+
+        if (in_array('FREQ=SERIES', $pieces)) {
+
+            $dates = $this->seriesRule($this->pattern, $start_at, $end_at);
+
+        } else {
+
+            $rules = new \Recurr\Rule($this->pattern, $start_at, $end_at);
+            $transformer = new \Recurr\Transformer\ArrayTransformer;
+            $dates = $transformer->transform($rules);
+        }
+
         return $dates;
     }
 
@@ -340,7 +351,11 @@ class Event extends Model
         if ($countOld >= $countNew) {
             // More Old than New
             foreach ($occurrences as $occurrence) {
-                $recurrence = $dates[$i++];
+                if ($countNew > $i) {
+                    $recurrence = $dates[$i++];
+                } else {
+                    $recurrence = false;
+                }
                 $this->updateOccurrence($occurrence, $recurrence);
             }
 

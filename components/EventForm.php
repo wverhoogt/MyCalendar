@@ -10,6 +10,8 @@ use \Recurr\Rule;
 
 class EventForm extends ComponentBase
 {
+    use \KurtJensen\MyCalendar\Traits\Series;
+
     public $myevents;
     public $myevent;
     public $categorylist;
@@ -239,9 +241,16 @@ class EventForm extends ComponentBase
         $end_at = $start_at->copy();
         $end_at->addMinutes($lengthMinute)->addHours($lengthHour);
 
-        $rules = new \Recurr\Rule($pattern, $start_at, $end_at);
-        $transformer = new \Recurr\Transformer\ArrayTransformer;
-        $dates = $transformer->transform($rules);
+        if (post('FREQ') == 'SERIES') {
+
+            $dates = $this->seriesRule($pattern, $start_at, $end_at);
+
+        } else {
+
+            $rules = new \Recurr\Rule($pattern, $start_at, $end_at);
+            $transformer = new \Recurr\Transformer\ArrayTransformer;
+            $dates = $transformer->transform($rules);
+        }
 
         return $dates;
 

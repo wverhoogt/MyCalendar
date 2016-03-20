@@ -33,7 +33,7 @@ class RRForm
 
     public function getFreqOptions()
     {
-        $freqs = ['NONE', 'HOURLY', 'DAILY', 'WEEKDAYS', 'WEEKENDS', 'WEEKLY', 'MONTHLY', 'YEARLY'];
+        $freqs = ['NONE', 'HOURLY', 'DAILY', 'WEEKDAYS', 'WEEKENDS', 'WEEKLY', 'MONTHLY', 'YEARLY', 'SERIES'];
         foreach ($freqs as $freq) {
             $freqOpts[$freq] = $this->t('freq.' . $freq);
         }
@@ -116,11 +116,11 @@ class RRForm
         <div class="col-md-6' . (array_get($f, 'FREQ') == 'NONE' ? ' hidden' : '') . ' r_all r_hourly r_daily r_weekly r_monthly r_yearly">
             ' . Form::label('INTERVAL', $this->t('INTERVAL')) . '
             ' . Form::select('INTERVAL', $this->getIntervalOptions(), array_get($f, 'INTERVAL'), ['class' => 'form-control custom-select r_all r_hourly r_daily r_weekly r_monthly r_yearly']) . '
-            <span class="inline-form-text' . (array_get($f, 'FREQ') == 'HOURLY' ? '' : ' hidden') . ' r_all r_hourly"><strong>hours(s)</strong></span>
-            <span class="inline-form-text' . (array_get($f, 'FREQ') == 'DAILY' ? '' : ' hidden') . ' r_all r_daily"><strong>days(s)</strong></span>
-            <span class="inline-form-text' . (array_get($f, 'FREQ') == 'WEEKLY' ? '' : ' hidden') . ' r_all r_weekly"><strong>week(s)</strong></span>
-            <span class="inline-form-text' . (array_get($f, 'FREQ') == 'MONTHLY' ? '' : ' hidden') . '  r_all r_monthly"><strong>month(s)</strong></span>
-            <span class="inline-form-text' . (array_get($f, 'FREQ') == 'YEARLY' ? '' : ' hidden') . ' r_all r_yearly"><strong>year(s)</strong></span>
+            <span class="inline-form-text' . (array_get($f, 'FREQ') == 'HOURLY' ? '' : ' hidden') . ' r_all r_hourly"><strong>' . $this->t('freq_units.HOURLY') . '</strong></span>
+            <span class="inline-form-text' . (array_get($f, 'FREQ') == 'DAILY' ? '' : ' hidden') . ' r_all r_daily"><strong>' . $this->t('freq_units.DAILY') . '</strong></span>
+            <span class="inline-form-text' . (array_get($f, 'FREQ') == 'WEEKLY' ? '' : ' hidden') . ' r_all r_weekly"><strong>' . $this->t('freq_units.WEEKLY') . '</strong></span>
+            <span class="inline-form-text' . (array_get($f, 'FREQ') == 'MONTHLY' ? '' : ' hidden') . '  r_all r_monthly"><strong>' . $this->t('freq_units.MONTHLY') . '</strong></span>
+            <span class="inline-form-text' . (array_get($f, 'FREQ') == 'YEARLY' ? '' : ' hidden') . ' r_all r_yearly"><strong>' . $this->t('freq_units.YEARLY') . '</strong></span>
         </div>
     </div>
 
@@ -131,6 +131,16 @@ class RRForm
             <fieldset class="btn-group" data-toggle="buttons">' .
         $this->getWByDay(array_get($f, 'WBYDAY'))
         . '
+            </fieldset>
+        </div>
+    </div>
+
+<!-- INTERVALS -->
+    <div class="row hidden r_all r_series"><br>
+        <div class="col-md-12 form-group">
+            ' . Form::label('INTERVALS', $this->t('INTERVALS')) . '
+            ' . Form::text('INTERVALS', array_get($f, 'INTERVALS')) . '
+            <p>' . $this->t('INTERVALS_example') . '</p>
             </fieldset>
         </div>
     </div>
@@ -182,10 +192,10 @@ class RRForm
     <br>
 
 <!-- Ends -->
-    <div class="row' . (array_get($f, 'FREQ', 'NONE') == 'NONE' ? ' hidden' : '') . ' r_all r_hourly r_daily r_weekdays r_weekends r_weekly r_monthly r_yearly form-inline">
+    <div class="row' . (array_get($f, 'FREQ', 'NONE') == 'NONE' ? ' hidden' : '') . ' r_all r_hourly r_daily r_weekdays r_weekends r_weekly r_monthly r_yearly r_series form-inline">
         <div class="col-md-2 form-group">
             ' . Form::label('Ends', 'Ends') . '
-            ' . Form::select('Ends', ['NEVER' => $this->t('Never'), 'AFTER' => $this->t('After'), 'DATE' => $this->t('On_date')], array_get($f, 'Ends'), ['class' => 'form-control custom-select  r_all r_hourly r_daily r_weekdays r_weekends r_weekly r_monthly r_yearly']) . '
+            ' . Form::select('Ends', ['NEVER' => $this->t('Never'), 'AFTER' => $this->t('After'), 'DATE' => $this->t('On_date')], array_get($f, 'Ends'), ['class' => 'form-control custom-select  r_all r_hourly r_daily r_weekdays r_weekends r_weekly r_monthly r_yearly r_series']) . '
         </div>
 
 
@@ -282,6 +292,9 @@ class RRForm
                 }
 
                 break;
+            case 'SERIES':
+                $rrule .= 'INTERVALS=' . array_get($data, 'INTERVALS') . ';';
+                break;
         }
 
         $ends = strtoupper(array_get($data, 'Ends'));
@@ -359,6 +372,9 @@ class RRForm
                     $formVals['year_on'] = 'on_day';
                 }
                 break;
+            case 'SERIES':
+                $formVals = ['FREQ' => 'SERIES', 'INTERVALS' => $INTERVALS];
+                break;
         }
 
         //die(print_r($formVals));
@@ -386,8 +402,9 @@ class RRForm
             case 'DAILY':$v['INTERVAL'] = 'required|integer|min:1';
                 break;
             case 'WEEKLY':
-                $v['INTERVAL'] = ['required', 'integer', 'min:1'];
-                $v['BYDAY'] = 'required|array';     // 'required|array|each:in:"MO","TU","WE","TH","FR","SA","SU"';
+                $formValues['BYDAY'] = array_get($formValues, 'WBYDAY', '');
+                $v['INTERVAL'] = 'required|integer|min:1';
+                $v['WBYDAY'] = 'required|array';
                 break;
             case 'MONTHLY':
                 $v['INTERVAL'] = 'required|integer|min:1';
@@ -398,19 +415,21 @@ class RRForm
                 break;
             case 'YEARLY':
                 $v['INTERVAL'] = 'required|integer|min:1';
-                if (!array_get($formValues, 'year_on') == 'on_day') {
+                if (array_get($formValues, 'year_on', '') == 'on_the') {
                     $formValues['BYMONTH'] = array_get($formValues, 'YBYMONTH', '');
                     $formValues['BYDAY'] = explode(',', array_get($formValues, 'YBYDAY', ''));
-                    unset($formValues['YBYMONTH'], $formValues['YBYDAY']);
+                    $formValues['BYSETPOS'] = explode(',', array_get($formValues, 'YBYSETPOS', ''));
 
-                    $v['YBYMONTH'] = 'required|max:12|min:1';
-                    $v['BYSETPOS'] = 'required|max:5|min:-5';
-
-                    $v['BYDAY'] = 'required|array';
+                    $v['YBYMONTH'] = 'required';
+                    $v['YBYDAY'] = 'required';
+                    $v['YBYSETPOS'] = 'required';
                 }
                 break;
+            case 'SERIES':
+                $v['INTERVALS'] = 'required|min:3';
+                break;
         }
-        if (isset($v['INTERVAL'])) {
+        if (isset($v['INTERVAL']) || isset($v['INTERVALS'])) {
             $ends = strtoupper(array_get($formValues, 'Ends', ''));
             if ($ends == 'AFTER') {
                 $v['COUNT'] = 'required|max:100|min:1';
@@ -420,7 +439,7 @@ class RRForm
         }
 
         $validations = array_merge([
-            'name' => 'required|min:1',
+            'name' => 'required|min:3',
             'is_published' => 'boolean',
             'date' => 'required',
             'time' => 'required',
@@ -433,7 +452,7 @@ class RRForm
 
         $this->formValues = $formValues;
 
-        $validator = Validator::make($formValues, $validations);
+        $validator = Validator::make($formValues, $validations, Lang::get('kurtjensen.mycalendar::validation'));
 
         if ($validator->fails()) {
             $this->messages = $validator->messages();
