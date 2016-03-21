@@ -55,3 +55,4 @@
 1.1.10: Fixed JS errors and frontend form save redirection
 1.1.11: Fixed "NOT NULL column with value of NULL" error for SQLite users
 1.1.12: Added Series recurrence type and added several phrases to lang files including validation.
+1.1.13: Fixes error caused by removal of test component. Adds sorting.
