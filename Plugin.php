@@ -101,7 +101,7 @@ class Plugin extends PluginBase
     public function registerComponents()
     {
         return [
-            'KurtJensen\MyCalendar\Components\Test' => 'Test',
+            //'KurtJensen\MyCalendar\Components\Test' => 'Test',
             'KurtJensen\MyCalendar\Components\Month' => 'Month',
             'KurtJensen\MyCalendar\Components\MonthEvents' => 'MonthEvents',
             //'KurtJensen\MyCalendar\Components\Week' => 'Week',
