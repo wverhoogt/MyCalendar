@@ -139,6 +139,7 @@ class Events extends ComponentBase
         $occurs = Ocurrs::where('start_at', '<', $month_end)->
         where('end_at', '>=', $month_start)->
         where('relation', 'events')->
+        orderBy('start_at', 'ASC')->
         get();
 
         if (!$occurs) {
