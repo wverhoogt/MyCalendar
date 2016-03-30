@@ -32,12 +32,12 @@ class Settings extends Model
         $this->date_format = 'F jS, Y';
         $this->time_format = 'g:i a';
         $options = array_flip($this->getDropdownOptions());
-        $this->public_perm = $this->public_perm ? $this->public_perm : array_get($options, 'calendar_public', 0);
-        $this->deny_perm = $this->deny_perm ? $this->deny_perm : array_get($options, 'calendar_deny_all', 0);
-        $this->default_perm = $this->default_perm ? $this->default_perm : array_get($options, 'calendar_deny_all', 0);
-        $this->day_start = $this->day_start ? $this->day_start : '00:00:00';
-        $this->day_end = $this->day_end ? $this->day_end : '23:59:00';
-        $this->default_length = $this->default_length ? $this->default_length : '01:00:00';
+        $this->public_perm = $this->public_perm ?: array_get($options, 'calendar_public', 0);
+        $this->deny_perm = $this->deny_perm ?: array_get($options, 'calendar_deny_all', 0);
+        $this->default_perm = $this->default_perm ?: array_get($options, 'calendar_deny_all', 0);
+        $this->day_start = $this->day_start ?: '00:00:00';
+        $this->day_end = $this->day_end ?: '23:59:00';
+        $this->default_length = $this->default_length ?: '01:00:00';
     }
 
     public function getDropdownOptions($fieldName = null, $keyValue = null)

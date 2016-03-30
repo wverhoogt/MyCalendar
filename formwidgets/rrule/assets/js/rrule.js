@@ -1,3 +1,4 @@
+$(window).load(function(){
 function preSubmit() {
 	if($('#ck-input').val()){
 	 for(var instanceName in CKEDITOR.instances)
@@ -31,7 +32,7 @@ function endsChange(hide) {
 }
 
 $( "#FREQ" ).on( "change", function() {
-        disableHide('.r_all');
+    disableHide('.r_all');
 	var repeat = $('#FREQ').val().toLowerCase();
 	enableshow('.r_'+repeat);
 	endsChange(true);
@@ -62,4 +63,5 @@ $('#EventForm').submit(function()
 {
     preSubmit();
 	return true;
+});
 });
