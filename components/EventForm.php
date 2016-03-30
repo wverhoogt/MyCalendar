@@ -2,257 +2,246 @@
 
 use Auth;
 use Cms\Classes\ComponentBase;
-use KurtJensen\MyCalendar\Classes\RRForm;
+use KurtJensen\MyCalendar\Classes\RRValidator;
 use KurtJensen\MyCalendar\Models\Category as MyCalCategory;
 use KurtJensen\MyCalendar\Models\Event as MyCalEvent;
 use Lang;
 use \Recurr\Rule;
 
-class EventForm extends ComponentBase
-{
-    use \KurtJensen\MyCalendar\Traits\Series;
+class EventForm extends ComponentBase {
+	use \KurtJensen\MyCalendar\Traits\Series;
+	use \KurtJensen\MyCalendar\Traits\RRuleWidget;
+	use \System\Traits\ViewMaker;
 
-    public $myevents;
-    public $myevent;
-    public $categorylist;
-    public $user;
-    public $allowpublish;
-    public $ckeditor;
-    public $is_copy;
-    private $rdate;
-    public $RRForm;
-    public $formValues = [];
-    public $ajaxResponse = [
-        'context' => 'default',
-        'title' => '',
-        'content' => '',
-        'footer' => '',
-    ];
+	public $previewMode = false;
+	public $myevents;
+	public $myevent;
+	public $categorylist;
+	public $user;
+	public $allowpublish;
+	public $ckeditor;
+	public $is_copy;
+	private $rdate;
+	public $RRForm;
+	public $ajaxResponse = [
+		'context' => 'default',
+		'title' => '',
+		'content' => '',
+		'footer' => '',
+	];
 
-    public function componentDetails()
-    {
-        return [
-            'name' => 'kurtjensen.mycalendar::lang.event_form.name',
-            'description' => 'kurtjensen.mycalendar::lang.event_form.description',
-        ];
-    }
+	public function componentDetails() {
+		return [
+			'name' => 'kurtjensen.mycalendar::lang.event_form.name',
+			'description' => 'kurtjensen.mycalendar::lang.event_form.description',
+		];
+	}
 
-    public function defineProperties()
-    {
-        return [
-            'allowpublish' => [
-                'title' => 'kurtjensen.mycalendar::lang.event_form.allow_pub_title',
-                'description' => 'kurtjensen.mycalendar::lang.event_form.allow_pub_description',
-                'type' => 'dropdown',
-                'default' => '1',
-                'options' => [
-                    0 => 'kurtjensen.mycalendar::lang.event_form.opt_no',
-                    1 => 'kurtjensen.mycalendar::lang.event_form.opt_yes',
-                ],
-            ],
-            'ckeditor' => [
-                'title' => 'kurtjensen.mycalendar::lang.event_form.ckeditor_title',
-                'description' => 'kurtjensen.mycalendar::lang.event_form.ckeditor_description',
-                'type' => 'dropdown',
-                'default' => '1',
-                'options' => [
-                    0 => 'kurtjensen.mycalendar::lang.event_form.opt_no',
-                    1 => 'kurtjensen.mycalendar::lang.event_form.opt_yes',
-                ],
-            ],
-        ];
-    }
+	public function defineProperties() {
+		return [
+			'allowpublish' => [
+				'title' => 'kurtjensen.mycalendar::lang.event_form.allow_pub_title',
+				'description' => 'kurtjensen.mycalendar::lang.event_form.allow_pub_description',
+				'type' => 'dropdown',
+				'default' => '1',
+				'options' => [
+					0 => 'kurtjensen.mycalendar::lang.event_form.opt_no',
+					1 => 'kurtjensen.mycalendar::lang.event_form.opt_yes',
+				],
+			],
+			'ckeditor' => [
+				'title' => 'kurtjensen.mycalendar::lang.event_form.ckeditor_title',
+				'description' => 'kurtjensen.mycalendar::lang.event_form.ckeditor_description',
+				'type' => 'dropdown',
+				'default' => '1',
+				'options' => [
+					0 => 'kurtjensen.mycalendar::lang.event_form.opt_no',
+					1 => 'kurtjensen.mycalendar::lang.event_form.opt_yes',
+				],
+			],
+		];
+	}
 
-    public function init()
-    {
-        $this->user = Auth::getUser();
+	public function init() {
+		$this->user = Auth::getUser();
 
-        if (!$this->user) {
-            return null;
-        }
-        $this->allowpublish = $this->property('allowpublish');
-        $this->ckeditor = $this->property('ckeditor');
-    }
+		if (!$this->user) {
+			return null;
+		}
+		$this->allowpublish = $this->property('allowpublish');
+		$this->ckeditor = $this->property('ckeditor');
+	}
 
-    public function onRun()
-    {
-        $this->addCss('/modules/backend/formwidgets/datepicker/assets/css/datepicker.css');
-        $this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/pikaday/css/pikaday.css');
-        $this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/clockpicker/css/jquery-clockpicker.css');
-        $this->addCss('/plugins/kurtjensen/mycalendar/assets/css/cal-form.css');
-        $this->addJs('/modules/backend/formwidgets/datepicker/assets/js/build-min.js');
-        if ($this->ckeditor) {
-            $this->addJs('//cdn.ckeditor.com/4.5.4/standard/ckeditor.js');
-        }
+	public function onRun() {
+		$this->addCss('/modules/backend/formwidgets/datepicker/assets/css/datepicker.css');
+		$this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/pikaday/css/pikaday.css');
+		$this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/clockpicker/css/jquery-clockpicker.css');
+		$this->addCss('/plugins/kurtjensen/mycalendar/assets/css/cal-form.css');
+		$this->addJs('/modules/backend/formwidgets/datepicker/assets/js/build-min.js');
+		if ($this->ckeditor) {
+			$this->addJs('//cdn.ckeditor.com/4.5.4/standard/ckeditor.js');
+		}
 
-        $this->page['myevents'] = $this->loadEvents();
-        //$this->onEventForm();
-    }
+		$this->page['myevents'] = $this->loadEvents();
+		//$this->onEventForm();
+	}
 
-    public function trans($string)
-    {
-        return Lang::get('kurtjensen.mycalendar::lang.' . $string);
-    }
+	public function trans($string) {
+		return Lang::get('kurtjensen.mycalendar::lang.' . $string);
+	}
 
-    protected function loadEvents()
-    {
-        if (!$this->user->id) {
-            return null;
-        }
+	protected function loadEvents() {
+		if (!$this->user->id) {
+			return null;
+		}
 
-        $this->myevents = MyCalEvent::where('user_id', '=', $this->user->id)->
-        orderBy('date')->
-        get();
-        return $this->myevents;
-    }
+		$this->myevents = MyCalEvent::where('user_id', '=', $this->user->id)->
+			orderBy('date')->
+			get();
+		return $this->myevents;
+	}
 
-    protected function getMyEvent()
-    {
-        if (!$this->user->id) {
-            return null;
-        }
+	protected function getMyEvent() {
+		if (!$this->user->id) {
+			return null;
+		}
 
-        $eventId = post('id');
+		$eventId = post('id');
 
-        if (!$eventId) {
-            $this->myevent = new MyCalEvent();
-            $this->myevent->user_id = $this->user->id;
-        } else {
-            $this->myevent = MyCalEvent::where('user_id', '=', $this->user->id)->find($eventId);
-        }
+		if (!$eventId) {
+			$this->myevent = new MyCalEvent();
+			$this->myevent->user_id = $this->user->id;
+		} else {
+			$this->myevent = MyCalEvent::where('user_id', '=', $this->user->id)->find($eventId);
+		}
 
-        return $this->myevent;
-    }
+		return $this->myevent;
+	}
 
-    protected function onEventForm()
-    {
-        $this->addJs('/plugins/kurtjensen/mycalendar/assets/js/scheduler.js');
-        if (!$this->getMyEvent()) {
-            return null;
-        }
+	protected function onEventForm() {
+		$this->addJs('/plugins/kurtjensen/mycalendar/assets/js/scheduler.js');
+		if (!$this->getMyEvent()) {
+			return null;
+		}
 
-        $this->is_copy = $this->page['is_copy'] = post('copy');
+		$this->is_copy = $this->page['is_copy'] = post('copy');
 
-        $cat = isset($this->myevent->categorys->first()->id) ? $this->myevent->categorys->first()->id : 0;
-        $this->categorylist = $this->page['categorylist'] = MyCalCategory::selector(
-            $cat,
-            array('class' => 'form-control custom-select',
-                'id' => 'Form-field-myevent-category_id')
-        );
+		$cat = isset($this->myevent->categorys->first()->id) ? $this->myevent->categorys->first()->id : 0;
+		$this->categorylist = $this->page['categorylist'] = MyCalCategory::selector(
+			$cat,
+			array('class' => 'form-control custom-select',
+				'id' => 'Form-field-myevent-category_id')
+		);
 
-        $this->myevent = $this->page['myevent'] = $this->myevent;
+		//$this->RRForm = new RRForm();
 
-        $this->RRForm = new RRForm();
-        $this->formValues = $this->page['formVals'] = array_merge($this->RRForm->parseRrule($this->myevent->pattern), $this->myevent->toArray());
-        $this->page['rcurForm'] = $this->RRForm->showForm($this->formValues);
-    }
+		$formValues = $this->page['formVals'] = array_merge($this->parseRrule($this->myevent->pattern), $this->myevent->toArray());
+		//$this->page['rcurForm'] = $this->RRForm->showForm($formValues);
 
-    /**
-     * Update the myeventone
-     */
-    public function onUpdateEvent()
-    {
+		$this->page['rcurForm'] = $this->makePartial('@/plugins/kurtjensen/mycalendar/formwidgets/rrule/partials/_rrule.htm', ['f' => $formValues]);
+	}
 
-        $dates = $this->processPost();
-        if (!$dates) {
-            return ['#ajaxResponse' => $this->renderPartial('@ajaxResponse', $this->ajaxResponse)];
-        }
-        $this->myevent->save();
+	/**
+	 * Update the myeventone
+	 */
+	public function onUpdateEvent() {
 
-        $this->onRun();
-    }
+		$dates = $this->processPost();
+		if (!$dates) {
+			return ['#ajaxResponse' => $this->renderPartial('@ajaxResponse', $this->ajaxResponse)];
+		}
+		$this->myevent->save();
 
-    protected function onDelete()
-    {
-        $eventId = post('id');
+		$this->onRun();
+	}
 
-        if (!($eventId && $this->user)) {
-            return null;
-        }
+	protected function onDelete() {
+		$eventId = post('id');
 
-        $this->myevent = MyCalEvent::where('user_id', $this->user->id)
-            ->find($eventId);
+		if (!($eventId && $this->user)) {
+			return null;
+		}
 
-        $this->myevent->delete();
+		$this->myevent = MyCalEvent::where('user_id', $this->user->id)
+			->find($eventId);
 
-        $this->onRun();
-    }
+		$this->myevent->delete();
 
-    public function onProcess()
-    {
-        $dates = $this->processPost();
-        if (!$dates) {
-            return ['#ajaxResponse' => $this->renderPartial('@ajaxResponse', $this->ajaxResponse)];
-        }
-        $this->myevent->save();
-        $this->onRun();
-    }
+		$this->onRun();
+	}
 
-    public function onPreviewRrule()
-    {
-        $dates = $this->processPost();
-        if (!$dates) {
-            return ['#EventDetail' => $this->renderPartial('@ajaxResponse', $this->ajaxResponse)];
-        }
+	public function onProcess() {
+		$dates = $this->processPost();
+		if (!$dates) {
+			return ['#ajaxResponse' => $this->renderPartial('@ajaxResponse', $this->ajaxResponse)];
+		}
+		$this->myevent->save();
+		$this->onRun();
+	}
 
-        $occurrences = [];
-        foreach ($dates as $occurrence) {
-            $occurrences[] = $occurrence->getStart()->format('M d Y H:i') . ' - ' . $occurrence->getEnd()->format('H:i');
-        }
+	public function onPreviewRrule() {
+		$dates = $this->processPost();
+		if (!$dates) {
+			return ['#EventDetail' => $this->renderPartial('@ajaxResponse', $this->ajaxResponse)];
+		}
 
-        return ['#EventDetail' => $this->renderPartial('@details', ['ev' => $this->myevent, 'occs' => $occurrences, 'context' => 'success']), '#ajaxResponse' => ''];
+		$occurrences = [];
+		foreach ($dates as $occurrence) {
+			$occurrences[] = $occurrence->getStart()->format('M d Y H:i') . ' - ' . $occurrence->getEnd()->format('H:i');
+		}
 
-    }
+		return ['#EventDetail' => $this->renderPartial('@details', ['ev' => $this->myevent, 'occs' => $occurrences, 'context' => 'success']), '#ajaxResponse' => ''];
 
-    public function processPost()
-    {
-        $this->RRForm = new RRForm();
-        if (!$this->RRForm->valiDate(post())) {
-            // Sets a warning message
+	}
 
-            $this->ajaxResponse = array_merge($this->ajaxResponse, [
-                'context' => 'danger',
-                'title' => 'Form Validation Error:',
-                'content' => '<ul><li>' . implode('</li><li>', $this->RRForm->messages->all()) . '</li></ul>',
-                'footer' => '',
-            ]);
-            return false;
-        }
+	public function processPost() {
+		$RValidator = new RRValidator();
+		if (!$RValidator->valid(post())) {
+			// Sets a warning message
 
-        $pattern = $this->RRForm->unParseRrule(post());
+			$this->ajaxResponse = array_merge($this->ajaxResponse, [
+				'context' => 'danger',
+				'title' => 'Form Validation Error:',
+				'content' => '<ul><li>' . implode('</li><li>', $RValidator->messages->all()) . '</li></ul>',
+				'footer' => '',
+			]);
+			return false;
+		}
 
-        $this->getMyEvent();
+		$pattern = $this->getSaveValue('');
 
-        $this->myevent->name = post('name');
-        $this->myevent->text = post('text');
-        $this->myevent->date = post('date');
-        $this->myevent->time = post('time');
-        $this->myevent->length = post('length');
-        $this->myevent->pattern = $pattern;
-        $this->myevent->categorys = [post('category_id')];
-        if ($this->allowpublish) {
-            $this->myevent->is_published = post('is_published');
-        }
+		$this->getMyEvent();
 
-        $start_at = $this->myevent->carbon_time;
+		$this->myevent->name = post('name');
+		$this->myevent->text = post('text');
+		$this->myevent->date = post('date');
+		$this->myevent->time = post('time');
+		$this->myevent->length = post('length');
+		$this->myevent->pattern = $pattern;
+		$this->myevent->categorys = [post('category_id')];
+		if ($this->allowpublish) {
+			$this->myevent->is_published = post('is_published');
+		}
 
-        list($lengthHour, $lengthMinute) = explode(':', $this->myevent->length);
+		$start_at = $this->myevent->carbon_time;
 
-        $end_at = $start_at->copy();
-        $end_at->addMinutes($lengthMinute)->addHours($lengthHour);
+		list($lengthHour, $lengthMinute) = explode(':', $this->myevent->length);
 
-        if (post('FREQ') == 'SERIES') {
+		$end_at = $start_at->copy();
+		$end_at->addMinutes($lengthMinute)->addHours($lengthHour);
 
-            $dates = $this->seriesRule($pattern, $start_at, $end_at);
+		if (post('FREQ') == 'SERIES') {
 
-        } else {
+			$dates = $this->seriesRule($pattern, $start_at, $end_at);
 
-            $rules = new \Recurr\Rule($pattern, $start_at, $end_at);
-            $transformer = new \Recurr\Transformer\ArrayTransformer;
-            $dates = $transformer->transform($rules);
-        }
+		} else {
 
-        return $dates;
+			$rules = new \Recurr\Rule($pattern, $start_at, $end_at);
+			$transformer = new \Recurr\Transformer\ArrayTransformer;
+			$dates = $transformer->transform($rules);
+		}
 
-    }
+		return $dates;
+
+	}
 }

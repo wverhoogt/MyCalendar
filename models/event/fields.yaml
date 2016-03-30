@@ -37,7 +37,31 @@ fields:
         span: right
         placeholder: kurtjensen.mycalendar::lang.event.phold_length
     pattern:
+        type: rrule
         label: kurtjensen.mycalendar::lang.event.pattern
+        span: full
+
+#    recurrence_section:
+#        label: Recurrences
+#        type: section
+#        comment: Set options for repeating event.
+#
+#    recur:
+#        type: partial
+#        path: $/kurtjensen/mycalendar/controllers/events/_recurFrm.htm
+#    pattern:
+#        label: kurtjensen.mycalendar::lang.event.pattern
+#        span: left
+#    custom_pattern:
+#        label: Use custom pattern and ignore rule options above.
+#        type: checkbox
+#        value: 1
+#        span: right
+
+    details_section:
+        label: Event details
+        type: section
+        comment: Enter detailed decsription of the event.  ( HTML OK ).
     text:
         label: kurtjensen.mycalendar::lang.event.text
         type: textarea
