@@ -1,5 +1,5 @@
 <?php namespace KurtJensen\MyCalendar\Updates;
-
+use DB;
 use October\Rain\Database\Updates\Migration;
 use Schema;
 
