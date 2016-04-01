@@ -4,13 +4,12 @@ use BackendMenu;
 use Backend\Classes\Controller;
 use Flash;
 use KurtJensen\MyCalendar\Classes\RRValidator;
+use KurtJensen\MyCalendar\Models\Settings;
 
 /**
  * Events Back-end Controller
  */
 class Events extends Controller {
-
-	//use \KurtJensen\MyCalendar\Traits\Series;
 
 	public $implement = [
 		'Backend.Behaviors.FormController',
@@ -24,6 +23,7 @@ class Events extends Controller {
 		parent::__construct();
 
 		BackendMenu::setContext('KurtJensen.MyCalendar', 'mycalendar', 'events');
+		$this->addJs(Settings::get('boostrap_cdn', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'));
 	}
 
 	public function update_onSave($id) {

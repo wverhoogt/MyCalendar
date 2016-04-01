@@ -20,13 +20,13 @@
     </div>
 
 <!-- WBYDAY -->
-    <div class="row hidden r_all r_weekly"><br>
+    <div class="row<?= (count(array_get($f, 'WBYDAY'))>0 ?'' :  ' hidden') ?> r_all r_weekly"><br>
         <div class="col-md-8 form-group">
             <label for="bymonthday"><?= $this->t('WBYDAY') ?></label>
-            <fieldset class="btn-group" data-toggle="buttons"><?=
+            <div class="btn-group" data-toggle="buttons"><?=
         $this->getWByDay(array_get($f, 'WBYDAY'))
         ?>
-            </fieldset>
+            </div>
         </div>
     </div>
 

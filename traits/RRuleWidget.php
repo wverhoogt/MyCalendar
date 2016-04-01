@@ -52,7 +52,7 @@ trait RRuleWidget {
 			break;
 		case 'WEEKLY':
 			$rrule .= 'INTERVAL=' . post('INTERVAL') . ';';
-			if (count(post('BYDAY')) > 0) {
+			if (count(post('WBYDAY')) > 0) {
 				$BYDAY = implode(',', post('WBYDAY'));
 				$rrule .= 'BYDAY=' . $BYDAY . ';'; //FREQ=WEEKLY;BYDAY=SU,WE,TH;INTERVAL=3;COUNT=6
 			}
@@ -161,8 +161,9 @@ trait RRuleWidget {
 		$bydays = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 		foreach ($bydays as $day) {
 			$fields .= '
-            <label class="btn btn-default">' .
-			Form::checkbox('WBYDAY[' . $day . ']', $day, in_array($day, $f), ['class' => 'r_all r_weekly']) . $this->t($day) . '</label>';
+            <label class="btn btn-primary'.(in_array($day, $f)?' active':'').'">' .
+			Form::checkbox('WBYDAY[' . $day . ']', $day, in_array($day, $f), ['class' => 'r_all r_weekly', 'autocomplete'=>'off']) . $this->t($day) . '</label>
+			';
 
 		};
 		return $fields;

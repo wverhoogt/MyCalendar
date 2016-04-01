@@ -62,6 +62,8 @@ return [
         'day_end_comment' => 'When do you want the night to end for "All Day" events (default is 23:59)',
         'default_length_label' => 'Default Event Length',
         'default_length_comment' => 'Default time an event will last when created (default is 01:00)',
+        'boostrap_cdn_label' => 'bootstrap CDN',
+        'boostrap_cdn_comment' => 'What CDN should bootstrap JS load from?',
 
         'section_categories_label' => 'Category Defaults',
         'section_categories_comment' => 'Default categories for events and permissions',
@@ -71,6 +73,11 @@ return [
 
         'section_times_label' => 'Default Times / Dates',
         'section_times_comment' => 'Default times and dates for event creation and display',
+
+        'section_cdn_label' => 'CND Sources',
+        'section_cdn_comment' => 'Customize the Content Distribution Network servers your site will use.',
+
+
     ],
     'month' => [// Month Component
         'name' => 'Month View',
@@ -200,6 +207,8 @@ return [
         'allow_pub_description' => 'Allow users to publish their event. (No means an admin must do it.)',
         'ckeditor_title' => 'Use CKEditor',
         'ckeditor_description' => 'Load CKEditor from cdn.ckeditor.com and show rich editor field for event description.',
+        'bs_cdn_title' => 'Use bootstrap CDN',
+        'bs_cdn_description' => 'Load bootstrap from CDN specified in settings.  If your theme already loads JS assets from "vendor/bootstrap" then you should say "NO".',
         'opt_no' => 'No',
         'opt_yes' => 'Yes',
         'btn_add' => 'Add Event',

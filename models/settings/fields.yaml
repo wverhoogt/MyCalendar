@@ -66,3 +66,13 @@ fields:
         mode: time
         default: 01:00
         comment: kurtjensen.mycalendar::lang.settings.default_length_comment
+
+    section_cdn:
+        label: kurtjensen.mycalendar::lang.settings.section_cdn_label
+        type: section
+        comment: kurtjensen.mycalendar::lang.settings.section_cdn_comment
+    boostrap_cdn:
+        label: kurtjensen.mycalendar::lang.settings.boostrap_cdn_label
+        span: full
+        comment: kurtjensen.mycalendar::lang.settings.boostrap_cdn_comment
+        default: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'

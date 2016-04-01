@@ -12,3 +12,5 @@ columns:
         label: kurtjensen.mycalendar::lang.event.date
     time:
         label: kurtjensen.mycalendar::lang.event.time
+    pattern:
+        label: kurtjensen.mycalendar::lang.event.pattern

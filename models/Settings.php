@@ -38,6 +38,7 @@ class Settings extends Model
         $this->day_start = $this->day_start ?: '00:00:00';
         $this->day_end = $this->day_end ?: '23:59:00';
         $this->default_length = $this->default_length ?: '01:00:00';
+        $this->boostrap_cdn = $this->boostrap_cdn ?: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js';
     }
 
     public function getDropdownOptions($fieldName = null, $keyValue = null)

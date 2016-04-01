@@ -34,8 +34,13 @@ fields:
         label: kurtjensen.mycalendar::lang.event.length
         type: datepicker
         mode: time
-        span: right
+        span: left
         placeholder: kurtjensen.mycalendar::lang.event.phold_length
+    pattern_text:
+        label: kurtjensen.mycalendar::lang.event.pattern
+        type: partial
+        path: $/kurtjensen/mycalendar/controllers/events/_pattern_text.htm
+        span: right
     pattern:
         type: rrule
         label: kurtjensen.mycalendar::lang.event.pattern
@@ -49,9 +54,6 @@ fields:
 #    recur:
 #        type: partial
 #        path: $/kurtjensen/mycalendar/controllers/events/_recurFrm.htm
-#    pattern:
-#        label: kurtjensen.mycalendar::lang.event.pattern
-#        span: left
 #    custom_pattern:
 #        label: Use custom pattern and ignore rule options above.
 #        type: checkbox
