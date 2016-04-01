@@ -58,3 +58,4 @@
 1.1.13: Fixes error caused by removal of test component. Adds sorting.
 1.1.14: Add recuurence generation for backend controller.
 1.1.15: Fixed missing use DB in add_date.php.
+1.1.16: Fixed concat() error for SQLITE users in add_date.php.
