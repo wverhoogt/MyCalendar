@@ -31,7 +31,7 @@
     </div>
 
 <!-- INTERVALS -->
-    <div class="row hidden r_all r_series"><br>
+    <div class="row<?= (array_get($f, 'FREQ') == 'SERIES' ? '' : ' hidden') ?> r_all r_series"><br>
         <div class="col-md-12 form-group">
             <?= Form::label('INTERVALS', $this->t('INTERVALS')) ?>
             <?= Form::text('INTERVALS', array_get($f, 'INTERVALS')) ?>
