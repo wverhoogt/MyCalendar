@@ -1,3 +1,4 @@
+<!-- Start RRule Widget -->
 <?php if ($this->previewMode): ?>
     <div class="form-control"><?= $value ?></div>
 <?php else: ?>
@@ -22,7 +23,7 @@
 <!-- WBYDAY -->
     <div class="row<?= (count(array_get($f, 'WBYDAY'))>0 ?'' :  ' hidden') ?> r_all r_weekly"><br>
         <div class="col-md-8 form-group">
-            <label for="bymonthday"><?= $this->t('WBYDAY') ?></label>
+            <label><?= $this->t('WBYDAY') ?></label>
             <div class="btn-group" data-toggle="buttons"><?=
         $this->getWByDay(array_get($f, 'WBYDAY'))
         ?>
@@ -36,7 +37,6 @@
             <?= Form::label('INTERVALS', $this->t('INTERVALS')) ?>
             <?= Form::text('INTERVALS', array_get($f, 'INTERVALS')) ?>
             <p><?= $this->t('INTERVALS_example') ?></p>
-            </fieldset>
         </div>
     </div>
 
@@ -44,19 +44,20 @@
 <!-- month_on -->
     <div class="row<?= (array_get($f, 'FREQ') == 'MONTHLY' ? '' : ' hidden') ?> r_all r_monthly  form-inline "><br>
         <div class="col-md-8 form-group">
-        <fieldset class="btn-group" data-toggle="buttons">
-            <?= Form::label('month_on', '&nbsp;') ?>
-            <?= Form::select('month_on', ['on_day' => $this->t('on.on_day'), 'on_the' => $this->t('on.on_the')], array_get($f, 'month_on'), ['class' => 'form-control custom-select r_all r_monthly']) ?>
+            <fieldset class="btn-group" data-toggle="buttons">
+                <?= Form::label('month_on', '&nbsp;') ?>
+                <?= Form::select('month_on', ['on_day' => $this->t('on.on_day'), 'on_the' => $this->t('on.on_the')], array_get($f, 'month_on'), ['class' => 'form-control custom-select r_all r_monthly']) ?>
 
 <!-- MBYSETPOS -->
-            <?= Form::label('MBYSETPOS', '&nbsp;') ?>
-            <?= Form::select('MBYSETPOS', $this->getDayPosOptions(), array_get($f, 'MBYSETPOS'), ['class' => 'form-control custom-select mo_all mo_on_the'. ((array_get($f, 'month_on') == 'on_the') ? '' : ' hidden')]) ?>
-
+                <span class="mo_all mo_on_the <?= (array_get($f, 'month_on') == 'on_the') ? '' : ' hidden'?>">
+                    <?= Form::label('MBYSETPOS', '&nbsp;') ?>
+                    <?= Form::select('MBYSETPOS', $this->getDayPosOptions(), array_get($f, 'MBYSETPOS'), ['class' => 'form-control custom-select mo_all mo_on_the'. ((array_get($f, 'month_on') == 'on_the') ? '' : ' hidden')]) ?>
 
 <!-- MBYDAY -->
-           <?= Form::label('MBYDAY', '&nbsp;') ?>
-           <?= Form::select('MBYDAY', $this->getByDayOptions(), array_get($f, 'MBYDAY'), ['class' => 'form-control custom-select mo_all mo_on_the'. ((array_get($f, 'month_on') == 'on_the') ? '' : ' hidden')]) ?>
-        </fieldset>
+                   <?= Form::label('MBYDAY', '&nbsp;') ?>
+                   <?= Form::select('MBYDAY', $this->getByDayOptions(), array_get($f, 'MBYDAY'), ['class' => 'form-control custom-select mo_all mo_on_the'. ((array_get($f, 'month_on') == 'on_the') ? '' : ' hidden')]) ?>
+                </span>
+            </fieldset>
         </div>
     </div>
 
@@ -64,24 +65,24 @@
 <!-- Year On -->
     <div class="row<?= (array_get($f, 'INTERVAL') == 'YEARLY' ? '' : ' hidden') ?> r_all r_yearly  form-inline"><br>
         <div class="col-md-8 form-group">
-        <fieldset class="btn-group" data-toggle="buttons">
-            <?= Form::label('year_on', '&nbsp;') ?>
-            <?= Form::select('year_on', ['on_day' => $this->t('on.on_day'), 'on_the' => $this->t('on.on_the')], array_get($f, 'year_on'), ['class' => 'form-control custom-select r_all r_yearly']) ?>
+            <fieldset class="btn-group" data-toggle="buttons">
+                <?= Form::label('year_on', '&nbsp;') ?>
+                <?= Form::select('year_on', ['on_day' => $this->t('on.on_day'), 'on_the' => $this->t('on.on_the')], array_get($f, 'year_on'), ['class' => 'form-control custom-select r_all r_yearly']) ?>
 
 
 <!-- YBYSETPOS -->
-            <?= Form::label('YBYSETPOS', '&nbsp;') ?>
-            <?= Form::select('YBYSETPOS', $this->getDayPosOptions(), array_get($f, 'YBYSETPOS'), ['class' => 'form-control custom-select yr_all yr_on_the'. ((array_get($f, 'year_on') == 'on_the') ? '' : ' hidden')]) ?>
+                <?= Form::label('YBYSETPOS', '&nbsp;') ?>
+                <?= Form::select('YBYSETPOS', $this->getDayPosOptions(), array_get($f, 'YBYSETPOS'), ['class' => 'form-control custom-select yr_all yr_on_the'. ((array_get($f, 'year_on') == 'on_the') ? '' : ' hidden')]) ?>
 
 
 <!-- YBYDAY -->
-            <?= Form::label('YBYDAY', '&nbsp;') ?>
-            <?= Form::select('YBYDAY', $this->getByDayOptions(), array_get($f, 'YBYDAY'), ['class' => 'form-control custom-select yr_all yr_on_the'. ((array_get($f, 'year_on') == 'on_the') ? '' : ' hidden')]) ?>
+                <?= Form::label('YBYDAY', '&nbsp;') ?>
+                <?= Form::select('YBYDAY', $this->getByDayOptions(), array_get($f, 'YBYDAY'), ['class' => 'form-control custom-select yr_all yr_on_the'. ((array_get($f, 'year_on') == 'on_the') ? '' : ' hidden')]) ?>
 
 <!-- YBYMONTH -->
-            <?= Form::label('YBYMONTH', $this->t('YBYMONTH')) ?>
-            <?= Form::select('YBYMONTH', $this->getMonthOptions(), array_get($f, 'YBYMONTH'), ['class' => 'form-control custom-select yr_all yr_on_the'. ((array_get($f, 'year_on') == 'on_the') ? '' : ' hidden')]) ?>
-        </fieldset>
+                <?= Form::label('YBYMONTH', $this->t('YBYMONTH')) ?>
+                <?= Form::select('YBYMONTH', $this->getMonthOptions(), array_get($f, 'YBYMONTH'), ['class' => 'form-control custom-select yr_all yr_on_the'. ((array_get($f, 'year_on') == 'on_the') ? '' : ' hidden')]) ?>
+            </fieldset>
         </div>
     </div>
     <br>
@@ -124,3 +125,4 @@
         </div>
     </div>
 <?php endif ?>
+<!-- End RRule Widget -->

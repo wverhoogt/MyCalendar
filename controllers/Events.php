@@ -31,9 +31,9 @@ class Events extends Controller {
 		return $error ?: parent::update_onSave($id);
 	}
 
-	public function create_onSave($id) {
+	public function create_onSave() {
 		$error = $this->validate();
-		return $error ?: parent::create_onSave($id);
+		return $error ?: parent::create_onSave();
 	}
 
 	public function validate() {

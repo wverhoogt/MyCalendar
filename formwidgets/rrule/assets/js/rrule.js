@@ -23,7 +23,7 @@ function enableshow(sclass) {
 function endsChange(hide) {
 	disableHide('.e_all');
     if (hide == true){
-    	$('#Ends').val('NEVER');
+    	$('#Ends').val('NEVER').change();
     }
 
 	var end_at = $('#Ends').val().toLowerCase();

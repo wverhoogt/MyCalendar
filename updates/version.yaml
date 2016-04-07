@@ -60,3 +60,4 @@
 1.1.15: Fixed missing use DB in add_date.php.
 1.1.16: Fixed concat() error for SQLITE users in add_date.php.
 1.1.17: Fixed form not showing interval field when editing a series type event.
+1.1.18: Located and eliminated bastard div end tag that screwed up backend form.

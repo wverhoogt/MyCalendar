@@ -257,6 +257,13 @@ class Event extends Model {
 				});
 			return $query;
 		}
+
+		return $query;
+	}
+
+	public function scopeDuring($query, $start, $end) {
+		$query->where('start_at', '<', $end)->
+			where('end_at', '>=', $start);
 		return $query;
 	}
 

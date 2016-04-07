@@ -161,8 +161,8 @@ trait RRuleWidget {
 		$bydays = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 		foreach ($bydays as $day) {
 			$fields .= '
-            <label class="btn btn-primary'.(in_array($day, $f)?' active':'').'">' .
-			Form::checkbox('WBYDAY[' . $day . ']', $day, in_array($day, $f), ['class' => 'r_all r_weekly', 'autocomplete'=>'off']) . $this->t($day) . '</label>
+            <label class="btn btn-primary' . (in_array($day, $f) ? ' active' : '') . '">' .
+			Form::checkbox('WBYDAY[' . $day . ']', $day, in_array($day, $f), ['class' => 'r_all r_weekly', 'autocomplete' => 'off']) . $this->t($day) . '</label>
 			';
 
 		};
@@ -194,8 +194,9 @@ trait RRuleWidget {
 			$$prop = $val;
 		}
 		switch ($FREQ) {
-		case 'None':
-			return ['FREQ' => 'None'];
+		case '':
+		case 'NONE':
+			return ['FREQ' => 'NONE'];
 			break;
 		case 'HOURLY':
 			$formVals = ['FREQ' => 'HOURLY', 'INTERVAL' => $INTERVAL];
