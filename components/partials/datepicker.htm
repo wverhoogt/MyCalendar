@@ -1,23 +1,26 @@
 
 <!-- datepicker partial start-->
-            <div
-                id="DatePicker-form-{{ name }}"
-                class="field-datepicker"
-                data-control="datepicker"
-                data-min-date="2015-01-01 00:00:00"
-                data-max-date="{{ date()|date("Y") +5 }}-12-31 00:00:00">
-                <div class="right-align input-group date">
-                    <input
-                        type="text"
-                        id="DatePicker-form-input-{{ name }}"
-                        name="{{ name }}"
-                        value="{% if value %}{{ value }}{% else %}{{ "now"|date("Y-m-d") }}{% endif %}"
-                        class="form-control {{ class }}  align-right"
-                        autocomplete="off"
-                         />
-                    <label for="DatePicker-form-input-{{ name }}" class="input-group-addon">
-                        {{ label }} <i class="icon icon-calendar"></i>
-                    </label>
-                </div>
-            </div>
+        <div class="right-align input-group date">
+            <input 
+                type="text" 
+                id="DatePicker-form-input-{{ name }}" 
+                name="{{ name }}" 
+                class="form-control {{ class }}  align-right" 
+                value="{% if value %}{{ value }}{% else %}{{ "now"|date("Y-m-d") }}{% endif %}"
+                autocomplete="off">
+            <label for="DatePicker-form-input-{{ name }}" class="input-group-addon">
+                {{ label }} <i class="icon icon-calendar"></i>
+            </label>
+        </div>
+{% set y = date()|date("Y") %}
+<script>
+    var picker = new Pikaday(
+    {
+        field: document.getElementById('DatePicker-form-input-{{ name }}'),
+        minDate: new Date({{ y-1 }}, 1, 1),
+        maxDate: new Date({{ y+5 }}, 12, 31),
+        yearRange: [{{ y-1 }},{{ y+5 }}],
+      format: 'YYYY-MM-DD',
+    });
+</script>
 <!-- datepicker partial end-->

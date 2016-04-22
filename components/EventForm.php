@@ -85,11 +85,15 @@ class EventForm extends ComponentBase {
 	}
 
 	public function onRun() {
-		$this->addCss('/modules/backend/formwidgets/datepicker/assets/css/datepicker.css');
-		$this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/pikaday/css/pikaday.css');
-		$this->addCss('/modules/backend/formwidgets/datepicker/assets/vendor/clockpicker/css/jquery-clockpicker.css');
+
+		$this->addCss('https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.4.0/css/pikaday.min.css');
+		$this->addJs('https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js');
+		$this->addJs('https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.4.0/pikaday.min.js');
+
+		$this->addJs('/plugins/kurtjensen/mycalendar/assets/js/jquery-clockpicker.js');
+		$this->addCss('/plugins/kurtjensen/mycalendar/assets/css/jquery-clockpicker.css');
+
 		$this->addCss('/plugins/kurtjensen/mycalendar/assets/css/cal-form.css');
-		$this->addJs('/modules/backend/formwidgets/datepicker/assets/js/build-min.js');
 
 		if ($this->property('bootstrapCDN')) {
 			$this->addJs(Settings::get('boostrap_cdn', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'));
@@ -165,7 +169,7 @@ class EventForm extends ComponentBase {
 		);
 
 		$formValues = $this->page['formVals'] = array_merge($this->parseRrule($this->myevent->pattern), $this->myevent->toArray());
-		$this->page['rcurForm'] = $this->makePartial('@/plugins/kurtjensen/mycalendar/formwidgets/rrule/partials/_rrule.htm', ['f' => $formValues]);
+		$this->page['rcurForm'] = $this->makePartial(plugins_path() . '/kurtjensen/mycalendar/formwidgets/rrule/partials/rrule', ['f' => $formValues]);
 	}
 
 	/**

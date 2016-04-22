@@ -7,6 +7,7 @@ trait Series
 
     public function seriesRule($pattern, $start_at, $end_at)
     {
+        $date = [];
         //'INTERVALS=1,2,1,4;COUNT=20;'
         if (is_string($pattern)) {
             $rulePieces = explode(';', $pattern);
