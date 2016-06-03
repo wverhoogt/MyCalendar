@@ -1,12 +1,12 @@
-      <div class="panel panel-{{ context }}">
-          <div class="panel-heading"> 
+      <div class="modal-content">
+          <div class="modal-header{% if context %} modal-header-{{ context }}{% endif %}"> 
               <a type="button" class="close btn btn-default" data-dismiss="modal">&times;</a>
               <h4 class="modal-title">{{ ev.name }}</h4>{{ ev.date }} {% if ev.time %} {{ ev.time }}{% endif %}
           </div>
-          <div class="panel-body">
+          <div class="modal-body">
             {{ ev.text|raw }}
           </div>
-          <div class="panel-footer">
+          <div class="modal-footer">
 {% for cat in ev.cats %}
               <span class="label label-info">{{cat}}</span>
 {% endfor %}  <br />

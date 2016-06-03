@@ -87,3 +87,8 @@
 
 <input type="hidden" id="ck-input" value="{{ __SELF__.ckeditor }}"></input>
 {% scripts %}
+<script type="text/javascript">
+    window.onbeforeunload = function() {
+    return "Leaving this page will not save changes!";
+};
+</script>

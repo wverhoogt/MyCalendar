@@ -4,7 +4,7 @@
 <?php else: ?>
     <div class="row form-inline ">
 <!-- FREQ -->
-        <div class="col-md-3 form-group">
+        <div class="col-md-6 form-group">
             <?= Form::label('FREQ', $this->t('repeat')) ?>
             <?= Form::select('FREQ', $this->getFreqOptions(), array_get($f, 'FREQ'), ['class' => 'form-control custom-select']) ?>
         </div>

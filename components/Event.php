@@ -62,12 +62,18 @@ class Event extends ComponentBase
     public function onRun()
     {
         $this->loadEvent();
-        $date = $this->calEvent->date->format(Settings::get('date_format', 'F jS, Y'));
-        $time = $this->calEvent->human_time;
+        if ($this->calEvent) {
+            $date = $this->calEvent->date->format(Settings::get('date_format', 'F jS, Y'));
+            $time = $this->calEvent->human_time;
 
-        $this->page->title = $this->calEvent->name;
-        $this->page->description = $date . ' ' . $time;
-        $this->page['backLink'] = $this->property('linkpage', '');
+            $this->page->title = $this->calEvent->name;
+            $this->page->description = $date . ' ' . $time;
+            $this->page['backLink'] = $this->property('linkpage', '');
+        } else {
+            $this->page->title = Lang::get('kurtjensen.mycalendar::lang.event.error_not_found');
+            $this->page->description = Lang::get('kurtjensen.mycalendar::lang.event.error_not_found');
+            $this->page['backLink'] = $this->property('linkpage', '');
+        }
     }
 
     public function userId()
@@ -97,8 +103,8 @@ class Event extends ComponentBase
         }
 
         $this->calEvent = $query->with('categorys')
-             ->where('is_published', true)
-             ->find($slug);
+            ->where('is_published', true)
+            ->find($slug);
 
         if (!$this->calEvent) {
             return $this->page['ev'] = ['name' => Lang::get('kurtjensen.mycalendar::lang.event.error_not_found'), 'cats' => []];

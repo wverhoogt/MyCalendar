@@ -1,6 +1,6 @@
 <?php
 return [
-    'plugin' => [//Plugin File
+    'plugin' => [ //Plugin File
         'name' => 'MyCalendar',
         'description' => 'Super simple calendar for displaying events.',
         'user_btn' => 'Users',
@@ -10,7 +10,7 @@ return [
         'access_occurrences' => 'occurrences',
         'access_settings' => 'settings',
     ],
-    'events' => [// Events Controller
+    'events' => [ // Events Controller
         'menu_label' => 'Events',
         'toolbar_new' => 'New Event',
         'form_name' => 'Event',
@@ -20,7 +20,7 @@ return [
         'return' => 'Return to Events list',
         'delete_confirm' => 'Do you really want to delete this event?',
     ],
-    'categories' => [// Categories Controller
+    'categories' => [ // Categories Controller
         'menu_label' => 'Categories',
         'toolbar_new' => 'New Category',
         'form_name' => 'Category',
@@ -31,7 +31,7 @@ return [
         'return' => 'Return to categories list',
         'delete_confirm' => 'Do you really want to delete this category?',
     ],
-    'occurrences' => [// Occurrences Controller
+    'occurrences' => [ // Occurrences Controller
         'menu_label' => 'Occurrences',
         'toolbar_new' => 'New Occurrence',
         'form_name' => 'Occurrence',
@@ -77,9 +77,8 @@ return [
         'section_cdn_label' => 'CND Sources',
         'section_cdn_comment' => 'Customize the Content Distribution Network servers your site will use.',
 
-
     ],
-    'month' => [// Month Component
+    'month' => [ // Month Component
         'name' => 'Month View',
         'description' => 'Shows a month calendar with events',
         'month_title' => 'Month',
@@ -110,11 +109,11 @@ return [
         'previous' => 'Previous',
         'next' => 'Next',
     ],
-    'week' => [// Week Component
+    'week' => [ // Week Component
         'name' => 'Week View',
         'description' => 'Shows a week calendar with events',
     ],
-    'evlist' => [// EvList Component
+    'evlist' => [ // EvList Component
         'name' => 'List View',
         'description' => 'Shows a list of events',
         'month_title' => 'Month',
@@ -142,7 +141,7 @@ return [
         'link' => 'Link',
         'categorys' => 'Categories',
     ],
-    'events_comp' => [// Events Component
+    'events_comp' => [ // Events Component
         'name' => 'Events Data',
         'description' => 'Get Events from DB and insert them into page',
         'linkpage_title' => 'Link to Event Detail Page',
@@ -163,7 +162,7 @@ return [
         'opt_no' => 'No',
         'opt_yes' => 'Yes',
     ],
-    'event' => [// Event Component and Model
+    'event' => [ // Event Component and Model
         'name' => 'Event View',
         'description' => 'Shows one event on page with details',
         'label' => 'Event',
@@ -178,6 +177,8 @@ return [
         'time' => 'Time',
         'text' => 'Details',
         'pattern' => 'Recuring Event Pattern',
+        'details_section_label' => 'Event details',
+        'details_section_comment' => 'Enter detailed description of the event.  ( HTML OK ).',
         'link' => 'Link',
         'categorys' => 'Categories',
         'category' => 'Category',
@@ -200,7 +201,7 @@ return [
         'link_description' => 'Name of the event page file for list or calendar page. This property is used by the event component partial.',
         'link_group' => 'Links',
     ],
-    'event_form' => [// EventForm Component
+    'event_form' => [ // EventForm Component
         'name' => 'Event Form',
         'description' => 'Front end form to allow users to ad their own events',
         'allow_pub_title' => 'Allow Publish',
@@ -227,15 +228,15 @@ return [
         'btn_save' => 'Save',
         'btn_save' => 'Save',
     ],
-    'month_events' => [// MonthEvents Component
+    'month_events' => [ // MonthEvents Component
         'name' => 'Month View w/ Event Data',
         'description' => 'Show Full Month View with DB events',
     ],
-    'list_events' => [// ListEvents Component
+    'list_events' => [ // ListEvents Component
         'name' => 'Event List w/ Event Data',
         'description' => 'Show Event List View with DB events',
     ],
-    'category' => [// Category Model
+    'category' => [ // Category Model
         'name' => 'Category',
         'slug' => 'Slug',
         'description' => 'Description',
@@ -245,7 +246,7 @@ return [
         'phold_description' => 'More details',
         'comment_permission' => 'Set the permision for this category.',
     ],
-    'occurrence' => [// Event Component and Model
+    'occurrence' => [ // Event Component and Model
         'name' => 'Occurrence',
         'description' => 'Every occurence on the calendar for an event.',
         'label' => 'Occurrence',
@@ -259,7 +260,7 @@ return [
         'is_allday' => 'All Day',
         'is_canceled' => 'Canceled',
     ],
-    'rrule' => [// Rrule Form
+    'rrule' => [ // Rrule Form
         'repeat' => 'Repeat',
         'INTERVAL' => 'Every',
         'WBYDAY' => 'On',

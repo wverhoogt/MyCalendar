@@ -1,9 +1,9 @@
-<div class="panel panel-{{ context }}">
-	<div class="panel-heading"> 
-		<h3 class="panel-title">{{ title }}</h3> 
+<div class="modal-content">
+  <div class="modal-header{% if context %} modal-header-{{ context }}{% endif %}"> 
+		<h3 class="modal-title">{{ title }}</h3> 
 	</div>
-  	<div class="panel-body">
+  	<div class="modal-body">
     	{{ content|raw }}
   	</div>
-  <div class="panel-footer">{{ footer }}</div>
+  <div class="modal-footer">{{ footer }}</div>
 </div
