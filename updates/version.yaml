@@ -63,3 +63,4 @@
 1.1.18: Located and eliminated bastard div end tag that screwed up backend form.
 1.1.19: Added DE lang files. Fixed a few minor issues.
 1.1.20: Fixes backend form broken by changes to October timepicker.
+1.1.21: Updated to changes made in Passage Permission Plugin

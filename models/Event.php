@@ -261,7 +261,7 @@ class Event extends Model
 
         if ($manager->exists('kurtjensen.passage')) {
 
-            $akeys = array_keys(\KurtJensen\Passage\Plugin::globalPassageKeys());
+            $akeys = array_keys(\KurtJensen\Passage\Plugin::passageKeys());
             if ($user_id) {
                 $permarray = array_merge($akeys, $public_perm);
             } else {
