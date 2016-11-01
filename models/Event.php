@@ -4,7 +4,7 @@ use Carbon\Carbon;
 use Html;
 use KurtJensen\MyCalendar\Models\Settings;
 use Model;
-use RainLab\User\Models\User as UserModel;
+//use RainLab\User\Models\User as UserModel;
 use System\Classes\PluginManager;
 use \Recurr\Rule;
 use \Recurr\Transformer\ArrayTransformer;
@@ -195,7 +195,7 @@ class Event extends Model {
 		$Users = [];
 		$manager = PluginManager::instance();
 		if ($manager->exists('rainlab.user')) {
-			foreach (UserModel::orderBy('surname')->
+			foreach (\RainLab\User\Models\User::orderBy('surname')->
 				orderBy('name')->get() as $user) {
 				$Users[$user->id] = $user->surname . ', ' . $user->name;
 			}

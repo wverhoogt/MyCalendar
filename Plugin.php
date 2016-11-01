@@ -4,7 +4,7 @@ use Backend;
 use KurtJensen\MyCalendar\Controllers\Events as EventController;
 use KurtJensen\MyCalendar\Models\Category as CategoryModel;
 use KurtJensen\MyCalendar\Models\Event as EventModel;
-use RainLab\User\Models\User;
+//use RainLab\User\Models\User;
 use System\Classes\PluginBase;
 use System\Classes\PluginManager;
 
@@ -34,7 +34,7 @@ class Plugin extends PluginBase {
 	public function boot() {
 		$manager = PluginManager::instance();
 		if ($manager->exists('rainlab.user')) {
-			User::extend(function ($model) {
+			\RainLab\User\Models\User::extend(function ($model) {
 				$model->hasMany['mycalevents'] = [
 					'KurtJensen\MyCalendar\Models\Events',
 					'table' => 'kurtjensen_mycal_events'];
@@ -99,7 +99,7 @@ class Plugin extends PluginBase {
 			//'KurtJensen\MyCalendar\Components\Test' => 'Test',
 			'KurtJensen\MyCalendar\Components\Month' => 'Month',
 			'KurtJensen\MyCalendar\Components\MonthEvents' => 'MonthEvents',
-			//'KurtJensen\MyCalendar\Components\Week' => 'Week',
+			'KurtJensen\MyCalendar\Components\Week' => 'Week',
 			'KurtJensen\MyCalendar\Components\EvList' => 'EvList',
 			'KurtJensen\MyCalendar\Components\ListEvents' => 'ListEvents',
 			'KurtJensen\MyCalendar\Components\Events' => 'Events',
