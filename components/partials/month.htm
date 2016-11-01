@@ -19,22 +19,73 @@
                 {{ MyM.trans('kurtjensen.mycalendar::lang.month.next') }}</a>
             </th>
         </tr>
+
+
+<!-- START DAY LABELS -->
         <tr class="daysHead">
-{% for hding in  MyM.calHeadings %}
-            <th>{{ hding }}</th>
+
+{# 
+    ** START - walk through 7 days of week for titles  **
+#}
+{% for weekDayNum in range(0,6) %}
+{# 
+    ** calculate order of day labels based on week start setting  **
+#}
+{% set labelOffset = weekDayNum + MyM.weekstart %}
+{% set labelKey = labelOffset > 6 ? labelOffset - 7 : labelOffset %}
+            <th>{{ MyM.calHeadings[labelKey] }}</th>
 {% endfor %}
+{# 
+    ** END - walk through 7 days of week for titles  **
+#}
         </tr>
+<!-- END DAY LABELS -->
      </thead>
+
+
+<!-- START DAYS of Previous month -->
      <tbody>
-{% for r in range(1,6) %}
+{# 
+    ** START - walk through 6 weeks of month **
+#}
+{% for rows in range(1,6) %}
 {% if dayPointer < MyM.days_in_month %}
         <tr class="days">
+
+{# 
+    ** Advance dayPointer **
+#}
+{#
+
+
+
+
+    ** START - walk through 7 days of week **
+#}
 {% for x in range(0, 6) %}
+{# 
+    ** Advance dayPointer **
+#}
 {% set dayPointer = dayPointer + 1 %}
+{# 
+************ SHOW PREVIOUS MONTH DAYS ************
+        If dayPointer indicates that current
+        month has not started yet.
+#}
 {% if dayPointer <1 %}
-            <td><div class="dis">{{ MyM.prevMonthMonday + x }}</div></td>
+            <td><div class="dis">{{ MyM.prevMonthStartDay + x }}</div></td>
+{# 
+************ SHOW NEXT MONTH DAYS ************
+        If dayPointer indicates that current
+        month has past.
+#}
 {% elseif dayPointer > MyM.days_in_month %}
             <td><div class="dis">{% set trailDays = trailDays + 1 %}{{ trailDays }}</div></td>
+{# 
+************ SHOW CURRENT MONTH DAYS ************
+        If dayPointer indicates current
+        month. ( Not Past or Previous )
+#}
 {% else %}
 {% set dayProp = dprops[dayPointer] %}
             <td>
@@ -46,6 +97,14 @@
 {% endif %}
 {% if devents[dayPointer] %}
                 <ul class="eventList">
+
+{#
+
+
+
+
+    ** START - walk through events on this day **
+#}
 {% for ev in devents[dayPointer] %}
                     {% partial '@event' ev = ev %}
 {% endfor %}
@@ -53,9 +112,24 @@
 {% endif %}
             </td>
 {% endif %}
+{#
+    ** END - walk through events on this day **
+
+
+
+#}
 {% endfor %}
+{#
+    ** END - walk through 7 days of week **
+
+
+
+#}
         </tr>
 {% endif %}
 {% endfor %}
+{# 
+    ** END - walk through 6 weeks of month **
+#}
     </tbody>
 </table>

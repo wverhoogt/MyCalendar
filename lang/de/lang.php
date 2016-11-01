@@ -1,9 +1,5 @@
-<?php
-/**
- * This file contributed by https://github.com/Drikani
- **/
-return [
-    'plugin' => [ //Plugin File
+<?php return [
+    'plugin' => [
         'name' => 'MyCalendar',
         'description' => 'einfacher Calender zum anzeigen von Events',
         'user_btn' => 'Benutzer',
@@ -13,7 +9,7 @@ return [
         'access_occurrences' => 'Ereignis',
         'access_settings' => 'Einstellungen',
     ],
-    'events' => [ // Events Controller
+    'events' => [
         'menu_label' => 'Events',
         'toolbar_new' => 'Neues Event',
         'form_name' => 'Event',
@@ -23,7 +19,7 @@ return [
         'return' => 'Zurück zu Eventliste',
         'delete_confirm' => 'Möchtest du dieses Event wirklich löschen?',
     ],
-    'categories' => [ // Categories Controller
+    'categories' => [
         'menu_label' => 'Kategorien',
         'toolbar_new' => 'Neue Kategorie',
         'form_name' => 'Kategorie',
@@ -34,7 +30,7 @@ return [
         'return' => 'Zurück zu Kategorieliste',
         'delete_confirm' => 'Möchtest du diese Kategorie wirklich löschen?',
     ],
-    'occurrences' => [ // Occurrences Controller
+    'occurrences' => [
         'menu_label' => 'Ereignisse',
         'toolbar_new' => 'Neues Ereignis',
         'form_name' => 'Ereignis',
@@ -76,7 +72,7 @@ return [
         'section_cdn_label' => 'CND Sources',
         'section_cdn_comment' => 'Passe die Content Distribution Network Server an, die deine Seite nutzen wird.',
     ],
-    'month' => [ // Month Component
+    'month' => [
         'name' => 'Monatskalender',
         'description' => 'Zeigt einen Monatskalender mit Events',
         'month_title' => 'Monat',
@@ -87,6 +83,8 @@ return [
         'events_description' => 'Liste an Ereignissen, die Sie anzeigen wollen',
         'color_title' => 'Kalenderfarbe',
         'color_description' => 'Welche Farbe soll ihr Kalender haben?',
+        'weekstart_title' => 'First Day of Week',
+        'weekstart_description' => 'The day that starts the weeks of the calendar.',
         'dayprops_title' => 'Tageseigenschaften',
         'dayprops_description' => 'Liste mit Eigenschaften die die Tage haben sollen',
         'loadstyle_title' => 'Lade Stylesheet',
@@ -107,11 +105,11 @@ return [
         'previous' => 'Zurück',
         'next' => 'Vor',
     ],
-    'week' => [ // Week Component
+    'week' => [
         'name' => 'Wochenansicht',
         'description' => 'Zeigt einen Wochenkalender mit Events',
     ],
-    'evlist' => [ // EvList Component
+    'evlist' => [
         'name' => 'Listenansicht',
         'description' => 'Zeigt eine Liste mit Events',
         'month_title' => 'Monat',
@@ -139,7 +137,7 @@ return [
         'link' => 'Link',
         'categorys' => 'Kategorien',
     ],
-    'events_comp' => [ // Events Component
+    'events_comp' => [
         'name' => 'Eventdaten',
         'description' => 'Holt Events aus der DB und fügt sie ein',
         'linkpage_title' => 'Link für Eventdetailseite',
@@ -148,6 +146,8 @@ return [
         'linkpage_opt_none' => 'Keine - Nutze Modal Pop-up',
         'title_max_title' => 'Maximale Pop-up Titel länge',
         'title_max_description' => 'Maximale länge der "Titel"-Eigenschaft beim Hovern',
+        'category_title' => 'Category Slug',
+        'category_description' => 'Filter events to only show this category. ( blank for all )',
         'permissions_title' => 'Nutze Regeln',
         'permissions_description' => 'Nutze Regeln um die Kategorien nur bestimmten Gruppen anzuzeigen',
         'past_title' => 'Vergangenheit',
@@ -159,7 +159,7 @@ return [
         'opt_no' => 'Nein',
         'opt_yes' => 'Ja',
     ],
-    'event' => [ // Event Component and Model
+    'event' => [
         'name' => 'Eventansicht',
         'description' => 'Zeigt ein Event mit seinen Details',
         'label' => 'Event',
@@ -174,6 +174,8 @@ return [
         'time' => 'Zeit',
         'text' => 'Details',
         'pattern' => 'Wiederholungsmuster',
+        'details_section_label' => 'Event details',
+        'details_section_comment' => 'Enter detailed description of the event.  ( HTML OK ).',
         'link' => 'Link',
         'categorys' => 'Kategorien',
         'category' => 'Kategorie',
@@ -196,7 +198,7 @@ return [
         'link_description' => 'Name der Eventseite für den Kalender. Diese Eigenschaft wird von der Eventkomponente genutzt.',
         'link_group' => 'Links',
     ],
-    'event_form' => [ // EventForm Component
+    'event_form' => [
         'name' => 'Eventeingabe',
         'description' => 'FrontendFeld für das Eingeben von Events',
         'allow_pub_title' => 'Veröffentlichen erlauben',
@@ -218,20 +220,16 @@ return [
         'delete_conf' => 'Möchtest du dieses Event wirklich löschen?',
         'every' => 'Jeden',
         'repeat' => 'Wiederholen',
-        'btn_save' => 'Speichern',
-        'btn_save' => 'Speichern',
-        'btn_save' => 'Speichern',
-        'btn_save' => 'Speichern',
     ],
-    'month_events' => [ // MonthEvents Component
+    'month_events' => [
         'name' => 'Monatskalender /w Daten',
         'description' => 'Zeige vollen Monatskalender mit Einträgen',
     ],
-    'list_events' => [ // ListEvents Component
+    'list_events' => [
         'name' => 'Eventliste mit DB Einträgen',
         'description' => 'Zeigt eine Eventliste mit Einträgen aus der Datenbank',
     ],
-    'category' => [ // Category Model
+    'category' => [
         'name' => 'Kategorie',
         'slug' => 'Slug',
         'description' => 'Beschreibung',
@@ -241,7 +239,7 @@ return [
         'phold_description' => 'Mehr Details',
         'comment_permission' => 'Setze die Regeln für diese Kategorie',
     ],
-    'occurrence' => [ // Event Component and Model
+    'occurrence' => [
         'name' => 'Ereignis',
         'description' => 'Jedes Ereignis des Kalenders',
         'label' => 'Ereignis',
@@ -255,7 +253,7 @@ return [
         'is_allday' => 'Ganztägig',
         'is_canceled' => 'Abgesagt',
     ],
-    'rrule' => [ // Rrule Form
+    'rrule' => [
         'repeat' => 'Wiederholen',
         'INTERVAL' => 'Jeden',
         'WBYDAY' => 'On',
@@ -267,7 +265,7 @@ return [
         'bymonth' => 'bymonth',
         'INTERVALS' => 'Trage die Tagesintervalle kommagetrennt ein',
         'INTERVALS_example' => 'Beispiel: "1,2,1,4" würde bedeuten, dass am ersten Tag ein Event wäre, dann 2 Tage ausgelassen, ein weiteres Event, lasse 4 Tage aus und dann wird es wiederholt.</p>
-        <p>Wenn ihr Event am ersten Februar startet und obiges Beispiel nutzt, würden die Daten wie folg aussehen: Februar 1,4,9,12,17,20,25,28 März 2,5,etc...',
+                <p>Wenn ihr Event am ersten Februar startet und obiges Beispiel nutzt, würden die Daten wie folg aussehen: Februar 1,4,9,12,17,20,25,28 März 2,5,etc...',
         'timezone' => 'Zeitzone',
         'timezones' => [
             '+00:00' => '(GMT) Greenwich Mean Time : Dublin, Edinburgh, Lisbon, London',
@@ -278,7 +276,6 @@ return [
             '+05:00' => '(GMT+05:00) Tashkent',
             '+05:30' => '(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi',
             '+05:45' => '(GMT+05:45) Kathmandu',
-            '+06:00' => '(GMT+06:00) Astana, Dhaka',
             '+06:00' => '(GMT+06:30) Yangon (Rangoon)',
             '+07:00' => '(GMT+07:00) Bangkok, Hanoi, Jakarta',
             '+08:00' => '(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi, Singapore, Taipei',
@@ -337,29 +334,31 @@ return [
             'MO,TU,WE,TH,FR' => 'Werktag',
             'SU,SA' => 'Wochenende',
         ],
-        'on' => ['on_day' => 'An obigem Datum', 'on_the' => 'Am',
+        'on' => [
+            'on_day' => 'An obigem Datum',
+            'on_the' => 'Am',
         ],
         'day-pos' => [
-            '1' => 'Erster',
-            '2' => 'Zweiter',
-            '3' => 'Dritter',
-            '4' => 'Vierter',
-            '-1' => 'Letzter',
-            '-2' => 'Zweitletzter',
+            1 => 'Erster',
+            2 => 'Zweiter',
+            3 => 'Dritter',
+            4 => 'Vierter',
+            -1 => 'Letzter',
+            -2 => 'Zweitletzter',
         ],
         'month' => [
-            '1' => 'Januar',
-            '2' => 'Februar',
-            '3' => 'März',
-            '4' => 'April',
-            '5' => 'Mai',
-            '6' => 'Juni',
-            '7' => 'Juli',
-            '8' => 'August',
-            '9' => 'September',
-            '10' => 'Oktober',
-            '11' => 'November',
-            '12' => 'Dezember',
+            1 => 'Januar',
+            2 => 'Februar',
+            3 => 'März',
+            4 => 'April',
+            5 => 'Mai',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'August',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Dezember',
         ],
         'ENDON' => 'Enddatum',
         'Never' => 'Nie',
