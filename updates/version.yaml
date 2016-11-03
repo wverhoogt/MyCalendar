@@ -65,3 +65,4 @@
 1.1.20: Fixes backend form broken by changes to October timepicker.
 1.1.21: Updated to changes made in Passage Permission Plugin
 1.2.0: Added configurable week start day to month and fixed category filter for showing events
+1.2.1: Fixes datepicker in _rrule widget partial by adding JS

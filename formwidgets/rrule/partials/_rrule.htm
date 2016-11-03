@@ -101,27 +101,34 @@
             <span class="inline-form-text"><strong>occurrence(s)</strong></span>
         </div>
 
+
         <div class="col-md-4<?= (array_get($f, 'Ends') == 'DATE' ? '' : ' hidden') ?> e_all e_date form-group">
-            <div
-                id="DatePicker-form-ENDON"
-                class="field-datepicker"
-                data-control="datepicker"
-                data-min-date="<?= date('Y') ?>-01-01 00:00:00"
-                data-max-date="<?= (date('Y') + 5) ?>-12-31 00:00:00">
-                <div class="right-align input-group date">
-                    <input
-                        type="text"
-                        id="DatePicker-form-input-ENDON"
-                        name="ENDON"
-                        value="<?= array_get($f, 'ENDON') ?>"
-                        class="form-control align-right"
-                        autocomplete="off"
-                         />
-                    <label for="DatePicker-form-input-ENDON" class="input-group-addon">
-                        <?= $this->t('ENDON') ?> <i class="icon icon-calendar"></i>
-                    </label>
-                </div>
+
+<!-- datepicker start-->
+            <div class="right-align input-group date">
+                <input 
+                    type="text" 
+                    id="DatePicker-form-input-ENDON" 
+                    name="ENDON" 
+                    class="form-control align-right" 
+                    value="<?= array_get($f, 'ENDON') ?>"
+                    autocomplete="off">
+                <label for="DatePicker-form-input-ENDON" class="input-group-addon">
+                            <?= $this->t('ENDON') ?> <i class="icon icon-calendar"></i>
+                </label>
             </div>
+<?php $y = date("Y") ?>
+<script>
+    var picker = new Pikaday(
+    {
+        field: document.getElementById('DatePicker-form-input-ENDON'),
+        minDate: new Date(<?= $y-1 ?>, 1, 1),
+        maxDate: new Date(<?= $y+5 ?>, 12, 31),
+        yearRange: [<?= $y-1 ?>,<?= $y+5 ?>],
+      format: 'YYYY-MM-DD',
+    });
+</script>
+<!-- datepicker end-->
         </div>
     </div>
 <?php endif ?>
