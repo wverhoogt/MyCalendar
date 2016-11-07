@@ -1,4 +1,4 @@
-<?php namespace Indikator\Marketing\Updates;
+<?php namespace KurtJensen\MyCalendar\Updates;
 
 use October\Rain\Database\Updates\Migration;
 use DbDongle;
