@@ -117,10 +117,8 @@ class Month extends ComponentBase {
 
 	public function calcElements() {
 		$this->calHeadings = $this->getWeekstartOptions();
-
 		$time = new Carbon($this->month . '/1/' . $this->year); // 11/01/2016
-
-		$this->monthTitle = $time->format('F'); // Nov
+		$this->monthTitle = Lang::get('kurtjensen.mycalendar::lang.rrule.month.' . $time->month); // Nov
 		$this->monthNum = $time->month; // 11
 		$this->running_day = $time->dayOfWeek; // 2 ( Tuesday )
 		$this->days_in_month = $time->daysInMonth; // 30

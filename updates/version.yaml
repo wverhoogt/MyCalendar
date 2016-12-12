@@ -69,3 +69,4 @@
 1.2.2:
     - Database maintenance. Updated all timestamp columns to be nullable.
     - update_timestamp_nullable.php
+1.2.3: Fixes Language problem monthHead in MonthEvents. no language switch
