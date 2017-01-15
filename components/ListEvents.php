@@ -15,13 +15,13 @@ class ListEvents extends EvList {
 
 	public function defineProperties() {
 		$this->EventsComp = new Events();
-		$this->EventsComp->compLink = 'ListEvents';
 		$properties = parent::defineProperties();
 
 		return array_merge($properties, $this->EventsComp->defineProperties());
 	}
 
 	public function init() {
+		$this->EventsComp->compLink = 'ListEvents';
 		$this->EventsComp->month = $this->property('month');
 		$this->EventsComp->year = $this->property('year');
 		$this->EventsComp->category = $this->property('category', null);

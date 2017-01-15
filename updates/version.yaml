@@ -70,3 +70,4 @@
     - Database maintenance. Updated all timestamp columns to be nullable.
     - update_timestamp_nullable.php
 1.2.3: Fixes Language problem monthHead in MonthEvents. no language switch
+1.2.4: Fixes FIRST-SUNDAY-of-JANUARY is not valid for ON DATE ABOVE
