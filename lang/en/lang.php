@@ -14,6 +14,7 @@ return [
 		'menu_label' => 'Events',
 		'toolbar_new' => 'New Event',
 		'form_name' => 'Event',
+		'create_title' => 'Create Event',
 		'update_title' => 'Edit Event',
 		'preview_title' => 'Preview Event',
 		'list_title' => 'Manage Events',
@@ -74,7 +75,7 @@ return [
 		'section_times_label' => 'Default Times / Dates',
 		'section_times_comment' => 'Default times and dates for event creation and display',
 
-		'section_cdn_label' => 'CND Sources',
+		'section_cdn_label' => 'CDN Sources',
 		'section_cdn_comment' => 'Customize the Content Distribution Network servers your site will use.',
 
 	],

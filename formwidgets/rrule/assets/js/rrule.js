@@ -31,11 +31,18 @@ function endsChange(hide) {
 
 }
 
+function yearOnChange() {
+	disableHide('.yr_all');    
+	var on = $('#year_on').val().toLowerCase();
+	enableshow('.yr_'+on);
+}
+
 $( "#FREQ" ).on( "change", function() {
     disableHide('.r_all');
 	var repeat = $('#FREQ').val().toLowerCase();
 	enableshow('.r_'+repeat);
 	endsChange(true);
+	yearOnChange();
 });
 
 $( "#month_on" ).on( "change", function() {
@@ -46,9 +53,7 @@ $( "#month_on" ).on( "change", function() {
 });
 
 $( "#year_on" ).on( "change", function() {	
-	disableHide('.yr_all');    
-	var on = $('#year_on').val().toLowerCase();
-	enableshow('.yr_'+on);
+	yearOnChange();
 });
 
 
