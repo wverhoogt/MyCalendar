@@ -36,8 +36,10 @@ class MonthEvents extends Month {
 		if ($this->property('loadstyle')) {
 			$this->addCss('/plugins/kurtjensen/mycalendar/assets/css/calendar.css');
 		}
+		$y_start = date('Y') - 2;
+		$y_end = $y_start + 15;
 		$this->month = in_array($this->property('month'), range(1, 12)) ? $this->property('month') : date('m');
-		$this->year = in_array($this->property('year'), range(2014, 2030)) ? $this->property('year') : date('Y');
+		$this->year = in_array($this->property('year'), range($y_start, $y_end)) ? $this->property('year') : date('Y');
 		$this->weekstart = $this->property('weekstart', 0);
 		$this->calcElements();
 		$this->dayprops = $this->property('dayprops');

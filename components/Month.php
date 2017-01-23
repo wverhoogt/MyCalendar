@@ -5,22 +5,9 @@ use Cms\Classes\ComponentBase;
 use Lang;
 
 class Month extends ComponentBase {
-	public $month;
-	public $year;
-	public $dayprops;
-	public $color;
-	public $weekstart;
-	public $events;
-	public $calHeadings;
+	use \KurtJensen\MyCalendar\Traits\ComonProperties;
 
 	public $monthTitle;
-	public $monthNum;
-	public $running_day;
-	public $days_in_month;
-	public $dayPointer;
-	public $prevMonthLastDay;
-	public $prevMonthStartDay;
-
 	public $linkNextMonth;
 	public $linkPrevMonth;
 
@@ -32,86 +19,28 @@ class Month extends ComponentBase {
 	}
 
 	public function defineProperties() {
-		return [
-			'month' => [
-				'title' => 'kurtjensen.mycalendar::lang.month.month_title',
-				'description' => 'kurtjensen.mycalendar::lang.month.month_description',
-				'default' => '{{ :month }}',
-			],
-			'year' => [
-				'title' => 'kurtjensen.mycalendar::lang.month.year_title',
-				'description' => 'kurtjensen.mycalendar::lang.month.year_description',
-				'default' => '{{ :year }}',
-			],
-			'events' => [
-				'title' => 'kurtjensen.mycalendar::lang.month.events_title',
-				'description' => 'kurtjensen.mycalendar::lang.month.events_description',
-			],
-			'color' => [
-				'title' => 'kurtjensen.mycalendar::lang.month.color_title',
-				'description' => 'kurtjensen.mycalendar::lang.month.color_description',
-				'type' => 'dropdown',
-				'default' => 'red',
-			],
-			'weekstart' => [
-				'title' => 'kurtjensen.mycalendar::lang.month.weekstart_title',
-				'description' => 'kurtjensen.mycalendar::lang.month.weekstart_description',
-				'type' => 'dropdown',
-				'default' => '0',
-			],
-			'dayprops' => [
-				'title' => 'kurtjensen.mycalendar::lang.month.dayprops_title',
-				'description' => 'kurtjensen.mycalendar::lang.month.dayprops_description',
-			],
-			'loadstyle' => [
-				'title' => 'kurtjensen.mycalendar::lang.month.loadstyle_title',
-				'description' => 'kurtjensen.mycalendar::lang.month.loadstyle_description',
-				'type' => 'dropdown',
-				'default' => '1',
-				'options' => [
-					0 => 'kurtjensen.mycalendar::lang.month.opt_no',
-					1 => 'kurtjensen.mycalendar::lang.month.opt_yes',
-				],
-			],
-		];
+		return $this->propertiesFor('month');
 	}
 
-	public function trans($string) {
-		return Lang::get($string);
-	}
-
-	public function getColorOptions() {
-		$colors = [
-			'red' => Lang::get('kurtjensen.mycalendar::lang.month.color_red'),
-			'green' => Lang::get('kurtjensen.mycalendar::lang.month.color_green'),
-			'blue' => Lang::get('kurtjensen.mycalendar::lang.month.color_blue'),
-			'yellow' => Lang::get('kurtjensen.mycalendar::lang.month.color_yellow'),
-		];
-		return $colors;
-	}
-
-	public function getWeekstartOptions() {
-		return [
-			Lang::get('kurtjensen.mycalendar::lang.month.day_sun'),
-			Lang::get('kurtjensen.mycalendar::lang.month.day_mon'),
-			Lang::get('kurtjensen.mycalendar::lang.month.day_tue'),
-			Lang::get('kurtjensen.mycalendar::lang.month.day_wed'),
-			Lang::get('kurtjensen.mycalendar::lang.month.day_thu'),
-			Lang::get('kurtjensen.mycalendar::lang.month.day_fri'),
-			Lang::get('kurtjensen.mycalendar::lang.month.day_sat'),
-		];
-	}
-
-	public function onRender() {
+	public function init() {
 		if ($this->property('loadstyle')) {
 			$this->addCss('/plugins/kurtjensen/mycalendar/assets/css/calendar.css');
 		}
-		$this->month = in_array($this->property('month'), range(1, 12)) ? $this->property('month') : date('m');
-		$this->year = in_array($this->property('year'), range(2014, 2030)) ? $this->property('year') : date('Y');
-		$this->weekstart = $this->property('weekstart', 0);
-		$this->calcElements();
-		$this->dayprops = $this->property('dayprops');
 		$this->color = $this->property('color');
+		$this->weekstart = $this->property('weekstart', 0);
+	}
+
+	public function onRender() {
+		// Must use onRender() for properties that can be modified in page
+		$y_start = date('Y') - 2;
+		$y_end = $y_start + 15;
+
+		$this->month = in_array($this->property('month'), range(1, 12)) ? $this->property('month') : date('m');
+		$this->year = in_array($this->property('year'), range($y_start, $y_end)) ? $this->property('year') : date('Y');
+
+		$this->calcElements();
+
+		$this->dayprops = $this->property('dayprops');
 		$this->events = $this->property('events');
 	}
 
