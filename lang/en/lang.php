@@ -272,8 +272,12 @@ return [
 		'name' => 'Month View w/ Event Data',
 		'description' => 'Show Full Month View with DB events',
 	],
+	'week_events' => [ // WeekEvents Component
+		'name' => 'Week View w/ Event Data',
+		'description' => 'Show Week View with DB events',
+	],
 	'list_events' => [ // ListEvents Component
-		'name' => 'Event List w/ Event Data',
+		'name' => 'List View w/ Event Data',
 		'description' => 'Show Event List View with DB events',
 	],
 	'category' => [ // Category Model

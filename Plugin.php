@@ -100,6 +100,7 @@ class Plugin extends PluginBase {
 			'KurtJensen\MyCalendar\Components\Month' => 'Month',
 			'KurtJensen\MyCalendar\Components\MonthEvents' => 'MonthEvents',
 			'KurtJensen\MyCalendar\Components\Week' => 'Week',
+			'KurtJensen\MyCalendar\Components\WeekEvents' => 'WeekEvents',
 			'KurtJensen\MyCalendar\Components\EvList' => 'EvList',
 			'KurtJensen\MyCalendar\Components\ListEvents' => 'ListEvents',
 			'KurtJensen\MyCalendar\Components\Events' => 'Events',

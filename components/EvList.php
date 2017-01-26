@@ -3,7 +3,7 @@
 use Cms\Classes\ComponentBase;
 
 class EvList extends ComponentBase {
-	use \KurtJensen\MyCalendar\Traits\ComonProperties;
+	use \KurtJensen\MyCalendar\Traits\MyCalComponentTraits;
 
 	public function componentDetails() {
 		return [
@@ -17,14 +17,11 @@ class EvList extends ComponentBase {
 	}
 
 	public function init() {
-		if ($this->property('loadstyle')) {
-			$this->addCss('/plugins/kurtjensen/mycalendar/assets/css/calendar.css');
-		}
-		$this->color = $this->property('color');
+		$this->initFor('list');
 	}
 
 	public function onRender() {
 		// Must use onRender() for properties that can be modified in page
-		$this->events = $this->property('events');
+		$this->renderFor('list');
 	}
 }

@@ -1,15 +1,17 @@
 <?php namespace KurtJensen\MyCalendar\Traits;
 
 /**
- * RRule
- * Renders RRule fields.
+ * MyCalComponentTraits
+ * Consolidated Component Properties and Functions for easier reuse and
+ * easier code management.
  *
  * @package kurtjensen\mycalendar
  * @author Kurt Jensen
  */
+use Carbon\Carbon;
 use Lang;
 
-trait ComonProperties {
+trait MyCalComponentTraits {
 	// Week
 	public $day;
 
@@ -97,6 +99,75 @@ trait ComonProperties {
 				]);
 		}
 		return $properties;
+	}
+
+	public function initFor($type) {
+		switch ($type) {
+		case 'week':
+		case 'month':
+			$this->weekstart = $this->property('weekstart', 0);
+		case 'list':
+			if ($this->property('loadstyle')) {
+				$this->addCss('/plugins/kurtjensen/mycalendar/assets/css/calendar.css');
+			}
+			$this->color = $this->property('color');
+		}
+	}
+
+	public function renderFor($type) {
+		switch ($type) {
+		case 'week':
+			// Must use onRender() for properties that can be modified in page
+			$this->day = $this->property('day') ?: date('d');
+
+		case 'month':
+			$y_start = date('Y') - 2;
+			$y_end = $y_start + 15;
+
+			$this->month = in_array($this->property('month'), range(1, 12)) ? $this->property('month') : date('m');
+
+			$this->year = in_array($this->property('year'), range($y_start, $y_end)) ? $this->property('year') : date('Y');
+
+			$this->calHeadings = $this->getWeekstartOptions();
+
+			$this->calcElements();
+
+			$this->dayprops = $this->property('dayprops');
+
+		case 'list':
+			$this->events = $this->property('events');
+		}
+
+	}
+
+	public function calcElementsFor($type) {
+		switch ($type) {
+		case 'week':
+			$time = new Carbon($this->year . '-' . $this->month . '-' . $this->day);
+			break;
+		case 'month':
+			$time = new Carbon($this->month . '/1/' . $this->year); // 11/01/2016
+			$this->monthTitle = Lang::get('kurtjensen.mycalendar::lang.rrule.month.' . $time->month); // Nov
+			break;
+		}
+
+		$this->monthNum = $time->month;
+		$this->running_day = $time->dayOfWeek;
+		$this->days_in_month = $time->daysInMonth;
+
+		switch ($type) {
+		case 'week':
+			$this->dayPointer = $this->day - $this->running_day - $this->weekstart - 1;
+			break;
+		case 'month':
+			$this->dayPointer = $this->weekstart - $this->running_day; // 1 - 2 = -1
+			break;
+		}
+
+		$prevMonthLastDay = $time->copy()->subMonth()->daysInMonth;
+
+		$this->prevMonthStartDay = $this->dayPointer + $prevMonthLastDay + 1;
+		return $time;
 	}
 
 	public function trans($string) {

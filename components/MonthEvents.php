@@ -5,6 +5,7 @@ use KurtJensen\MyCalendar\Components\Month;
 
 class MonthEvents extends Month {
 	public $EventsComp = null;
+	public $eventsCompEvents = [];
 
 	public function componentDetails() {
 		return [
@@ -16,12 +17,13 @@ class MonthEvents extends Month {
 	public function defineProperties() {
 		$this->EventsComp = new Events();
 		$this->EventsComp->compLink = 'MonthEvents';
-		$properties = parent::defineProperties();
+		$properties = $this->propertiesFor('month');
 
 		return array_merge($properties, $this->EventsComp->defineProperties());
 	}
 
 	public function init() {
+		$this->initFor('month');
 		$this->EventsComp->category = $this->property('category', null);
 		$this->EventsComp->usePermissions = $this->property('usePermissions', 0);
 		$this->EventsComp->dayspast = $this->property('dayspast', 120);
@@ -29,21 +31,12 @@ class MonthEvents extends Month {
 	}
 
 	public function onRun() {
-		$this->events = $this->EventsComp->loadEvents();
+		$this->eventsCompEvents = $this->EventsComp->loadEvents();
 	}
 
 	public function onRender() {
-		if ($this->property('loadstyle')) {
-			$this->addCss('/plugins/kurtjensen/mycalendar/assets/css/calendar.css');
-		}
-		$y_start = date('Y') - 2;
-		$y_end = $y_start + 15;
-		$this->month = in_array($this->property('month'), range(1, 12)) ? $this->property('month') : date('m');
-		$this->year = in_array($this->property('year'), range($y_start, $y_end)) ? $this->property('year') : date('Y');
-		$this->weekstart = $this->property('weekstart', 0);
-		$this->calcElements();
-		$this->dayprops = $this->property('dayprops');
-		$this->color = $this->property('color');
+		$this->renderFor('month');
+		$this->events = $this->eventsCompEvents;
 	}
 
 	public function onShowEvent() {
