@@ -132,10 +132,10 @@ trait MyCalComponentTraits {
 
 			$this->calcElements();
 
-			$this->dayprops = $this->property('dayprops');
+			$this->dayprops = $this->property('dayprops') ?: [];
 
 		case 'list':
-			$this->events = $this->property('events');
+			$this->events = $this->property('events') ?: [];
 		}
 
 	}
@@ -168,6 +168,44 @@ trait MyCalComponentTraits {
 
 		$this->prevMonthStartDay = $this->dayPointer + $prevMonthLastDay + 1;
 		return $time;
+	}
+
+	public function getMonthYear($offset) {
+		$month = $this->month + $offset;
+		$year = $this->year;
+		if ($month == 13) {
+			$year++;
+			$month = 1;
+		}
+		if ($month == -1) {
+			$year--;
+			$month = 12;
+		}
+		return [$month, $year];
+	}
+
+	public function monthEvents($offset = 0) {
+		list($month, $year) = $this->getMonthYear($offset);
+
+		if (array_key_exists($year, $this->events)) {
+			$yrEvents = $this->events[$year];
+			if (array_key_exists($month, $yrEvents)) {
+				return $yrEvents[$month];
+			}
+		}
+		return [];
+	}
+
+	public function monthProperties($offset = 0) {
+		list($month, $year) = $this->getMonthYear($offset);
+
+		if (array_key_exists($year, $this->dayprops)) {
+			$yrProps = $this->dayprops[$year];
+			if (array_key_exists($month, $yrProps)) {
+				return $yrProps[$month];
+			}
+		}
+		return [];
 	}
 
 	public function trans($string) {

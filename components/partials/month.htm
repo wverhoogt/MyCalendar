@@ -1,8 +1,8 @@
 {% set MyM = __SELF__ %}
 {% set dayPointer = MyM.dayPointer %}
-{% set devents = MyM.events[MyM.year][MyM.monthNum] %}
-{% set dprops = MyM.dayprops[MyM.year][MyM.monthNum] %}
-{% set trailDays = 0 %}
+{% set devents = MyM.monthEvents %}
+{% set dprops = MyM.monthProperties %}
+{% set trailDay = 0 %}
 <table class="mycal" 
        data-request-data="month:{{ MyM.monthNum }}">
     <thead>
@@ -45,91 +45,39 @@
 
 <!-- START DAYS of Previous month -->
      <tbody>
-{# 
-    ** START - walk through 6 weeks of month **
-#}
+{# ** START - walk through 6 weeks of month ** #}
 {% for rows in range(1,6) %}
 {% if dayPointer < MyM.days_in_month %}
         <tr class="days">
 
-{# 
-    ** Advance dayPointer **
-#}
-{#
-
-
-
-
-    ** START - walk through 7 days of week **
-#}
+{# ** START - walk through 7 days of week ** #}
 {% for x in range(0, 6) %}
-{# 
-    ** Advance dayPointer **
-#}
+
+{# ** Advance dayPointer ** #}
 {% set dayPointer = dayPointer + 1 %}
-{# 
-************ SHOW PREVIOUS MONTH DAYS ************
-        If dayPointer indicates that current
-        month has not started yet.
-#}
+
+{# ************ SHOW PREVIOUS MONTH DAYS ************ If dayPointer indicates that current month has not started yet. #}
 {% if dayPointer <1 %}
-            <td><div class="dis">{{ MyM.prevMonthStartDay + x }}</div></td>
-{# 
-************ SHOW NEXT MONTH DAYS ************
-        If dayPointer indicates that current
-        month has past.
-#}
+
+{% set prevDay = MyM.prevMonthStartDay + x %}
+{% partial '@day' Container=MyM events= MyM.monthEvents(-1)[prevDay] dayProp = { class:'dis'} dayPointer=prevDay %}
+
+{# ************ SHOW NEXT MONTH DAYS ************ If dayPointer indicates that current month has past. #}
 {% elseif dayPointer > MyM.days_in_month %}
-            <td><div class="dis">{% set trailDays = trailDays + 1 %}{{ trailDays }}</div></td>
-{# 
-************ SHOW CURRENT MONTH DAYS ************
-        If dayPointer indicates current
-        month. ( Not Past or Previous )
-#}
+{% set trailDay = trailDay + 1 %}
+{% partial '@day' Container=MyM events= MyM.monthEvents(1)[trailDay] dayProp = { class:'dis'} dayPointer=trailDay %}
+
+{# ************ SHOW CURRENT MONTH DAYS ************ If dayPointer indicates current month. ( Not Past or Previous ) #}
 {% else %}
-{% set dayProp = dprops[dayPointer] %}
-            <td>
-{% if dayProp.link %}
-                <a {{ dayProp.link|raw }}>{% endif %}
-                <div class="{% if dayProp.class %}{{ dayProp.class|raw }}{% else %}dayLabel {{ MyM.color }}{% endif %}">{{ dayPointer }}</div>
-{% if dayProp.link %}
-                </a>
-{% endif %}
-{% if devents[dayPointer] %}
-                <ul class="eventList">
 
-{#
+{% partial '@day' Container=MyM events=devents[dayPointer] dayProp = dprops[dayPointer] dayPointer=dayPointer %}
 
+{% endif %}{# ** END - If dayPointer indicates that current month ** #}
 
-
-
-    ** START - walk through events on this day **
-#}
-{% for ev in devents[dayPointer] %}
-                    {% partial '@event' ev = ev %}
-{% endfor %}
-                </ul>
-{% endif %}
-            </td>
-{% endif %}
-{#
-    ** END - walk through events on this day **
-
-
-
-#}
-{% endfor %}
-{#
-    ** END - walk through 7 days of week **
-
-
-
-#}
+{% endfor %}{# ** END - walk through 7 days of week ** #}
         </tr>
 {% endif %}
-{% endfor %}
-{# 
-    ** END - walk through 6 weeks of month **
-#}
+
+{% endfor %}{# ** END - walk through 6 weeks of month ** #}
     </tbody>
 </table>

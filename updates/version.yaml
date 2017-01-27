@@ -73,3 +73,4 @@
 1.2.4: Fixes FIRST-SUNDAY-of-JANUARY is not valid for ON DATE ABOVE
 1.2.5: Fixes settings model default times.
 1.2.6: Consolidated component properties and functions into new trait. Added working week component.
+1.2.7: Finished Week component. Months now shows prev and past month events in leading and trailing days.
