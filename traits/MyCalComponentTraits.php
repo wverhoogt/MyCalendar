@@ -28,6 +28,9 @@ trait MyCalComponentTraits {
 	public $dayPointer;
 	public $prevMonthLastDay;
 	public $prevMonthStartDay;
+	public $monthTitle;
+	public $linkNext;
+	public $linkPrevious;
 
 	// Month - Week - List
 	public $color;
@@ -144,6 +147,7 @@ trait MyCalComponentTraits {
 		switch ($type) {
 		case 'week':
 			$time = new Carbon($this->year . '-' . $this->month . '-' . $this->day);
+			$this->monthTitle = Lang::get('kurtjensen.mycalendar::lang.rrule.month.' . $time->month); // Nov
 			break;
 		case 'month':
 			$time = new Carbon($this->month . '/1/' . $this->year); // 11/01/2016

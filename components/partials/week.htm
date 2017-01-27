@@ -3,10 +3,24 @@
 {% set devents = MyWeek.monthEvents %}
 {% set dprops = MyWeek.monthProperties %}
 {% set trailDay = 0 %}
-
 <table class="mycal" 
        data-request-data="month:{{ MyWeek.monthNum }}">
     <thead>
+        <tr>
+            <th colspan="2" class="text-right">
+                <a href="{{ this.page.baseFileName | app }}/{{ MyWeek.linkPrevious|date('d') }}/{{ MyWeek.linkPrevious|date('m') }}/{{ MyWeek.linkPrevious|date('Y') }}">
+                {{ MyWeek.trans('kurtjensen.mycalendar::lang.com_prop_trait.previous') }}</a>
+            </th>
+            <th colspan="3"  class="weekHead">
+                {{ MyWeek.monthTitle }} {{ MyWeek.year }}
+            </th>
+            <th colspan="2" class="text-left">
+                <a href="{{ this.page.baseFileName | app }}/{{ MyWeek.linkNext|date('d') }}/{{ MyWeek.linkNext|date('m') }}/{{ MyWeek.linkNext|date('Y') }}">
+                {{ MyWeek.trans('kurtjensen.mycalendar::lang.com_prop_trait.next') }}</a>
+            </th>
+        </tr>
+
+
         <tr class="daysHead">
 {% for hding in  MyWeek.calHeadings %}
             <th>{{ hding }}</th>

@@ -5,10 +5,6 @@ use Cms\Classes\ComponentBase;
 class Month extends ComponentBase {
 	use \KurtJensen\MyCalendar\Traits\MyCalComponentTraits;
 
-	public $monthTitle;
-	public $linkNextMonth;
-	public $linkPrevMonth;
-
 	public function componentDetails() {
 		return [
 			'name' => 'kurtjensen.mycalendar::lang.month.name',
@@ -31,9 +27,8 @@ class Month extends ComponentBase {
 
 	public function calcElements() {
 		$time = $this->calcElementsFor('month');
-
-		$this->linkNextMonth = $time->copy()->addDays(32);
-		$this->linkPrevMonth = $time->copy()->subDays(2);
+		$this->linkPrevious = $time->copy()->subDays(2);
+		$this->linkNext = $time->copy()->addDays(32);
 	}
 
 }

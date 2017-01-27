@@ -26,9 +26,9 @@ class Week extends ComponentBase {
 	}
 
 	public function calcElements() {
-
 		$time = $this->calcElementsFor('week');
-
+		$this->linkPrevious = $time->copy()->subDays(7);
+		$this->linkNext = $time->copy()->addDays(7);
 	}
 
 }

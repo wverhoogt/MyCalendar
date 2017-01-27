@@ -33,6 +33,11 @@ tr th.monthHead{
         font-size:1.5em;
         text-align: center;
     }
+    
+tr th.weekHead{
+        font-size:1.3em;
+        text-align: center;
+    }
 
 div.dayLabel {
         text-align: left;
