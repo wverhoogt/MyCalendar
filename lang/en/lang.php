@@ -194,6 +194,8 @@ return [
 		'permissions_description' => 'Use permissions to restrict what categories of events are shown based on user groups.',
 		'past_title' => 'Past Days',
 		'past_description' => 'How far into the past do you want to load events from? If zero and "Future Days" is zero, then month and year will be used.',
+		'relations_title' => 'Relations',
+		'relations_description' => 'Related models you want to load.( default: KurtJensen\MyCalendar\Models\Event )',
 		'future_title' => 'Future Days',
 		'future_description' => 'How far into the future do you want to load events from? If zero and "Past Days" is zero, then month and year will be used.',
 		'raw_data_title' => 'Supply Raw Data',

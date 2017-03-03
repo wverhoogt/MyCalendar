@@ -82,6 +82,7 @@ class Event extends Model {
 		'occurrences' => ['KurtJensen\MyCalendar\Models\Occurrence',
 			'table' => 'kurtjensen_mycalendar_occurrences',
 			'key' => 'event_id',
+			'conditions' => 'relation = event',
 			'delete' => true,
 		],
 	];
@@ -166,7 +167,8 @@ class Event extends Model {
 	}
 
 	public function beforeDelete() {
-		Occurrence::where('event_id', '=', $this->id)->forceDelete();
+		Occurrence::where('event_id', '=', $this->id)->
+			where('relation', '=', 'events')->forceDelete();
 
 	}
 

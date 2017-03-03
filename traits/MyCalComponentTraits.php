@@ -9,6 +9,8 @@
  * @author Kurt Jensen
  */
 use Carbon\Carbon;
+use Cms\Classes\Page;
+use KurtJensen\MyCalendar\Models\Occurrence as Ocurrs;
 use Lang;
 
 trait MyCalComponentTraits {
@@ -41,6 +43,77 @@ trait MyCalComponentTraits {
 	public function propertiesFor($type) {
 		$properties = [];
 		switch ($type) {
+		case 'events':
+			$properties = [
+				'linkpage' => [
+					'title' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_title',
+					'description' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_desc',
+					'type' => 'dropdown',
+					//'options' => $this->getpageOptions(),
+					'default' => '',
+					'group' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_group',
+				],
+				'title_max' => [
+					'title' => 'kurtjensen.mycalendar::lang.events_comp.title_max_title',
+					'description' => 'kurtjensen.mycalendar::lang.events_comp.title_max_description',
+					'default' => 100,
+				],
+				'usePermissions' => [
+					'title' => 'kurtjensen.mycalendar::lang.events_comp.permissions_title',
+					'description' => 'kurtjensen.mycalendar::lang.events_comp.permissions_description',
+					'type' => 'dropdown',
+					'default' => 0,
+					'options' => [
+						0 => 'kurtjensen.mycalendar::lang.events_comp.opt_no',
+						1 => 'kurtjensen.mycalendar::lang.events_comp.opt_yes',
+					],
+				],
+				'category' => [
+					'title' => 'kurtjensen.mycalendar::lang.events_comp.category_title',
+					'description' => 'kurtjensen.mycalendar::lang.events_comp.category_description',
+					'default' => '{{ :cat }}',
+				],
+				'month' => [
+					'title' => 'kurtjensen.mycalendar::lang.month.month_title',
+					'description' => 'kurtjensen.mycalendar::lang.month.month_description',
+					'default' => '{{ :month }}',
+				],
+				'year' => [
+					'title' => 'kurtjensen.mycalendar::lang.month.year_title',
+					'description' => 'kurtjensen.mycalendar::lang.month.year_description',
+					'default' => '{{ :year }}',
+				],
+				'dayspast' => [
+					'title' => 'kurtjensen.mycalendar::lang.events_comp.past_title',
+					'description' => 'kurtjensen.mycalendar::lang.events_comp.past_description',
+					'default' => 0,
+				],
+				'daysfuture' => [
+					'title' => 'kurtjensen.mycalendar::lang.events_comp.future_title',
+					'description' => 'kurtjensen.mycalendar::lang.events_comp.future_description',
+					'default' => 60,
+				],
+				'relations' => [
+					'title' => 'kurtjensen.mycalendar::lang.events_comp.relations_title',
+					'description' => 'kurtjensen.mycalendar::lang.events_comp.relations_description',
+					'type' => 'set',
+					'items' => $this->getRelationItems(),
+					'default' => ['event'],
+				],
+				'raw_data' => [
+					'title' => 'kurtjensen.mycalendar::lang.events_comp.raw_data_title',
+					'description' => 'kurtjensen.mycalendar::lang.events_comp.raw_data_description',
+					'type' => 'dropdown',
+					'default' => 0,
+					'options' => [
+						0 => 'kurtjensen.mycalendar::lang.events_comp.opt_no',
+						1 => 'kurtjensen.mycalendar::lang.events_comp.opt_yes',
+					],
+				],
+			];
+
+			return $properties;
+			break;
 		case 'week':
 			$properties = [
 				// Week
@@ -214,6 +287,20 @@ trait MyCalComponentTraits {
 
 	public function trans($string) {
 		return Lang::get($string);
+	}
+
+	public function getLinkpageOptions() {
+		return ['' => Lang::get('kurtjensen.mycalendar::lang.events_comp.linkpage_opt_none')] +
+		Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName');
+	}
+
+	public function getRelationItems() {
+		$occ = new Ocurrs();
+		foreach ($occ->belongsTo as $key => $rel) {
+			$options[$key] = $rel[0];
+		}
+
+		return $options;
 	}
 
 	public function getColorOptions() {

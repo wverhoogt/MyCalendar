@@ -24,6 +24,7 @@ class WeekEvents extends Week {
 
 	public function init() {
 		$this->initFor('week');
+		$this->EventsComp->linkpage = $this->property('linkpage');
 		$this->EventsComp->category = $this->property('category', null);
 		$this->EventsComp->usePermissions = $this->property('usePermissions', 0);
 		$this->EventsComp->dayspast = $this->property('dayspast', 120);

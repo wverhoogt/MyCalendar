@@ -11,7 +11,7 @@ use KurtJensen\MyCalendar\Models\Settings;
 use Lang;
 
 class Events extends ComponentBase {
-	//use \KurtJensen\MyCalendar\Traits\LoadPermissions;
+	use \KurtJensen\MyCalendar\Traits\MyCalComponentTraits;
 
 	public $category;
 	public $month;
@@ -21,6 +21,7 @@ class Events extends ComponentBase {
 	public $daysfuture = 0;
 	public $compLink = 'Events';
 	public $user_id = null;
+	public $linkpage = '';
 
 	public function componentDetails() {
 		return [
@@ -30,74 +31,12 @@ class Events extends ComponentBase {
 	}
 
 	public function defineProperties() {
-		return [
-			'linkpage' => [
-				'title' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_title',
-				'description' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_desc',
-				'type' => 'dropdown',
-				'default' => '',
-				'group' => 'kurtjensen.mycalendar::lang.events_comp.linkpage_group',
-			],
-			'title_max' => [
-				'title' => 'kurtjensen.mycalendar::lang.events_comp.title_max_title',
-				'description' => 'kurtjensen.mycalendar::lang.events_comp.title_max_description',
-				'default' => 100,
-			],
-			'usePermissions' => [
-				'title' => 'kurtjensen.mycalendar::lang.events_comp.permissions_title',
-				'description' => 'kurtjensen.mycalendar::lang.events_comp.permissions_description',
-				'type' => 'dropdown',
-				'default' => 0,
-				'options' => [
-					0 => 'kurtjensen.mycalendar::lang.events_comp.opt_no',
-					1 => 'kurtjensen.mycalendar::lang.events_comp.opt_yes',
-				],
-			],
-			'category' => [
-				'title' => 'kurtjensen.mycalendar::lang.events_comp.category_title',
-				'description' => 'kurtjensen.mycalendar::lang.events_comp.category_description',
-				'default' => '{{ :cat }}',
-			],
-			'month' => [
-				'title' => 'kurtjensen.mycalendar::lang.month.month_title',
-				'description' => 'kurtjensen.mycalendar::lang.month.month_description',
-				'default' => '{{ :month }}',
-			],
-			'year' => [
-				'title' => 'kurtjensen.mycalendar::lang.month.year_title',
-				'description' => 'kurtjensen.mycalendar::lang.month.year_description',
-				'default' => '{{ :year }}',
-			],
-			'dayspast' => [
-				'title' => 'kurtjensen.mycalendar::lang.events_comp.past_title',
-				'description' => 'kurtjensen.mycalendar::lang.events_comp.past_description',
-				'default' => 0,
-			],
-			'daysfuture' => [
-				'title' => 'kurtjensen.mycalendar::lang.events_comp.future_title',
-				'description' => 'kurtjensen.mycalendar::lang.events_comp.future_description',
-				'default' => 60,
-			],
-			'raw_data' => [
-				'title' => 'kurtjensen.mycalendar::lang.events_comp.raw_data_title',
-				'description' => 'kurtjensen.mycalendar::lang.events_comp.raw_data_description',
-				'type' => 'dropdown',
-				'default' => 0,
-				'options' => [
-					0 => 'kurtjensen.mycalendar::lang.events_comp.opt_no',
-					1 => 'kurtjensen.mycalendar::lang.events_comp.opt_yes',
-				],
-			],
-		];
-	}
-
-	public function getLinkpageOptions() {
-		return Page::sortBy('baseFileName')->lists('baseFileName', 'baseFileName') +
-			['' => Lang::get('kurtjensen.mycalendar::lang.events_comp.linkpage_opt_none')];
+		return $this->propertiesFor('events');
 	}
 
 	public function init() {
 		$this->category = $this->property('category', null);
+		$this->linkpage = $this->property('linkpage', '');
 
 		$this->usePermissions = $this->property('usePermissions', 0);
 		$this->dayspast = $this->property('dayspast', 0);
@@ -136,10 +75,34 @@ class Events extends ComponentBase {
 
 		$MyEvents = [];
 		$timeFormat = Settings::get('time_format', 'g:i a');
+		$relations = $this->property('relations', ['event']);
 
-		$occurs = Ocurrs::where('start_at', '<', $month_end)->
+		$relation_name = $relations[0];
+
+		$occurs = Ocurrs::with(
+			array($relation_name => function ($query) {
+				$query->withOwner()
+					->published();
+
+				if ($this->category) {
+					$query->whereHas('categorys', function ($q) {
+						$q->where('slug', $this->category);
+					});
+				}
+
+				if ($this->usePermissions) {
+
+					$query->permisions(
+						$this->userId(),
+						[Settings::get('public_perm')],
+						Settings::get('deny_perm')
+					);
+				}
+			})
+		)->
+			where('start_at', '<', $month_end)->
 			where('end_at', '>=', $month_start)->
-			where('relation', 'events')->
+			//wher//('relation', $relation_name)->
 			orderBy('start_at', 'ASC')->
 			get();
 
@@ -147,56 +110,33 @@ class Events extends ComponentBase {
 			return [];
 		}
 
-		$eventIds = $occurs->lists('event_id', 'id');
-
-		$query = MyEvents::withOwner()
-			->published()
-			->whereIn('id', $eventIds);
-
-		if ($this->category) {
-			$query->whereHas('categorys', function ($q) {
-				$q->where('slug', $this->category);
-			});
-		}
-
-		if ($this->usePermissions) {
-
-			$query->permisions(
-				$this->userId(),
-				[Settings::get('public_perm')],
-				Settings::get('deny_perm')
-			);
-		}
-
-		$events = $query->get();
-
 		$maxLen = $this->property('title_max', 100);
-		$linkPage = $this->property('linkpage', '');
 
 		foreach ($occurs as $occ) {
-			if (!$e = $events->find($occ->event_id)) {
+			if (!$occ->$relation_name) {
 				continue;
 			}
 
-			$title = (strlen($e->text) > 50) ? substr(strip_tags($e->text), 0, $maxLen) . '...' : $e->text;
+			$title = (strlen($occ->$relation_name->text) > 50) ? substr(strip_tags($occ->$relation_name->text), 0, $maxLen) . '...' : $occ->$relation_name->text;
 
-			$link = $e->link ? $e->link : ($linkPage ? Page::url($linkPage, ['slug' => $e->id]) :
+			$link = $occ->$relation_name->link ?:
+			($this->linkpage ?
+				Page::url($this->linkpage, ['slug' => $occ->$relation_name->id]) :
 				'#EventDetail"
             	data-request="onShowEvent"
             	data-request-data="evid:' . $occ->id . '"
             	data-request-update="\'' . $this->compLink . '::details\':\'#EventDetail\'" data-toggle="modal" data-target="#myModal');
-
 			$time = $occ->is_allday ? '(' . Lang::get('kurtjensen.mycalendar::lang.occurrence.is_allday') . ')'
 			: $occ->start_at->format($timeFormat);
 
 			$MyEvents[$occ->start_at->year][$occ->start_at->month][$occ->start_at->day][] = [
-				'name' => $e->name . ' ' . $time,
+				'name' => $occ->$relation_name->name . ' ' . $time,
 				'title' => $title,
 				'link' => $link,
 				'id' => $occ->id,
-				'owner' => $e->user_id,
-				'owner_name' => $e->owner_name,
-				'data' => $e,
+				'owner' => $occ->$relation_name->user_id,
+				'owner_name' => $occ->$relation_name->owner_name,
+				'data' => $occ->$relation_name,
 			];
 		}
 		return $MyEvents;

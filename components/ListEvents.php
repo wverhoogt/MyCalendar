@@ -16,9 +16,7 @@ class ListEvents extends EvList {
 
 	public function defineProperties() {
 		$this->EventsComp = new Events();
-		$properties = $this->propertiesFor('list');
-
-		return array_merge($properties, $this->EventsComp->defineProperties());
+		return array_merge($this->propertiesFor('list'), $this->propertiesFor('events'));
 	}
 
 	public function init() {
@@ -26,6 +24,7 @@ class ListEvents extends EvList {
 		$this->EventsComp->compLink = 'ListEvents';
 		$this->EventsComp->month = $this->property('month');
 		$this->EventsComp->year = $this->property('year');
+		$this->EventsComp->linkpage = $this->property('linkpage');
 		$this->EventsComp->category = $this->property('category', null);
 		$this->EventsComp->usePermissions = $this->property('usePermissions', 0);
 		if (!$this->property('month') || !$this->property('year')) {

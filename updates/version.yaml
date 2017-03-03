@@ -75,3 +75,7 @@
 1.2.6: Consolidated component properties and functions into new trait. Added working week component.
 1.2.7: Finished Week component. Months now shows prev and past month events in leading and trailing days.
 1.2.8: Add Next and Previous links to Week component.
+1.2.9:
+    - Fixes inoperable linkpage property.
+    - Updated occurences relation column value to match Event Relation name.
+    - update_events_relation.php
