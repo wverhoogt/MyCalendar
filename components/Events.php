@@ -5,7 +5,6 @@ use Carbon\Carbon;
 use Cms\Classes\ComponentBase;
 use Cms\Classes\Page;
 use KurtJensen\MyCalendar\Models\Category;
-use KurtJensen\MyCalendar\Models\Event as MyEvents;
 use KurtJensen\MyCalendar\Models\Occurrence as Ocurrs;
 use KurtJensen\MyCalendar\Models\Settings;
 use Lang;
@@ -145,26 +144,34 @@ class Events extends ComponentBase {
 
 	public function onShowEvent() {
 		$e = false;
-		$ocurrs = Ocurrs::where('relation', 'events')->find(post('evid'));
 
-		if ($ocurrs) {
-			if ($this->usePermissions) {
-				$query = MyEvents::withOwner()
-					->permisions(
+		$relations = $this->property('relations', ['event']);
+		$relation_name = $relations[0];
+
+		$ocurrs = Ocurrs::with(
+			array($relation_name => function ($query) {
+				$query->withOwner()
+					->published();
+
+				if ($this->category) {
+					$query->whereHas('categorys', function ($q) {
+						$q->where('slug', $this->category);
+					});
+				}
+
+				if ($this->usePermissions) {
+
+					$query->permisions(
 						$this->userId(),
 						[Settings::get('public_perm')],
 						Settings::get('deny_perm')
 					);
-			} else {
+				}
+			})
+		)->
+			find(post('evid'));
 
-				$query = MyEvents::withOwner();
-			}
-
-			$e = $query->with('categorys')
-				->where('is_published', true)
-				->find($ocurrs->event_id);
-		}
-		if (!$e) {
+		if (!$ocurrs->$relation_name) {
 			return $this->page['ev'] = ['name' => Lang::get('kurtjensen.mycalendar::lang.event.error_not_found'), 'cats' => []];
 		}
 
@@ -173,22 +180,22 @@ class Events extends ComponentBase {
 
 		if ($this->property('raw_data', false)) {
 			return $this->page['ev_data'] = [
-				'ev' => $e,
+				'ev' => $ocurrs->$relation_name,
 				'oc' => $ocurrs,
 				'format' => ['t' => $timeFormat, 'd' => $dateFormat],
 			];
 		} else {
 			return $this->page['ev'] = [
-				'name' => $e->name,
+				'name' => $ocurrs->$relation_name->name,
 				'date' => $ocurrs->start_at->format($dateFormat),
 				'time' => $ocurrs->is_allday ? Lang::get('kurtjensen.mycalendar::lang.occurrence.is_allday')
 				: $ocurrs->start_at->format($timeFormat) . ' - ' . $ocurrs->end_at->format($timeFormat),
-				'link' => $e->link ? $e->link : '',
-				'text' => $e->text,
-				'cats' => $e->categorys->lists('name'),
-				'owner' => $e->user_id,
-				'owner_name' => $e->owner_name,
-				'data' => $e,
+				'link' => $ocurrs->$relation_name->link ? $ocurrs->$relation_name->link : '',
+				'text' => $ocurrs->$relation_name->text,
+				'cats' => $ocurrs->$relation_name->categorys->lists('name'),
+				'owner' => $ocurrs->$relation_name->user_id,
+				'owner_name' => $ocurrs->$relation_name->owner_name,
+				'data' => $ocurrs->$relation_name,
 			];
 		}
 	}
