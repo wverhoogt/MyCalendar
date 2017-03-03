@@ -13,8 +13,6 @@ class Events extends ComponentBase {
 	use \KurtJensen\MyCalendar\Traits\MyCalComponentTraits;
 
 	public $category;
-	public $month;
-	public $year;
 	public $usePermissions = 0;
 	public $dayspast = 0;
 	public $daysfuture = 0;
