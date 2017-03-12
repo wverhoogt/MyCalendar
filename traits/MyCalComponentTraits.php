@@ -14,29 +14,114 @@ use KurtJensen\MyCalendar\Models\Occurrence as Ocurrs;
 use Lang;
 
 trait MyCalComponentTraits {
-	// Week
+
+	/**
+	 * Week component property
+	 * @var integer A day in the week you want to show. ( 1..31 ).
+	 */
 	public $day;
 
-	// Month - Week
+	/**
+	 * Month / Week component property
+	 * @var integer The month you want to show. ( 1..12 ).
+	 */
 	public $month;
-	public $year;
-	public $weekstart;
-	public $dayprops;
-	// ---  Calc Vars
-	public $calHeadings;
-	public $monthNum;
-	public $running_day;
-	public $days_in_month;
-	public $dayPointer;
-	public $prevMonthLastDay;
-	public $prevMonthStartDay;
-	public $monthTitle;
-	public $linkNext;
-	public $linkPrevious;
 
-	// Month - Week - List
+	/**
+	 * Month / Week component property
+	 * @var integer The year you want to show.
+	 */
+	public $year;
+
+	/**
+	 * Month / Week component property
+	 * @var integer The day that starts the weeks of the calendar. ( 0..6 )
+	 */
+	public $weekstart;
+
+	/**
+	 * Month / Week component property
+	 *
+	 * $dayprops[2017][3][15]['class' => 'yellow']
+	 * @var array Array of the properties you want to put on the day indicator.
+	 */
+	public $dayprops;
+
+	/**
+	 * Month / Week / List component property
+	 * @var string Color the calendar will be
+	 */
 	public $color;
-	public $events;
+
+	/**
+	 * Month / Week / List component property
+	 *          YEAR    MONTH    DAY   SEQUENCE   DATA
+	 * $events[ 2017 ][   3   ][  15 ][        ][
+	 *      'class' => '',
+	 *		'title' => '',
+	 *		'text' => '',
+	 *		'link' => '',
+	 *		'name' => '',
+	 *    ]
+	 * @var array Multi-dimention collection of events and their
+	 *      data to display.
+	 */
+	public $events = [];
+
+	/**
+	 * Calculated
+	 * @var array Headings for days of week ( Sun, Mon,Tue...)
+	 */
+	public $calHeadings;
+
+	/**
+	 * Calculated
+	 * @var integer Month of selected time.
+	 */
+	public $monthNum;
+
+	/**
+	 * Calculated
+	 * @var integer Day of week for selected time. ( 0..6 )
+	 */
+	public $running_day;
+
+	/**
+	 * Calculated
+	 * @var integer Count of days in month for selected time.
+	 */
+	public $days_in_month;
+
+	/**
+	 * Calculated
+	 * @var integer Pointer to what day is being iterated over.
+	 */
+	public $dayPointer;
+
+	/**
+	 * Calculated
+	 * @var integer Day in previous month to start display on when
+	 * selected month does not start on first day of week.
+	 */
+	public $prevMonthStartDay;
+
+	/**
+	 * Calculated
+	 * @var string Translated Month Heading
+	 */
+	public $monthTitle;
+
+	/**
+	 * Calculated
+	 * @var Carbon\Carbon Date to jump to for displaying next in sequence.
+	 */
+	public $linkNext;
+
+	/**
+	 * Calculated
+	 * @var Carbon\Carbon Date to jump to for displaying previous in sequence.
+	 */
+	public $linkPrevious;
 
 	public $langPath = 'kurtjensen.mycalendar::lang.';
 
@@ -211,7 +296,9 @@ trait MyCalComponentTraits {
 			$this->dayprops = $this->property('dayprops') ?: [];
 
 		case 'list':
-			$this->events = $this->property('events') ?: [];
+
+			$this->mergeEvents($this->property('events', []));
+			//$this->events = $this->property('events') ?: [];
 		}
 
 	}
@@ -219,7 +306,7 @@ trait MyCalComponentTraits {
 	public function calcElementsFor($type) {
 		switch ($type) {
 		case 'week':
-			$time = new Carbon($this->year . '-' . $this->month . '-' . $this->day);
+			$time = new Carbon($this->day . '-' . $this->month . '-' . $this->year);
 			$this->monthTitle = Lang::get('kurtjensen.mycalendar::lang.rrule.month.' . $time->month); // Nov
 			break;
 		case 'month':
@@ -323,5 +410,22 @@ trait MyCalComponentTraits {
 			Lang::get($this->langPath . 'com_prop_trait.day_fri'),
 			Lang::get($this->langPath . 'com_prop_trait.day_sat'),
 		];
+	}
+
+	public function mergeEvents(array $new_events) {
+		$events = $this->events;
+		//foreach year
+		foreach ($new_events as $year => $months) {
+			//foreach month
+			foreach ($months as $month => $days) {
+				//foreach year
+				foreach ($days as $day => $eventCollection) {
+					foreach ($eventCollection as $event) {
+						$events[$year][$month][$day][] = $event;
+					}
+				}
+			}
+		}
+		$this->events = $events;
 	}
 }

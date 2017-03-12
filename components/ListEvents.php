@@ -5,7 +5,6 @@ use KurtJensen\MyCalendar\Components\EvList;
 
 class ListEvents extends EvList {
 	public $EventsComp = null;
-	public $eventsCompEvents = [];
 
 	public function componentDetails() {
 		return [
@@ -15,31 +14,21 @@ class ListEvents extends EvList {
 	}
 
 	public function defineProperties() {
-		$this->EventsComp = new Events();
+		$this->EventsComp = new Events('ListEvents');
 		return array_merge($this->propertiesFor('list'), $this->propertiesFor('events'));
 	}
 
 	public function init() {
 		$this->initFor('list');
-		$this->EventsComp->compLink = 'ListEvents';
-		$this->EventsComp->month = $this->property('month');
-		$this->EventsComp->year = $this->property('year');
-		$this->EventsComp->linkpage = $this->property('linkpage');
-		$this->EventsComp->category = $this->property('category', null);
-		$this->EventsComp->usePermissions = $this->property('usePermissions', 0);
-		if (!$this->property('month') || !$this->property('year')) {
-			$this->EventsComp->dayspast = $this->property('dayspast', 120);
-			$this->EventsComp->daysfuture = $this->property('daysfuture', 60);
-		}
+		$this->EventsComp->importProperties($this);
 	}
 
 	public function onRun() {
-		$this->eventsCompEvents = $this->EventsComp->loadEvents();
+		$this->mergeEvents($this->EventsComp->loadEvents());
 	}
 
 	public function onRender() {
 		$this->renderFor('list');
-		$this->events = $this->eventsCompEvents;
 	}
 
 	public function onShowEvent() {

@@ -5,7 +5,6 @@ use KurtJensen\MyCalendar\Components\Week;
 
 class WeekEvents extends Week {
 	public $EventsComp = null;
-	public $eventsCompEvents = [];
 
 	public function componentDetails() {
 		return [
@@ -15,33 +14,25 @@ class WeekEvents extends Week {
 	}
 
 	public function defineProperties() {
-		$this->EventsComp = new Events();
-		$this->EventsComp->compLink = 'WeekEvents';
+		$this->EventsComp = new Events('WeekEvents');
 		$properties = $this->propertiesFor('week');
-
 		return array_merge($properties, $this->EventsComp->defineProperties());
 	}
 
 	public function init() {
 		$this->initFor('week');
-		$this->EventsComp->linkpage = $this->property('linkpage');
-		$this->EventsComp->category = $this->property('category', null);
-		$this->EventsComp->usePermissions = $this->property('usePermissions', 0);
-		$this->EventsComp->dayspast = $this->property('dayspast', 120);
-		$this->EventsComp->daysfuture = $this->property('daysfuture', 60);
+		$this->EventsComp->importProperties($this);
 	}
 
 	public function onRun() {
-		$this->eventsCompEvents = $this->EventsComp->loadEvents();
+		$this->mergeEvents($this->EventsComp->loadEvents());
 	}
 
 	public function onRender() {
 		$this->renderFor('week');
-		$this->events = $this->eventsCompEvents;
 	}
 
 	public function onShowEvent() {
-		$this->EventsComp->compLink = 'WeekEvents';
 		return $this->page['ev'] = $this->EventsComp->onShowEvent();
 	}
 

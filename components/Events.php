@@ -19,6 +19,7 @@ class Events extends ComponentBase {
 	public $compLink = 'Events';
 	public $user_id = null;
 	public $linkpage = '';
+	public $relations = ['event'];
 
 	public function componentDetails() {
 		return [
@@ -31,31 +32,42 @@ class Events extends ComponentBase {
 		return $this->propertiesFor('events');
 	}
 
+	public function __construct($compLink = 'Events') {
+		$this->compLink = $compLink;
+		parent::__construct();
+	}
+
 	public function init() {
-		$this->category = $this->property('category', null);
-		$this->linkpage = $this->property('linkpage', '');
-
-		$this->usePermissions = $this->property('usePermissions', 0);
-		$this->dayspast = $this->property('dayspast', 0);
-		$this->daysfuture = $this->property('daysfuture', 60);
-
-		$this->month = in_array($this->property('month'), range(1, 12)) ? $this->property('month') : date('m');
-		$this->year = in_array($this->property('year'), range(2014, 2030)) ? $this->property('year') : date('Y');
+		$this->importProperties($this);
 	}
 
 	public function onRun() {
 		$this->page['MyEvents'] = $this->loadEvents();
+		// 	$this->mergeEvents($this->loadEvents());
+	}
+
+	public function importProperties($comp) {
+		$this->linkpage = $comp->property('linkpage');
+		$this->category = $comp->property('category', null);
+		$this->usePermissions = $comp->property('usePermissions', 0);
+		if (!$comp->property('month') || !$comp->property('year')) {
+			$this->dayspast = $comp->property('dayspast', 120);
+			$this->daysfuture = $comp->property('daysfuture', 60);
+		} else {
+			$this->month = in_array($comp->property('month'), range(1, 12)) ? $comp->property('month') : date('m');
+			$this->year = in_array($comp->property('year'), range(date('Y') - 2, date('Y') + 15)) ? $comp->property('year') : date('Y');
+		}
+		$this->relations = $comp->property('relations', ['event']);
 	}
 
 	public function userId() {
 		if (is_null($this->user_id)) {
 			$user = Auth::getUser();
-		}
-
-		if ($user) {
-			$this->user_id = $user->id;
-		} else {
-			$this->user_id = 0;
+			if ($user) {
+				$this->user_id = $user->id;
+			} else {
+				$this->user_id = 0;
+			}
 		}
 		return $this->user_id;
 	}
@@ -72,79 +84,93 @@ class Events extends ComponentBase {
 
 		$MyEvents = [];
 		$timeFormat = Settings::get('time_format', 'g:i a');
-		$relations = $this->property('relations', ['event']);
 
-		$relation_name = $relations[0];
+		foreach ($this->relations as $relation_name) {
 
-		$occurs = Ocurrs::with(
-			array($relation_name => function ($query) {
-				$query->withOwner()
-					->published();
+			$occurs = Ocurrs::with(
+				array($relation_name => function ($query) {
+					$query->withOwner()
+						->published();
 
-				if ($this->category) {
-					$query->whereHas('categorys', function ($q) {
-						$q->where('slug', $this->category);
-					});
-				}
+					if ($this->category) {
+						$query->whereHas('categorys', function ($q) {
+							$q->where('slug', $this->category);
+						});
+					}
 
-				if ($this->usePermissions) {
+					if ($this->usePermissions) {
 
-					$query->permisions(
-						$this->userId(),
-						[Settings::get('public_perm')],
-						Settings::get('deny_perm')
-					);
-				}
-			})
-		)->
-			where('start_at', '<', $month_end)->
-			where('end_at', '>=', $month_start)->
-			//wher//('relation', $relation_name)->
-			orderBy('start_at', 'ASC')->
-			get();
+						$query->permisions(
+							$this->userId(),
+							[Settings::get('public_perm')],
+							Settings::get('deny_perm')
+						);
+					}
+				})
+			)->
+				where('start_at', '<', $month_end)->
+				where('end_at', '>=', $month_start)->
+				//wher//('relation', $relation_name)->
+				orderBy('start_at', 'ASC')->
+				get();
 
-		if (!$occurs) {
-			return [];
-		}
-
-		$maxLen = $this->property('title_max', 100);
-
-		foreach ($occurs as $occ) {
-			if (!$occ->$relation_name) {
-				continue;
+			if (!$occurs) {
+				return [];
 			}
 
-			$title = (strlen($occ->$relation_name->text) > 50) ? substr(strip_tags($occ->$relation_name->text), 0, $maxLen) . '...' : $occ->$relation_name->text;
+			$maxLen = $this->property('title_max', 100);
 
-			$link = $occ->$relation_name->link ?:
-			($this->linkpage ?
-				Page::url($this->linkpage, ['slug' => $occ->$relation_name->id]) :
-				'#EventDetail"
+			foreach ($occurs as $occ) {
+				if (!$occ->$relation_name) {
+					continue;
+				}
+
+				$title = (strlen($occ->$relation_name->text) > 50) ? substr(strip_tags($occ->$relation_name->text), 0, $maxLen) . '...' : $occ->$relation_name->text;
+
+				$link = $occ->$relation_name->link ?: // If model has link property use it
+				($this->linkpage ? // else If component has linkpage use it
+					Page::url($this->linkpage, ['slug' => $occ->$relation_name->id]) : // else Use AJAX popup
+					'#EventDetail"
             	data-request="onShowEvent"
-            	data-request-data="evid:' . $occ->id . '"
+            	data-request-data="evid:' . $occ->id . ($relation_name == 'event' ? '' : ',rel:\'' . $relation_name . '\'') . '"
             	data-request-update="\'' . $this->compLink . '::details\':\'#EventDetail\'" data-toggle="modal" data-target="#myModal');
-			$time = $occ->is_allday ? '(' . Lang::get('kurtjensen.mycalendar::lang.occurrence.is_allday') . ')'
-			: $occ->start_at->format($timeFormat);
+				$time = $occ->is_allday ? '(' . Lang::get('kurtjensen.mycalendar::lang.occurrence.is_allday') . ')'
+				: $occ->start_at->format($timeFormat);
 
-			$MyEvents[$occ->start_at->year][$occ->start_at->month][$occ->start_at->day][] = [
-				'name' => $occ->$relation_name->name . ' ' . $time,
-				'title' => $title,
-				'link' => $link,
-				'id' => $occ->id,
-				'owner' => $occ->$relation_name->user_id,
-				'owner_name' => $occ->$relation_name->owner_name,
-				'data' => $occ->$relation_name,
-			];
+				$evData = [
+					'name' => $occ->$relation_name->name . ' ' . $time,
+					'title' => $title,
+					'link' => $link,
+					'id' => $occ->id,
+					'owner' => $occ->$relation_name->user_id,
+					'owner_name' => $occ->$relation_name->owner_name,
+					'data' => $occ->$relation_name,
+				];
+
+				if ($this->property('raw_data', false)) {
+					$data['data'] = $occ->$relation_name;
+				}
+
+				$evData = [
+					'name' => $occ->$relation_name->name . ' ' . $time,
+					'title' => $title,
+					'link' => $link,
+					'id' => $occ->id,
+					'owner' => $occ->$relation_name->user_id,
+					'owner_name' => $occ->$relation_name->owner_name,
+					'data' => $occ->$relation_name,
+				];
+
+				$MyEvents[$occ->start_at->year][$occ->start_at->month][$occ->start_at->day][] = $evData;
+			}
 		}
 		return $MyEvents;
-
 	}
 
 	public function onShowEvent() {
 		$e = false;
 
-		$relations = $this->property('relations', ['event']);
-		$relation_name = $relations[0];
+		$relation_name = post('rel') ?: 'event';
 
 		$ocurrs = Ocurrs::with(
 			array($relation_name => function ($query) {
