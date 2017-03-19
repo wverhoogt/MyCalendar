@@ -1,9 +1,9 @@
 <?php namespace KurtJensen\MyCalendar\Components;
 
-use KurtJensen\MyCalendar\Components\Events;
 use KurtJensen\MyCalendar\Components\EvList;
 
 class ListEvents extends EvList {
+	public $ComponentType = ['list', 'ListEvents'];
 	public $EventsComp = null;
 
 	public function componentDetails() {
@@ -13,22 +13,8 @@ class ListEvents extends EvList {
 		];
 	}
 
-	public function defineProperties() {
-		$this->EventsComp = new Events('ListEvents');
-		return array_merge($this->propertiesFor('list'), $this->propertiesFor('events'));
-	}
-
-	public function init() {
-		$this->initFor('list');
-		$this->EventsComp->importProperties($this);
-	}
-
 	public function onRun() {
 		$this->mergeEvents($this->EventsComp->loadEvents());
-	}
-
-	public function onRender() {
-		$this->renderFor('list');
 	}
 
 	public function onShowEvent() {

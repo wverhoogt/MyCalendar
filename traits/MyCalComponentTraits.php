@@ -10,6 +10,7 @@
  */
 use Carbon\Carbon;
 use Cms\Classes\Page;
+use KurtJensen\MyCalendar\Components\Events;
 use KurtJensen\MyCalendar\Models\Occurrence as Ocurrs;
 use Lang;
 
@@ -115,17 +116,24 @@ trait MyCalComponentTraits {
 	 * Calculated
 	 * @var Carbon\Carbon Date to jump to for displaying next in sequence.
 	 */
-	public $linkNext;
+	public $linkNext = null;
 
 	/**
 	 * Calculated
 	 * @var Carbon\Carbon Date to jump to for displaying previous in sequence.
 	 */
-	public $linkPrevious;
+	public $linkPrevious = null;
+
+	/**
+	 * Calculated
+	 * @var Carbon\Carbon Date currently displayed.
+	 */
+	public $viewTime;
 
 	public $langPath = 'kurtjensen.mycalendar::lang.';
 
-	public function propertiesFor($type) {
+	public function defineProperties() {
+		$type = is_array($this->ComponentType) ? $this->ComponentType[0] : $this->ComponentType;
 		$properties = [];
 		switch ($type) {
 		case 'events':
@@ -259,10 +267,15 @@ trait MyCalComponentTraits {
 					],
 				]);
 		}
+		if (is_array($this->ComponentType)) {
+			$this->EventsComp = new Events($this->ComponentType[1]);
+			return array_merge($properties, $this->EventsComp->defineProperties());
+		}
 		return $properties;
 	}
 
-	public function initFor($type) {
+	public function init() {
+		$type = is_array($this->ComponentType) ? $this->ComponentType[0] : $this->ComponentType;
 		switch ($type) {
 		case 'week':
 		case 'month':
@@ -271,11 +284,15 @@ trait MyCalComponentTraits {
 			if ($this->property('loadstyle')) {
 				$this->addCss('/plugins/kurtjensen/mycalendar/assets/css/calendar.css');
 			}
+			if (is_array($this->ComponentType)) {
+				$this->EventsComp->importProperties($this);
+			}
 			$this->color = $this->property('color');
 		}
 	}
 
-	public function renderFor($type) {
+	public function onRender() {
+		$type = is_array($this->ComponentType) ? $this->ComponentType[0] : $this->ComponentType;
 		switch ($type) {
 		case 'week':
 			// Must use onRender() for properties that can be modified in page
@@ -303,21 +320,22 @@ trait MyCalComponentTraits {
 
 	}
 
-	public function calcElementsFor($type) {
+	public function calcElements() {
+		$type = is_array($this->ComponentType) ? $this->ComponentType[0] : $this->ComponentType;
 		switch ($type) {
 		case 'week':
-			$time = new Carbon($this->day . '-' . $this->month . '-' . $this->year);
-			$this->monthTitle = Lang::get('kurtjensen.mycalendar::lang.rrule.month.' . $time->month); // Nov
+			$this->viewTime = new Carbon($this->month . '/' . $this->day . '/' . $this->year);
+			$this->monthTitle = Lang::get('kurtjensen.mycalendar::lang.rrule.month.' . $this->viewTime->month); // Nov
 			break;
 		case 'month':
-			$time = new Carbon($this->month . '/1/' . $this->year); // 11/01/2016
-			$this->monthTitle = Lang::get('kurtjensen.mycalendar::lang.rrule.month.' . $time->month); // Nov
+			$this->viewTime = new Carbon($this->month . '/1/' . $this->year); // 11/01/2016
+			$this->monthTitle = Lang::get('kurtjensen.mycalendar::lang.rrule.month.' . $this->viewTime->month); // Nov
 			break;
 		}
 
-		$this->monthNum = $time->month;
-		$this->running_day = $time->dayOfWeek;
-		$this->days_in_month = $time->daysInMonth;
+		$this->monthNum = $this->viewTime->month;
+		$this->running_day = $this->viewTime->dayOfWeek;
+		$this->days_in_month = $this->viewTime->daysInMonth;
 
 		switch ($type) {
 		case 'week':
@@ -328,10 +346,10 @@ trait MyCalComponentTraits {
 			break;
 		}
 
-		$prevMonthLastDay = $time->copy()->subMonth()->daysInMonth;
+		$prevMonthLastDay = $this->viewTime->copy()->subMonth()->daysInMonth;
 
 		$this->prevMonthStartDay = $this->dayPointer + $prevMonthLastDay + 1;
-		return $time;
+		return $this->viewTime;
 	}
 
 	public function getMonthYear($offset) {
@@ -427,5 +445,52 @@ trait MyCalComponentTraits {
 			}
 		}
 		$this->events = $events;
+	}
+
+	public function setPrevLink($prev = ' ') {
+		return $this->linkPrevious = $prev;
+	}
+
+	public function setNextLink($next = ' ') {
+		return $this->linkNext = $next;
+	}
+
+	public function prevLink() {
+		$type = is_array($this->ComponentType) ? $this->ComponentType[0] : $this->ComponentType;
+
+		if (!$this->linkPrevious == null) {
+			return $this->linkPrevious;
+		}
+		$monthParam = $this->paramName('month');
+		$yearParam = $this->paramName('year');
+		$dayParam = $this->paramName('day');
+		if ($type == 'month') {
+			$prevPeriod = $this->viewTime->copy()->subMonth();
+		} else {
+			$prevPeriod = $this->viewTime->copy()->subWeek();
+		}
+		return '
+                <a href="' . $this->currentPageUrl([$yearParam => $prevPeriod->year, $monthParam => $prevPeriod->month, $dayParam => $prevPeriod->day]) . '">
+                ' . $this->trans('kurtjensen.mycalendar::lang.com_prop_trait.previous') . '</a>';
+	}
+
+	public function nextLink() {
+		$type = is_array($this->ComponentType) ? $this->ComponentType[0] : $this->ComponentType;
+
+		if (!$this->linkNext == null) {
+			return $this->linkNext;
+		}
+		$monthParam = $this->paramName('month');
+		$yearParam = $this->paramName('year');
+		$dayParam = $this->paramName('day');
+		if ($type == 'month') {
+			$nextPeriod = $this->viewTime->copy()->addMonth();
+		} else {
+			$nextPeriod = $this->viewTime->copy()->addWeek();
+		}
+
+		return '
+                <a href="' . $this->currentPageUrl([$yearParam => $nextPeriod->year, $monthParam => $nextPeriod->month, $dayParam => $nextPeriod->day]) . '">
+                ' . $this->trans('kurtjensen.mycalendar::lang.com_prop_trait.next') . '</a>';
 	}
 }

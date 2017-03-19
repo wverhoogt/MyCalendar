@@ -10,6 +10,7 @@ use KurtJensen\MyCalendar\Models\Settings;
 use Lang;
 
 class Events extends ComponentBase {
+	public $ComponentType = 'events';
 	use \KurtJensen\MyCalendar\Traits\MyCalComponentTraits;
 
 	public $category;
@@ -26,10 +27,6 @@ class Events extends ComponentBase {
 			'name' => 'kurtjensen.mycalendar::lang.events_comp.name',
 			'description' => 'kurtjensen.mycalendar::lang.events_comp.description',
 		];
-	}
-
-	public function defineProperties() {
-		return $this->propertiesFor('events');
 	}
 
 	public function __construct($compLink = 'Events') {

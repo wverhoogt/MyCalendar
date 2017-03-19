@@ -1,5 +1,4 @@
-{% set MyM = __SELF__ %}
-{% set devents = MyM.events %}
+{% set devents = __SELF__.events %}
 <table class="mycal">
     <tbody>
 {% for y,eYear in devents %}
@@ -8,7 +7,7 @@
         <tr data-request-data="year:{{ y }},month:{{ m }},day:{{ d }}">
             <td class="list-icon">
                 <div class="holder">
-                    <div class="month {{ MyM.color }}">
+                    <div class="month {{ __SELF__.color }}">
                         <p>{{ (m~'/1/'~y)|date('M') }}</p> 
                     </div>
                     <div class="day">
