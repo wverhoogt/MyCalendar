@@ -55,6 +55,12 @@ trait MyCalComponentTraits {
 	public $color;
 
 	/**
+	 * Month / Week component property
+	 * @var boolean Include data-request-data properties in calendar output
+	 */
+	public $data_request = false;
+
+	/**
 	 * Month / Week / List component property
 	 *          YEAR    MONTH    DAY   SEQUENCE   DATA
 	 * $events[ 2017 ][   3   ][  15 ][        ][
@@ -445,6 +451,10 @@ trait MyCalComponentTraits {
 			}
 		}
 		$this->events = $events;
+	}
+
+	public function dataRequestProp($onOff = true) {
+		return $this->data_request = $onOff;
 	}
 
 	public function setPrevLink($prev = ' ') {

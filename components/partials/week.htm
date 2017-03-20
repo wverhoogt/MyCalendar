@@ -1,9 +1,11 @@
+{% if __SELF__.data_request %}Hello{% endif %}
+
 {% set dayPointer = __SELF__.dayPointer %}
 {% set devents = __SELF__.monthEvents %}
 {% set dprops = __SELF__.monthProperties %}
 {% set trailDay = 0 %}
 <table class="mycal" 
-       data-request-data="month:{{ __SELF__.monthNum }}">
+       data-request-data="month:'{{ __SELF__.monthNum }}'">
     <thead>
         <tr>
             <th colspan="2" class="text-right">
@@ -40,7 +42,7 @@
 {% if dayPointer <1 %}
 
 {% set prevDay = __SELF__.prevMonthStartDay + x %}
-{% partial '@day' Container=__SELF__ events= __SELF__.monthEvents(-1)[prevDay] dayProp = { class:'dis'} dayPointer=prevDay %}
+{% partial '@day' Container=__SELF__ events= __SELF__.monthEvents(-1)[prevDay] dayProp = { class:'dis'} dayPointer=prevDay data_request=__SELF__.data_request %}
 
 {# 
 ************ SHOW NEXT MONTH DAYS ************

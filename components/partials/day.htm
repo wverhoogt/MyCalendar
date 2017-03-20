@@ -1,4 +1,4 @@
-            <td>
+            <td{% if data_request %} data-request-data="day:'{{ dayPointer }}'"{% endif %}>
 {% if dayProp.link %}
                 <a {{ dayProp.link|raw }}>
 {% endif %}

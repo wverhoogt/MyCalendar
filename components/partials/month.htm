@@ -2,8 +2,7 @@
 {% set devents = __SELF__.monthEvents %}
 {% set dprops = __SELF__.monthProperties %}
 {% set trailDay = 0 %}
-<table class="mycal" 
-       data-request-data="month:{{ __SELF__.monthNum }}">
+<table class="mycal"{% if __SELF__.data_request %} data-request-data="year:{{ __SELF__.year }}, month:{{ __SELF__.monthNum }}"{% endif %}>
     <thead>
         <tr>
             <th colspan="2" class="text-right">
@@ -67,7 +66,7 @@
 {# ************ SHOW CURRENT MONTH DAYS ************ If dayPointer indicates current month. ( Not Past or Previous ) #}
 {% else %}
 
-{% partial '@day' Container=__SELF__ events=devents[dayPointer] dayProp = dprops[dayPointer] dayPointer=dayPointer %}
+{% partial '@day' Container=__SELF__ events=devents[dayPointer] dayProp = dprops[dayPointer] dayPointer=dayPointer data_request=__SELF__.data_request %}
 
 {% endif %}{# ** END - If dayPointer indicates that current month ** #}
 
