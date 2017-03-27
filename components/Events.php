@@ -53,7 +53,7 @@ class Events extends ComponentBase {
 		$this->linkpage = $comp->property('linkpage');
 		$this->category = $comp->property('category', null);
 		$this->usePermissions = $comp->property('usePermissions', 0);
-		$this->order = $this->property('descending') ? 'desc' : 'asc';
+		$this->order = $comp->property('descending') ? 'desc' : 'asc';
 		if (!$comp->property('month') || !$comp->property('year')) {
 			$this->dayspast = $comp->property('dayspast', 120);
 			$this->daysfuture = $comp->property('daysfuture', 60);
@@ -155,15 +155,6 @@ if ($this->property('raw_data', false)) {
 $data['data'] = $occ->$relation_name;
 }
 
-$evData = [
-'name' => $occ->$relation_name->name . ' ' . $time,
-'title' => $title,
-'link' => $link,
-'id' => $occ->id,
-'owner' => $occ->$relation_name->user_id,
-'owner_name' => $occ->$relation_name->owner_name,
-'data' => $occ->$relation_name,
-];
  */
 				$MyEvents[$occ->start_at->year][$occ->start_at->month][$occ->start_at->day][] = $evData;
 			}
