@@ -209,6 +209,16 @@ trait MyCalComponentTraits {
 						1 => 'kurtjensen.mycalendar::lang.events_comp.opt_yes',
 					],
 				],
+				'descending' => [
+					'title' => 'kurtjensen.mycalendar::lang.events_comp.descending_title',
+					'description' => 'kurtjensen.mycalendar::lang.events_comp.descending_description',
+					'type' => 'dropdown',
+					'default' => 0,
+					'options' => [
+						0 => 'kurtjensen.mycalendar::lang.events_comp.opt_no',
+						1 => 'kurtjensen.mycalendar::lang.events_comp.opt_yes',
+					],
+				],
 			];
 
 			return $properties;

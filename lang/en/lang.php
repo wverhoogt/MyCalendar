@@ -200,6 +200,8 @@ return [
 		'future_description' => 'How far into the future do you want to load events from? If zero and "Past Days" is zero, then month and year will be used.',
 		'raw_data_title' => 'Supply Raw Data',
 		'raw_data_description' => 'When event details are requested, supply raw Event and Occurance data to page instead of default formated array.',
+		'descending_title' => 'Sort Descending',
+		'descending_description' => 'Sort events in descending order so lists will show reversed.',
 
 		'opt_no' => 'No',
 		'opt_yes' => 'Yes',

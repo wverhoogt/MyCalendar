@@ -82,7 +82,7 @@ class Event extends Model {
 		'occurrences' => ['KurtJensen\MyCalendar\Models\Occurrence',
 			'table' => 'kurtjensen_mycalendar_occurrences',
 			'key' => 'event_id',
-			'conditions' => 'relation = event',
+			'conditions' => 'relation = \'event\'',
 			'delete' => true,
 		],
 	];

@@ -81,3 +81,4 @@
     - update_events_relation.php
 1.2.10:
     - 'Made Builder compatible.  Updated a few translation strings.'
+1.2.11: 'Fixes line 85 in Event model.  Adds sorting to events. Seperates out time from name in event partial.'
