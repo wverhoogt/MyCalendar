@@ -63,6 +63,8 @@ return [
 		'day_end_comment' => 'When do you want the night to end for "All Day" events (default is 23:59)',
 		'default_length_label' => 'Default Event Length',
 		'default_length_comment' => 'Default time an event will last when created (default is 01:00)',
+		'max_count_label' => 'Maximum Occurrence Count',
+		'max_count_comment' => 'Maximum number of occurrence that will be created by a rule that ends NEVER. (default is 365) ( Be sure to test performance after new setting. )',
 		'boostrap_cdn_label' => 'bootstrap CDN',
 		'boostrap_cdn_comment' => 'What CDN should bootstrap JS load from?',
 
@@ -418,7 +420,8 @@ return [
 			'12' => 'December',
 		],
 		'ENDON' => 'End Date',
-		'Never' => 'Never',
+		'Never' => 'Never ( Max ',
+		'Never_end' => ' occurrences )',
 		'After' => 'After',
 		'On_date' => 'On Date',
 	],

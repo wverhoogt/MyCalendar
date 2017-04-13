@@ -66,6 +66,12 @@ fields:
         mode: time
         default: 01:00
         comment: kurtjensen.mycalendar::lang.settings.default_length_comment
+    max_count:
+        label: kurtjensen.mycalendar::lang.settings.max_count_label
+        span: right
+        type: number
+        default: '365'
+        comment: kurtjensen.mycalendar::lang.settings.max_count_comment
 
     section_cdn:
         label: kurtjensen.mycalendar::lang.settings.section_cdn_label

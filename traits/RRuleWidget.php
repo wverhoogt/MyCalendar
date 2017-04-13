@@ -8,6 +8,7 @@
  * @author Kurt Jensen
  */
 use Form;
+use KurtJensen\MyCalendar\Models\Settings;
 use Lang;
 
 trait RRuleWidget {
@@ -15,6 +16,10 @@ trait RRuleWidget {
 
 	public function t($string) {
 		return Lang::get($this->langPath . $string);
+	}
+
+	public function maxCount() {
+		return Settings::get('max_count');
 	}
 
 	/**
@@ -98,7 +103,7 @@ trait RRuleWidget {
 			$rrule .= 'UNTIL=' . post('ENDON') . ';'; // UNTIL=20000131T090000Z;
 
 		} else {
-			$rrule .= 'COUNT=10;';
+			$rrule .= 'COUNT=' . Settings::get('max_count') . ';';
 		}
 		return $rrule;
 	}
@@ -151,7 +156,7 @@ trait RRuleWidget {
 	}
 
 	public function getOccuranceOptions() {
-		$range = range(1, 100);
+		$range = range(1, Settings::get('max_count'));
 		return array_combine($range, $range);
 	}
 
@@ -162,7 +167,7 @@ trait RRuleWidget {
 		foreach ($bydays as $day) {
 			$fields .= '
             <label class="btn btn-primary' . (in_array($day, $f) ? ' active' : '') . '">' .
-			Form::checkbox('WBYDAY[' . $day . ']', $day, in_array($day, $f), ['class' => 'r_all r_weekly', 'autocomplete' => 'off']) . $this->t($day) . '</label>
+			Form::checkbox('WBYDAY[' . $day . ']', $day, in_array($day, $f), ['class' => 'r_all r_weekly']) . $this->t($day) . '</label>
 			';
 
 		};
