@@ -84,3 +84,4 @@
 1.2.11: 'Fixes line 85 in Event model.  Adds sorting to events. Seperates out time from name in event partial.'
 1.2.12: 'Fixes dumb typo that prevented sorting from working.'
 1.2.13: 'Adds new setting for max_count for ENDS NEVER rule and others.'
+1.2.14: 'Updated to changes made in Passage Permission Plugin up to version 1.0.12'
