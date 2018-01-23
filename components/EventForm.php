@@ -125,8 +125,8 @@ class EventForm extends ComponentBase {
 			return null;
 		}
 		$this->myevents = MyCalEvent::where('user_id', '=', $this->user->id)->
-			orderBy('date')->
-			orderBy('time')->
+			orderBy('date', 'desc')->
+			orderBy('time', 'desc')->
 			get();
 		return $this->myevents;
 	}

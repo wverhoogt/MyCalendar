@@ -92,6 +92,7 @@ class Event extends Model {
 		'month' => '',
 		'year' => '',
 		'human_time' => '',
+		'human_date_time' => '',
 		'carbon_time' => '',
 		'owner_name' => '',
 	];
@@ -127,6 +128,12 @@ class Event extends Model {
 	public function getHumanTimeAttribute() {
 		$time = isset($this->time) ? $this->carbon_time->format(Settings::get('time_format', 'g:i a')) : '';
 		return $time;
+	}
+
+	public function getHumanDateTimeAttribute() {
+		$time = isset($this->time) ? $this->carbon_time->format(Settings::get('time_format', 'g:i a')) : '';
+		$date = $this->date->format('Y-m-d');
+		return $date . ' ' . $time;
 	}
 
 	public function getCarbonTimeAttribute() {
