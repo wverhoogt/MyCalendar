@@ -136,15 +136,21 @@ class Event extends Model {
 		return $date . ' ' . $time;
 	}
 
+    public function getAlldayAttribute() {
+	    return $this->time == false;
+    }
+
 	public function getCarbonTimeAttribute() {
-		if (!$this->time) {
-			return '';
+        $date = $this->date->copy();
+        $date->second = 0;
+		if ($this->allday) {
+            $date->hour = 0;
+            $date->minute = 0;
+			return $date;
 		}
 		$time = new Carbon($this->time);
-		$date = $this->date->copy();
 		$date->hour = $time->hour;
 		$date->minute = $time->minute;
-		$date->second = 0;
 		return $date;
 	}
 
@@ -291,9 +297,14 @@ class Event extends Model {
 
 		$length = new Carbon($this->length);
 
-		$end_at = $start_at->copy();
-		$end_at->addMinutes($length->minute)->addHours($length->hour);
-
+		if ($start_at) {
+            $end_at = $start_at->copy();
+            if (!$this->allday)
+            $end_at->addMinutes($length->minute)->addHours($length->hour);
+        } else {
+		    $start_at = null;
+		    $end_at = null;
+        }
 		$pieces = explode(';', $this->pattern);
 
 		if (in_array('FREQ=SERIES', $pieces)) {
@@ -319,7 +330,7 @@ class Event extends Model {
 				'start_at' => $recurrence->getStart()->format('Y-m-d H:i:s'),
 				'end_at' => $recurrence->getEnd()->format('Y-m-d H:i:s'),
 				'is_modified' => 0,
-				'is_allday' => 0,
+				'is_allday' => $this->allday,
 				'is_canceled' => 0,
 			]);
 		}
@@ -352,7 +363,7 @@ class Event extends Model {
 		$occurrence->start_at = $recurrence->getStart()->format('Y-m-d H:i:s');
 		$occurrence->end_at = $recurrence->getEnd()->format('Y-m-d H:i:s');
 		$occurrence->is_modified = 1;
-		$occurrence->is_allday = 0;
+		$occurrence->is_allday = $this->allday;
 		$occurrence->is_canceled = 0;
 		$occurrence->save();
 	}
