@@ -297,13 +297,9 @@ class Event extends Model {
 
 		$length = new Carbon($this->length);
 
-		if ($start_at) {
-            $end_at = $start_at->copy();
-            if (!$this->allday)
+        $end_at = $start_at->copy();
+        if (!$this->allday) {
             $end_at->addMinutes($length->minute)->addHours($length->hour);
-        } else {
-		    $start_at = null;
-		    $end_at = null;
         }
 		$pieces = explode(';', $this->pattern);
 
