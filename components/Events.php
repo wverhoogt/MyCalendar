@@ -82,7 +82,8 @@ class Events extends ComponentBase {
 			$month_end = $month_start->copy()->addDays($this->daysfuture);
 			$month_start->subDays($this->dayspast);
 		} else {
-			$month_start = new Carbon($this->year . '/' . $this->month . '/1 00:00:00');
+		    $now = Carbon::now();
+			$month_start = new Carbon(($this->year ?: $now->year) . '/' . ($this->month ?: $now->month) . '/1 00:00:00');
 			$month_end = $month_start->copy()->addMonth(1);
 		}
 
