@@ -136,7 +136,7 @@ class Events extends ComponentBase {
 					'#EventDetail"
             	data-request="onShowEvent"
             	data-request-data="evid:' . $occ->id . ($relation_name == 'event' ? '' : ',rel:\'' . $relation_name . '\'') . '"
-            	data-request-update="\'' . $this->compLink . '::details\':\'#EventDetail\'" data-toggle="modal" data-target="#myModal');
+            	data-request-update="\'' . '@details\':\'#EventDetail\'" data-toggle="modal" data-target="#myModal');
 				$time = $occ->is_allday ? '(' . Lang::get('kurtjensen.mycalendar::lang.occurrence.is_allday') . ')'
 				: $occ->start_at->format($timeFormat);
 
